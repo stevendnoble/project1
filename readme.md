@@ -90,16 +90,29 @@ Attributes:  question, correct answer, all answer options, percent correct, perc
 
 ## Milestones
 
-* Project planning
-* User page
-* Admin page
-* Server setup
-* Admin page rendered with database
-* Authentication
-* Routes firmed up
-* Styling complete
-* Deploy to Heroku
+Monday:
 
-Stretch:
+* routes (with testing)
+* views (possibly incomplete)
+* database set up
+* chartjs research
+
+Tuesday:
+
+* authentication
+* mvp
+* styling
+* validation (check students answered)
+
+Wednesday:
+
+* add option for multiple questions
+* finish styling/bootstrap styling for mobile ready
+
+Thursday:
+
 * Research external API for trivia questions
+
+If time:
+
 * Research 3D visualization for results
