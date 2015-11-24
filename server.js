@@ -30,9 +30,10 @@ app.use(express.static(__dirname + '/public'));
 
 // Set view engine to hbs
 app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname + '/views/partials');
 
 // Connect to mongodb
-
+mongoose.connect('mongodb://localhost/pulsecheck-app');
 
 // Set up routes
 app.get('/', function(req, res) {

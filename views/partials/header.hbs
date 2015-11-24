@@ -1,0 +1,18 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+		<div class="navbar-header">
+			<h3 class="navbar-text" id="logo">PulseCheck</h3>
+		</div>
+    {{#if user}}
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/profile"><span class="glyphicon glyphicon-home"></span> Profile</a></li>
+				<li><a href="/login"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+			</ul>
+		{{else}}
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/signup"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+				<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+			</ul>
+		{{/if}}
+  </div>
+</nav>
