@@ -14,7 +14,8 @@ Stretch add-ons will include:
 
 **Admin**
 
-The admin will log into the server and create or open questions
+The admin will log into the server and create or open questions.
+
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get/post, update/delete) for the page
@@ -22,18 +23,21 @@ The admin will log into the server and create or open questions
 5. serve the page with information populated from the database
 
 The teacher will log into the app and open a new question.
+
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get/post) for the page
 4. serve the page with information populated from the database
 
 The teacher will login to the webpage and view question results.
+
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get) for the page
 4. serve the page with information populated from the database
 
 The teacher will login to the webpage and view student results.
+
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get) for the page
@@ -42,6 +46,7 @@ The teacher will login to the webpage and view student results.
 ** Student
 
 The student will log into the server and view profile page.
+
 1. wireframe a page
 2. create a user schema with attributes for name, password, array of objects (question (referenced), user answer (ref), correct answer (ref))
 3. create an hbs template
@@ -49,6 +54,7 @@ The student will log into the server and view profile page.
 5. serve the page with information populated from the database
 
 The student will log into the server and view app page.
+
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get/post) for the page
