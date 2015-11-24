@@ -57,22 +57,22 @@ The student will log into the server and view app page.
 ## Wireframes
 
 1. Signup
-![alt text](https://github.com/stevendnoble/project1/mockups/blob/master/signup.png "Sign Up Page")
+![alt text](https://github.com/stevendnoble/project1/blob/master/mockups/signup.png "Sign Up Page")
 
 2. Login
-![alt text](https://github.com/stevendnoble/project1/mockups/blob/master/login.png "Log In Page")
+![alt text](https://github.com/stevendnoble/project1/blob/master/mockups/login.png "Log In Page")
 
 3. Admin Profile
-![alt text](https://github.com/stevendnoble/project1/mockups/blob/master/adminprofile.png "Admin Profile Page")
+![alt text](https://github.com/stevendnoble/project1/blob/master/mockups/adminprofile.png "Admin Profile Page")
 
 4. Admin App
-![alt text](https://github.com/stevendnoble/project1/mockups/blob/master/adminapp.png "Admin App Page")
+![alt text](https://github.com/stevendnoble/project1/blob/master/mockups/adminapp.png "Admin App Page")
 
 5. User Profile
-![alt text](https://github.com/stevendnoble/project1/mockups/blob/master/userprofile.png "User Profile Page")
+![alt text](https://github.com/stevendnoble/project1/blob/master/mockups/userprofile.png "User Profile Page")
 
 6. User App
-![alt text](https://github.com/stevendnoble/project1/mockups/blob/master/userapp.png "User App Page")
+![alt text](https://github.com/stevendnoble/project1/blob/master/mockups/userapp.png "User App Page")
 
 ## Data Models
 
