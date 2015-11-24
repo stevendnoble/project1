@@ -2,7 +2,7 @@
 
 ## Scope
 
-My app will have two views, one for a teacher and one for students.  The student view will work on a computer or a mobile phone.  It will be very simple.  The student will be given a multiple choice question with four choices.  They will press a button, and their answer will be sent to the server and recorded along with the amount of time that it took to answer.
+My app will have two views, one for a teacher (admin) and one for students (users).  The student view will work on a computer or a mobile phone.  It will be very simple.  The student will be given a multiple choice question with four choices.  They will press a button, and their answer will be sent to the server and recorded along with the amount of time that it took to answer.
 
 The teacher view will have two options:  create a new question or view results.  When the teacher views the results, it shows which students answered correctly, which students answered incorrectly, and a pie chart breakdown of the answers.  This will allow the teacher to get a better understanding of where students are having trouble.
 
@@ -22,30 +22,30 @@ The admin will log into the server and create or open questions.
 4. create a schema for question with attributes: question, correct answer, all answers
 5. serve the page with information populated from the database
 
-The teacher will log into the app and open a new question.
+The admin will log into the app and open a new question.
 
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get/post) for the page
 4. serve the page with information populated from the database
 
-The teacher will login to the webpage and view question results.
+The admin will login to the webpage and view question results.
 
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get) for the page
 4. serve the page with information populated from the database
 
-The teacher will login to the webpage and view student results.
+The admin will login to the webpage and view user results.
 
 1. wireframe a page
 2. create an hbs template
 3. write a server route (get) for the page
 4. serve the page with information populated from the database
 
-** Student
+**User**
 
-The student will log into the server and view profile page.
+The user will log into the server and view profile page.
 
 1. wireframe a page
 2. create a user schema with attributes for name, password, array of objects (question (referenced), user answer (ref), correct answer (ref))
@@ -53,7 +53,7 @@ The student will log into the server and view profile page.
 4. write a server route for the page
 5. serve the page with information populated from the database
 
-The student will log into the server and view app page.
+The user will log into the server and view app page.
 
 1. wireframe a page
 2. create an hbs template
