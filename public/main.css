@@ -3,6 +3,29 @@ body {
 	padding-top: 70px;
 }
 
+p {
+	font-size: 20px;
+}
+
+.box {
+	padding: 20px;
+	margin: 10px;
+	border: 3px solid black;
+}
+
+.center-box {
+	padding: 20px;
+	border: 3px solid black;
+}
+
+.container-fluid {
+	padding: 0px 30px;
+}
+
 #logo {
 	color: white;
+}
+
+#user-list, #question-list, #individual-results {
+	display: none;
 }

@@ -96,6 +96,7 @@ Monday:
 * views (possibly incomplete)
 * database set up
 * chartjs research
+* if screen is small (check height) only put A/B/C/D rather than the whole answer on the button
 
 Tuesday:
 

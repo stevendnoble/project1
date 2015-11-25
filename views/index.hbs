@@ -16,17 +16,88 @@
 </head>
 <body>
 	{{> header}}
-	<div class="col-md-4">
-		<h1>Mr. Noble</h1>
-		<h2>username:  mrnoble</h2>
-		<h2>password:  [edit]</h2>
+	<div class="container-fluid">		
+		<div class="row">
+			<div class="col-md-3">
+				<div class="box">
+					<h1>Mr. Noble</h1>
+					<h2>username:  mrnoble</h2>
+					<h2>password:  [edit]</h2>
+					<button class="btn btn-success btn-block" id="user-btn">View Users</button>
+					<button class="btn btn-success btn-block" id="question-btn">View Questions</button>
+					<button class="btn btn-success btn-block" id="add-question-btn">Add Question</button>
+					<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
+				</div>
+			</div>
+			<div class="col-md-9" id="directions">
+				<div class="box">
+					<h1>Directions</h1>
+					<h2>Here is where I will display directions</h2>
+				</div>
+			</div>
+			<div class="col-md-3" id="user-list">
+				<div class="box">
+					<p>User 1</p>
+					<p>User 2</p>
+					<p>User 3</p>
+					<p>User 4</p>
+					<p>User 5</p>
+				</div>
+			</div>
+			<div class="col-md-3" id="question-list">
+				<div class="box">
+					<p>Question 1</p>
+					<p>Question 2</p>
+					<p>Question 3</p>
+					<p>Question 4</p>
+					<p>Question 5</p>
+				</div>
+			</div>
+			<div class="col-md-6" id="individual-results">
+				<div class="box">
+					<h1>This is where the results for individual students or questions will go.</h1>
+				</div>
+			</div>
+			<div class="col-md-3 add-question">
+				<div class="box">
+					<h3>Fill in the following forms and click submit to insert a question</h1>
+					<hr>
+					<form role="form">
+					  <div class="form-group">
+					    <label for="question">Question:</label>
+					    <input type="text" class="form-control" id="question">
+					  </div>
+					  <div class="form-group">
+					    <label for="correct-answer">Correct Answer:</label>
+					    <input type="text" class="form-control" id="correct-answer">
+					  </div>
+					  <div class="form-group">
+					    <label for="answer-choice-1">Answer Choices:</label>
+					    <input type="text" class="form-control" id="answer-choice-1">
+					  </div>
+					  <div class="form-group">
+					    <input type="text" class="form-control" id="answer-choice-2">
+					  </div>
+					  <div class="form-group">
+					    <input type="text" class="form-control" id="answer-choice-3">
+					  </div>
+
+					  <button type="submit" class="btn btn-success" id="submit-question">Submit</button>
+					</form>
+				</div>
+			</div>
+			<div class="col-md-4 col-md-offset-1 add-question">
+				<div class="center-box">
+					<h2>Question</h2>
+					<hr>  <!-- danger, warning, success, primary -->
+					<button class="btn btn-danger btn-block" id="answer-a">Answer A</button>
+					<button class="btn btn-warning btn-block" id="answer-b">Answer A</button>
+					<button class="btn btn-success btn-block" id="answer-c">Answer A</button>
+					<button class="btn btn-primary btn-block" id="answer-d">Answer A</button>
+				</div>
+			</div>
+		</div>
 	</div>
-
-
-
-
-
-
 
 	<!-- jquery -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
