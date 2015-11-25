@@ -17,7 +17,7 @@ var User = require('./models/user'),
 		Question = require('./models/question');
 
 // Middleware for auth
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(session({
 	secret: 'supersecretkey',
 	resave: false,

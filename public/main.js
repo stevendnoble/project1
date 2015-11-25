@@ -1,6 +1,7 @@
 $(function() {
 
-var $box = $('.box'),
+var $avatar = $('.avatar'),
+		$box = $('.box'),
 		$centerBox = $('.center-box'),
 		$userList = $('#user-list'),
 		$questionList = $('#question-list'),
@@ -22,7 +23,13 @@ $userBtn.on('click', openUserPane);
 $questionBtn.on('click', openQuestionPane);
 $addQuestionBtn.on('click', addQuestionPane);
 $directionsBtn.on('click', openDirectionsPane);
+$avatar.on('click', changeAvatar);
 
+function changeAvatar() {
+	var avatarNumber = Number($avatar.attr('src').slice(14).slice(0, -4));
+	avatarNumber = (avatarNumber + 1) % 20;
+	$avatar.attr('src', 'avatars/avatar' + avatarNumber + '.png');
+}
 
 function openUserPane() {
 	event.preventDefault();

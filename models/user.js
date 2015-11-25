@@ -9,6 +9,10 @@ var UserSchema = new Schema({
 	password: {
 		type: String
 	},
+	avatar: {
+		type: String,
+		default: 'avatars/avatar0.png'
+	},
 	admin: Boolean,
 	questions: [{
 		type: Schema.Types.ObjectId,
