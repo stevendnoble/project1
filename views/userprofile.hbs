@@ -18,38 +18,66 @@
 	{{> header}}
 	<div class="container-fluid">		
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-3 col-sm-6 col-xs-12">
 				<div class="box">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3">
-							<img src="avatars/avatar0.png" class="img-responsive avatar">
+					<div class="scroll">
+						<div class="row">
+							<div class="col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
+								<img src="avatars/avatar0.png" class="img-responsive avatar">
+							</div>
 						</div>
+						<hr>
+						<h2 class="text-center">User Profile</h2>
+						<h4>username:</h4>
+						<h4 class="tab">user1</h4>
+						<h4>password:</h4>
+						<h4 class="tab">[edit]</h4>
+						<hr>
+						<button class="btn btn-success btn-block" id="goto-question-btn">Answer Questions</button>
+						<br>
+						<br>
 					</div>
-					<h1>User Profile</h1>
-					<h2>username:  user1</h2>
-					<h2>password:  [edit]</h2>
 				</div>
 			</div>
-			<div class="col-md-3" id="user-question-list">
+			<div class="col-md-3 col-sm-6 col-xs-12" id="user-question-list">
 				<div class="box">
-					<h1><strong>Questions</strong></h1>
-					<p>Question 1</p>
-					<p>Question 2</p>
-					<p>Question 3</p>
-					<p>Question 4</p>
-					<p>Question 5</p>
+					<div class="scroll">
+						<h2 class="text-center"><strong>Questions</strong></h2>
+						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
+						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
+						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
+						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
+						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
+						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
+						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
+						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
+						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
+						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
+						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
+						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
+						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
+						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
+						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
+						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
+						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
+						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
+						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
+						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
+					</div>
 				</div>
 			</div>
-			<div class="col-md-6" id="user-results">
+			<div class="col-md-6 col-sm-12 col-xs-12" id="user-results">
 				<div class="box">
-					<h1><strong>Question 1</strong></h1>
-					<h2>Your Answer:</h2>
-					<h3>Your Answer</h3>
-					<h2>Correct Answer:</h2>
-					<h3>Correct Answer</h3>
-					<h2>Class Breakdown</h2>
-					<br>
-					<img src="pie-chart-example.png" class="img-responsive" height="50%" width="50%">
+					<div class="scroll">
+						<h3><strong>Question 1</strong></h3>
+						<h4>Your Answer:</h4>
+						<h5 class="tab">Your Answer</h5>
+						<h4>Correct Answer:</h4>
+						<h5 class="tab">Correct Answer</h5>
+						<h4>Class Breakdown</h4>
+						<br>
+						<img src="pie-chart-example.png" class="img-responsive" height="25%" width="25%">
+					</div>
 				</div>
 			</div>
 		</div>

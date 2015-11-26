@@ -54,31 +54,99 @@ mongoose.connect('mongodb://localhost/pulsecheck-app');
 
 // User Signup Page
 app.get('/signup', function(req, res) {
-	res.render('signup');
+	// res.render('signup', {user: req.user});
+	// if user is logged in don't let them see signup view
+	if (req.user) {
+		res.redirect('/profile');
+	} else {
+		res.render('signup', {user: req.user});
+	}
 });
 
-app.get('/', function(req, res) {
-	// Set main admin profile
-	res.render('index');
+app.post('/signup', function(req, res) {
+	// If user is logged in, don't let them sign up again
+	if(req.user) {
+		res.redirect('/profile');
+	} else {
+		User.register(new User({username: req.body.username}), req.body.password,
+			function(err, newUser) {
+				passport.authenticate('local')(req, res, function() {
+					//res.send('signed up');
+					res.redirect('/profile');
+				});
+			}
+		);
+	}
 });
 
-app.get('/profile', function(req, res) {
-	// Set user profile
-	res.render('userprofile');
-});
-
-app.get('/question', function(req, res) {
-	// Set user profile
-	res.render('question');
-});
-
+// User login page
 app.get('/login', function(req, res) {
-	// Set user profile
-	res.render('login');
+	// If user is logged in, don't let them see login view
+	if (req.user.admin) {
+		res.redirect('/admin');
+	} else if (req.user) {
+		res.redirect('/profile');
+	} else {
+		res.render('login', {user: req.user});
+	}
 });
 
-// Set up auth routes
+app.post('/login', passport.authenticate('local'), function(req, res) {
+	// res.send('logged in');
+	res.redirect('/profile');
+});
 
+// User/Admin logout route
+app.get('/logout', function(req, res) {
+	req.logout();
+	res.redirect('/login');
+});
+
+// Admin page
+app.get('/admin', function(req, res) {
+	// Set main admin profile
+	// if (req.user.admin) {
+		res.render('admin', {user: req.user});
+	// } else if (req.user) {
+	// 	res.redirect('/profile');
+	// } else {
+	// 	res.redirect('/login');
+	// }
+});
+
+// User profile
+app.get('/profile', function(req, res) {
+	// If user is logged in, direct them to their profile
+	if (req.user) {
+		res.render('userprofile', {user: req.user});
+	} else {
+		res.redirect('/login');
+	}
+});
+
+// User questions
+app.get('/question', function(req, res) {
+	// If user is logged in, let them see the question
+	if (req.user) {
+		res.render('question', {user: req.user});
+	} else {
+		res.redirect('/login');
+	}
+});
+
+// Admin display question and breakdown responses
+app.get('/breakdown', function(req, res) {
+	// If user is admin, let them see the question
+	// If user is logged in as a user but not admin, redirect
+	// to profile, otherwise, redirect to login
+	if (req.user.admin) {
+		res.render('breakdown', {user: req.user});
+	} else if (req.user) {
+		res.redirect('/profile');
+	} else {
+		res.redirect('/login');
+	}
+});
 
 // Set up api routes
 
