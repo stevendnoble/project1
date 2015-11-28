@@ -3,6 +3,9 @@ var mongoose = require('mongoose'),
 		passportLocalMongoose = require('passport-local-mongoose');
 
 var UserSchema = new Schema({
+	name: {
+		type: String
+	},
 	username: {
 		type: String
 	},
@@ -21,7 +24,7 @@ var UserSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Question'
 	}],
-	useranswer: Array
+	useranswer: [String]
 });
 
 UserSchema.plugin(passportLocalMongoose, {

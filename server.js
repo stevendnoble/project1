@@ -64,6 +64,7 @@ app.get('/signup', function(req, res) {
 	// if user is logged in don't let them see signup view
 	if (req.user) {
 		console.log(req.user.username + ' tried to sign up.  Redirected to profile.');
+		console.log('user', req.user);
 		res.redirect('/profile');
 	} else {
 		res.render('signup', {user: req.user});
@@ -75,13 +76,17 @@ app.post('/signup', function(req, res) {
 	if(req.user) {
 		res.redirect('/profile');
 		console.log(req.user.username + ' tried to sign up.  Redirected to profile.');
+		console.log('user', req.user);
 	} else {
 		if (req.body.key == "administrator") {
 			req.body.key = true;
 		} else {
 			req.body.key = false;
 		}
-		User.register(new User({username: req.body.username, admin: req.body.key}), req.body.password,
+		User.register(new User({name: req.body.name,
+														username: req.body.username,
+														admin: req.body.key}),
+														req.body.password,
 			function(err, newUser) {
 				passport.authenticate('local')(req, res, function() {
 					console.log(req.user.username + ' signed up. Redirected to profile.');
@@ -98,6 +103,7 @@ app.get('/login', function(req, res) {
 	if (req.user) {
 		if (req.user.admin) {
 			console.log(req.user.username + ' tried to log in again.  Redirected to admin.');
+			console.log('user', req.user);
 			res.redirect('/admin');
 		} else {
 			console.log(req.user.username + ' tried to log in again.  Redirected to profile.');
@@ -112,6 +118,7 @@ app.post('/login', passport.authenticate('local'), function(req, res) {
 	// If admin, send to admin page.  If not, send to user page.
 	if (req.user.admin) {
 		console.log(req.user.username + ' logged in.  Redirected to admin.');
+		console.log('user', req.user);
 		res.redirect('/admin');		
 	} else {
 		console.log(req.user.username + ' logged in.  Redirected to profile.');
@@ -131,6 +138,7 @@ app.get('/admin', function(req, res) {
 	if (req.user) {
 		if (req.user.admin) {
 			res.render('admin', {user: req.user});
+			console.log('user', req.user);
 		} else {
 			res.redirect('/profile');
 		}
@@ -143,6 +151,7 @@ app.get('/admin', function(req, res) {
 app.get('/breakdown', function(req, res) {
 	// Set main admin profile
 	if (req.user) {
+		console.log('user', req.user);
 		if (req.user.admin) {
 			res.render('breakdown', {user: req.user});
 		} else {	
@@ -157,8 +166,8 @@ app.get('/breakdown', function(req, res) {
 app.get('/profile', function(req, res) {
 	// If user is logged in, direct them to their profile
 	if (req.user) {
+		console.log('user', req.user);
 		res.render('userprofile', {user: req.user});
-		console.log('"req.user.admin"', req.user.admin);
 	} else {
 		res.redirect('/login');
 	}
@@ -174,6 +183,7 @@ app.get('/profile', function(req, res) {
 app.get('/question', function(req, res) {
 	// If user is logged in, let them see the question
 	if (req.user) {
+		console.log('user', req.user);
 		res.render('question', {user: req.user}, {question: currentQuestion});
 	} else {
 		res.redirect('/login');
@@ -185,16 +195,19 @@ app.get('/breakdown', function(req, res) {
 	// If user is admin, let them see the question
 	// If user is logged in as a user but not admin, redirect
 	// to profile, otherwise, redirect to login
-	if (req.user.admin) {
-		res.render('breakdown', {user: req.user});
-	} else if (req.user) {
-		res.redirect('/profile');
+	if (req.user) {
+		console.log('user', req.user);
+		if (req.user.admin) {
+			res.render('breakdown', {user: req.user});
+		} else {
+			res.redirect('/profile');
+		}
 	} else {
 		res.redirect('/login');
 	}
 });
 
-// Set up api routes
+// Set up api routes for questions
 app.get('/api/questions', function(req, res) {
 	Question.find(function(err, allQuestions) {
 		if (err) {
@@ -272,6 +285,95 @@ app.put('/api/questions/:id', function(req, res) {
 			// Save updated question
 			foundQuestion.save(function(err, savedQuestion) {
 				res.json(savedQuestion);
+			});
+		}
+	});
+});
+
+// Set up api routes for user
+app.get('/api/users', function(req, res) {
+	User.find(function(err, allUsers) {
+		if (err) {
+			res.json(err);
+		} else {
+			console.log(allUsers);
+			res.json({users: allUsers});
+		}
+	});
+});
+
+app.post('/api/users', function(req, res) {
+	// if (req.user.admin) {
+		// Use form data to create new user
+		var newUser = new User(req.body);
+		newUser.save(function(err, savedUser) {
+			if (err) {
+				// console.log('err', err);
+				res.json(err);
+			} else {
+				// console.log('savedQ', savedQuestion);
+				res.json(savedUser);			
+			}
+		});
+	// } else {
+		// res.status(401).json({ error: 'Unauthorized' });
+	// }
+});
+
+app.get('/api/users/:id', function(req, res) {
+	// Find URL from parameters
+	var userId = req.params.id;
+	// Find user in db using id
+	User.findOne({ _id: userId }, function(err, foundUser) {
+		if (err) {
+			res.json(err);
+		} else {
+			res.json(foundUser);
+		}
+	});
+});
+
+app.delete('/api/users/:id', function(req, res) {
+	// Find the url from the parameters
+	var userId = req.params.id;
+	// Find user in the db using the id
+	User.findOneAndRemove({ _id: userId }, function(err, deletedUser) {
+		if (err) {
+			console.log(err);
+		} else {
+			res.json(deletedUser);
+		}
+	});
+});
+
+//
+// I think this will mess up the password field.
+// Could we create a second referenced set for the updateable
+// fields in users?
+//   name, username, avatar, questions, useranswer
+//
+app.put('/api/users/:id', function(req, res) {
+	// Find the url from the parameters
+	var userId = req.params.id;
+	// Find user in the db using the id
+	User.findOne({ _id: userId }, function(err, foundUser) {
+		if (err) {
+			console.log('we have an error.');
+			console.log(err);
+		} else {
+			// Update the user's attributes
+			console.log(req.body);
+			foundUser.name = req.body.name;
+			foundUser.username = req.body.username;
+			foundUser.password = foundUser.password;
+			foundUser.avatar = req.body.avatar;
+			foundUser.admin = req.body.admin;
+			foundUser.questions = req.body.questions;
+			foundUser.useranswer = req.body.useranswer;
+			console.log('foundUser', foundUser);
+			// Save updated user
+			foundUser.save(function(err, savedUser) {
+				res.json(savedUser);
 			});
 		}
 	});

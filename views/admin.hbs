@@ -23,14 +23,16 @@
 					<div class="scroll">
 						<div class="row">
 							<div class="col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
-								<img src="avatars/avatar0.png" class="img-responsive avatar">
+								<img src="{{user.avatar}}" class="img-responsive avatar">
 							</div>
 						</div>
-						<h2 class="text-center">Mr. Noble</h2>
+						<h2 class="text-center">{{user.name}}</h2>
 						<h4>username:</h4>
-						<h4 class="tab">mrnoble</h4>
+						<h4 class="tab">{{user.username}}</h4>
+						<h4>admin:</h4>
+						<h4 class="tab">{{#if user.admin}}yes{{else}}no{{/if}}</h4>
 						<h4>password:</h4>
-						<h4 class="tab">[edit]</h4>
+						<h4 class="tab">{{user.password}}</h4>
 						<button class="btn btn-success btn-block" id="user-btn">View Users</button>
 						<button class="btn btn-success btn-block" id="question-btn">View Results</button>
 						<button class="btn btn-success btn-block" id="add-question-btn">Add Question</button>
@@ -60,57 +62,29 @@
 					</div>						
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12" id="user-list">
+			<div class="col-md-3 col-sm-6 col-xs-12" id="user-list"> <!-- User List -->
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Users</strong></h2>
-						<button class="btn btn-success btn-block user-tab" id="user-1">User 1</button>
-						<button class="btn btn-success btn-block user-tab" id="user-2">User 2</button>
-						<button class="btn btn-success btn-block user-tab" id="user-3">User 3</button>
-						<button class="btn btn-success btn-block user-tab" id="user-4">User 4</button>
-						<button class="btn btn-success btn-block user-tab" id="user-5">User 5</button>
-						<button class="btn btn-success btn-block user-tab" id="user-1">User 6</button>
-						<button class="btn btn-success btn-block user-tab" id="user-2">User 7</button>
-						<button class="btn btn-success btn-block user-tab" id="user-3">User 8</button>
-						<button class="btn btn-success btn-block user-tab" id="user-4">User 9</button>
-						<button class="btn btn-success btn-block user-tab" id="user-5">User 10</button>
-						<button class="btn btn-success btn-block user-tab" id="user-1">User 11</button>
-						<button class="btn btn-success btn-block user-tab" id="user-2">User 12</button>
-						<button class="btn btn-success btn-block user-tab" id="user-3">User 13</button>
-						<button class="btn btn-success btn-block user-tab" id="user-4">User 14</button>
-						<button class="btn btn-success btn-block user-tab" id="user-5">User 15</button>
-						<button class="btn btn-success btn-block user-tab" id="user-1">User 16</button>
-						<button class="btn btn-success btn-block user-tab" id="user-2">User 17</button>
-						<button class="btn btn-success btn-block user-tab" id="user-3">User 18</button>
-						<button class="btn btn-success btn-block user-tab" id="user-4">User 19</button>
-						<button class="btn btn-success btn-block user-tab" id="user-5">User 20</button>						
+						<div id="user-list-results"></div>
+						<script type="text/x-handlebars-template" id="user-list-template">
+							\{{#each users}}
+								<button class="btn btn-success btn-block user-tab" data-id="\{{this._id}}">\{{this.name}}</button>
+							\{{/each}}
+						</script>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12" id="question-list">
+			<div class="col-md-3 col-sm-6 col-xs-12" id="question-list"> <!-- Question List -->
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Questions</strong></h2>
-						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
-						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
-						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
-						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
-						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
-						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
-						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
-						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
-						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
-						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
-						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
-						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
-						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
-						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
-						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
-						<button class="btn btn-success btn-block question-tab" id="question-1">Question 1</button>
-						<button class="btn btn-success btn-block question-tab" id="question-2">Question 2</button>
-						<button class="btn btn-success btn-block question-tab" id="question-3">Question 3</button>
-						<button class="btn btn-success btn-block question-tab" id="question-4">Question 4</button>
-						<button class="btn btn-success btn-block question-tab" id="question-5">Question 5</button>						
+						<div id="question-list-results"></div>
+						<script type="text/x-handlebars-template" id="question-list-template">
+							\{{#each questions}}
+								<button class="btn btn-success btn-block question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
+							\{{/each}}
+						</script>
 					</div>
 				</div>
 			</div>

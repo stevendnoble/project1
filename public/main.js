@@ -6,7 +6,11 @@ var $window = $(window),
 		$centerBox = $('.center-box'),
 		$centerBox2 = $('.center-box-2'),
 		$userList = $('#user-list'),
+		$userListResults = $('#user-list-results'),
+		$userListTemplate = $('#user-list-template'),
 		$questionList = $('#question-list'),
+		$questionListResults = $('#question-list-results'),
+		$questionListTemplate = $('#question-list-template'),
 		$scroll = $('.scroll'),
 		$individualResults = $('#individual-results'),
 		$directions = $('#directions'),
@@ -20,8 +24,16 @@ var $window = $(window),
 		$questionBox = $('div#question-box'),
 		$displayQuestionBtn = $('#display-question-btn');
 
-var baseUrl = '/',
-		apiUrl = baseUrl + 'api/questions';
+var userResults = [],
+		questionResults = [],
+		baseUrl = '/',
+		questionUrl = baseUrl + 'api/questions',
+		userUrl = baseUrl + 'api/users';
+
+var userListSource = $userListTemplate.html(),
+		userTemplate = Handlebars.compile(userListSource),
+		questionListSource = $questionListTemplate.html(),
+		questionTemplate = Handlebars.compile(questionListSource);
 
 // Event handlers
 $userBtn.on('click', openUserPane);
@@ -107,6 +119,18 @@ function openUserPane() {
 	$addQuestion.hide();
 	$userList.show();
 	$individualResults.show();
+	$.get(userUrl, function(data) {
+		userResults = data.users;
+		refreshUsers();
+	});
+}
+
+function refreshUsers() {
+	console.log('refreshing users');
+	$userListResults.empty();
+	// Render the data
+	var userListHtml = userTemplate({users: userResults});
+	$userListResults.append(userListHtml);
 }
 
 function openQuestionPane() {
@@ -116,6 +140,19 @@ function openQuestionPane() {
 	$addQuestion.hide();
 	$questionList.show();
 	$individualResults.show();
+	$.get(questionUrl, function(data) {
+		questionResults = data.questions;
+		refreshQuestions();
+	});
+}
+
+function refreshQuestions() {
+	console.log('refreshing questions');
+	$questionListResults.empty();
+	// Render the data
+	var questionListHtml = questionTemplate({questions: questionResults});
+	console.log(questionListHtml);
+	$questionListResults.append(questionListHtml);
 }
 
 function addQuestionPane() {
