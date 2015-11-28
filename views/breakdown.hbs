@@ -18,29 +18,21 @@
 	{{> header}}
 	<div class="container-fluid">		
 		<div class="row">
-			<div class="col-md-4 col-md-offset-4">
-				<div class="center-box">
-					<h1 class="text-center">Sign Up</h1>
+			<div class="col-md-4 col-md-offset-1">
+				<div class="center-box" id="question-box">
+					<h2>Question</h2>
 					<hr>
-					<form method="POST" action="/signup">
-						<div class="form-group">
-							<input type="text" name="username" class="form-control" placeholder="Username" autofocus>
-						</div>
-						<div class="form-group">
-							<input type="password" name="password" class="form-control" placeholder="Password">
-						</div>
-						<div class="form-group">
-							<input type="text" name="key" class="form-control" placeholder="Key">
-						</div>
-						<div class="form-group">
-							<input type="submit" class="btn btn-block btn-success" value="Sign Up">
-						</div>
-					</form>
-					<hr>
-					<div class="text-center">
-						<a href="/">Click here to learn more about this site</a>
-					</div>
-				</div>
+					<button class="btn btn-success btn-block" id="answer-a">Answer A</button>
+					<button class="btn btn-success btn-block" id="answer-b">Answer B</button>
+					<button class="btn btn-success btn-block" id="answer-c">Answer C</button>
+					<button class="btn btn-success btn-block" id="answer-d">Answer D</button>
+				</div> <!-- Question -->
+			</div>
+			<div class="col-md-4 col-md-offset-2">
+				<div class="center-box-2" id="pie-chart-canvas">
+					<h2 class="text-center">Class Breakdown</h2>
+					<img src="pie-chart-example.png" class="img-responsive">
+				</div> 
 			</div>
 		</div>
 	</div>

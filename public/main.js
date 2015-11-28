@@ -4,33 +4,69 @@ var $window = $(window),
 		$avatar = $('.avatar'),
 		$box = $('.box'),
 		$centerBox = $('.center-box'),
+		$centerBox2 = $('.center-box-2'),
 		$userList = $('#user-list'),
 		$questionList = $('#question-list'),
 		$scroll = $('.scroll'),
 		$individualResults = $('#individual-results'),
 		$directions = $('#directions'),
 		$addQuestion = $('.add-question'),
+		$submitQuestionBtn = $('#submit-question-btn'),
 		$userBtn = $('#user-btn'),
 		$questionBtn = $('#question-btn'),
+		$gotoQuestionBtn = $('#goto-question-btn'),
 		$addQuestionBtn = $('#add-question-btn'),
 		$directionsBtn = $('#directions-btn'),
-		$questionBox = $('div#question-box');
+		$questionBox = $('div#question-box'),
+		$displayQuestionBtn = $('#display-question-btn');
+
+var baseUrl = '/',
+		apiUrl = baseUrl + 'api/questions';
 
 // Event handlers
 $userBtn.on('click', openUserPane);
 $questionBtn.on('click', openQuestionPane);
 $addQuestionBtn.on('click', addQuestionPane);
+$gotoQuestionBtn.on('click', gotoQuestion);
 $directionsBtn.on('click', openDirectionsPane);
+$displayQuestionBtn.on('click', gotoBreakdown);
 $avatar.on('click', changeAvatar);
 $window.on('resize', calculateHeight);
+$submitQuestionBtn.on('click', submitQuestion);
 
+function submitQuestion() {
+	event.preventDefault();
+	var newQuestion = $(this).serialize();
+	$.post(apiUrl, newQuestion, function(data) {
+		console.log(data);
+	});
+}
+
+//
+//	Why do we have to do this?
+//	What is it actually doing?
+//
+function gotoBreakdown() {
+	var newWindow = window.open('', '_blank');
+	newWindow.location.href = ('/breakdown');
+}
+
+//
+//	Why do we have to do this?
+//	What is it actually doing?
+//
+function gotoQuestion() {
+	var newWindow = window.open('', '_blank');
+	newWindow.location.href = ('/question');
+	// $.get('/question');
+}
 
 calculateHeight();
-
 function calculateHeight() {
 	var height = $window.height();
 	var width = $window.width();
 	var boxHeight = $centerBox.height();
+	var boxHeight2 = $centerBox2.height();
 
 	// Trying to adjust the height when on a small device
 	// if (width < 768) {
@@ -40,25 +76,28 @@ function calculateHeight() {
 	// 	$questionBox.removeClass('box');		
 	// 	$questionBox.addClass('center-box');
 	// }
-	if (width < 768) {
-		$questionBox.removeAttr('margin-top');
-		$questionBox.css('height', height - 110);
-		$questionBox.css('margin', '20px 0px');
-	} else if (width > 768) {
-		$questionBox.removeAttr('height');		
-		$questionBox.css('margin-top', ((height - boxHeight - 150) / 2));
-		$questionBox.css('margin', '0px 20px');
-	}
+	// if (width < 768) {
+	// 	$questionBox.removeAttr('margin-top');
+	// 	$questionBox.css('height', height - 110);
+	// 	$questionBox.css('margin', '20px 0px');
+	// } else if (width > 768) {
+	// 	$questionBox.removeAttr('height');		
+	// 	$questionBox.css('margin-top', ((height - boxHeight - 150) / 2));
+	// 	$questionBox.css('margin', '0px 20px');
+	// }
 
 	$box.css('height', height - 90);
 	$scroll.css('height', height - 130);
 	$centerBox.css('margin-top', ((height - boxHeight - 150) / 2));	
+	$centerBox2.css('margin-top', ((height - boxHeight2 - 150) / 2));	
 }
 
 function changeAvatar() {
 	var avatarNumber = Number($avatar.attr('src').slice(14).slice(0, -4));
 	avatarNumber = (avatarNumber + 1) % 20;
-	$avatar.attr('src', 'avatars/avatar' + avatarNumber + '.png');
+	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
+	$avatar.attr('src', avatarFile);
+	// change avatar in the database
 }
 
 function openUserPane() {

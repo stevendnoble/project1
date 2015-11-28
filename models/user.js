@@ -13,7 +13,10 @@ var UserSchema = new Schema({
 		type: String,
 		default: 'avatars/avatar0.png'
 	},
-	admin: Boolean,
+	admin: {
+		type: Boolean,
+		default: false
+	},
 	questions: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Question'

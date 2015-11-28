@@ -10,10 +10,16 @@
 		</div>
 		<div class="collapse navbar-collapse" id="my-navbar">
 			<img src="ekg-animation.gif" id="ekg">
-	    {{#if user}}
+			{{#if user.admin}}
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/admin"><span class="glyphicon glyphicon-wrench"></span> Admin</a></li>
+					<li><a href="/profile"><span class="glyphicon glyphicon-home"></span> Profile</a></li>
+					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+				</ul>
+	    {{else if user}}
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/profile"><span class="glyphicon glyphicon-home"></span> Profile</a></li>
-					<li><a href="/login"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+					<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
 				</ul>
 			{{else}}
 				<ul class="nav navbar-nav navbar-right">

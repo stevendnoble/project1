@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+
+	<!-- set viewport to device width to make site responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- bootstrap -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+  <!-- custom styles -->
+  <link rel="stylesheet" type="text/css" href="main.css">
+
+	<title>PulseCheck</title>
+</head>
+<body>
+	{{> header}}
+	<div class="container-fluid">		
+		<div class="row">
+			<div class="col-md-1 col-xl-2 visible-md visible-lg visible-xl">
+				<div class="box">
+					<div class="scroll">
+						<img src="avatars/avatar0.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar1.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar2.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar3.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar4.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar5.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar6.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar7.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar8.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar9.png" class="img-responsive">
+						<hr class="hr-avatar">
+  						<img src="avatars/avatar10.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar11.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar12.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar13.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar14.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar15.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar16.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar17.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar18.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar19.png" class="img-responsive">
+					</div class="hr-avatar">
+				</div> <!-- Avatars -->
+			</div>
+			<div class="col-xl-8 col-lg-10 col-md-10 col-xs-12">
+				<div class="box">
+					<div class="scroll">
+						<h2 class="text-center">About this App</h2>
+						<button class="btn btn-success btn-block" id="user-btn">View Users</button>
+						<button class="btn btn-success btn-block" id="question-btn">View Results</button>
+						<button class="btn btn-success btn-block" id="add-question-btn">Add Question</button>
+						<button class="btn btn-success btn-block" id="display-question-btn">View Questions</button>
+						<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1 col-xl-2 visible-md visible-lg visible-xl"> <!-- Avatars -->
+				<div class="box">
+					<div class="scroll">
+						<img src="avatars/avatar10.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar11.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar12.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar13.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar14.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar15.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar16.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar17.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar18.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar19.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar0.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar1.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar2.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar3.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar4.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar5.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar6.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar7.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar8.png" class="img-responsive">
+						<hr class="hr-avatar">
+						<img src="avatars/avatar9.png" class="img-responsive">
+					</div class="hr-avatar">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- jquery -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+	<!-- bootstrapjs -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+	<!-- handlebars -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js"></script>
+
+  <!-- custom script -->
+  <script type="text/javascript" src="main.js"></script>
+</body>
+</html>

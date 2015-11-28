@@ -1,11 +1,12 @@
 var mongoose = require('mongoose'),
-		Schema = mongoose.Schema,
+		Schema = mongoose.Schema;
 		passportLocalMongoose = require('passport-local-mongoose');
 
 var QuestionSchema = new Schema({
+	label: String,
 	text: String,
 	answer: String,
-	incorrectanswers: Array,
+	incorrectanswers: [String],
 	userscorrect: [
 	{
 		type: Schema.Types.ObjectId,
