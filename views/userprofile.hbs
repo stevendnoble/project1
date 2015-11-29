@@ -17,8 +17,8 @@
 <body>
 	{{> header}}
 	<div class="container-fluid">		
-		<div class="row">
-			<div class="col-md-3 col-sm-6 col-xs-12">
+		<div class="row" id="user-profile">
+			<div class="col-md-3 col-sm-6 col-xs-12"> <!-- User Profile -->
 				<div class="box">
 					<div class="scroll">
 						<div class="row">
@@ -39,31 +39,54 @@
 					</div>
 				</div> <!-- User Info -->
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12" id="user-question-list">
+			<div class="col-md-3 col-sm-6 col-xs-12 user-question-list"> <!-- Question List -->
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Questions</strong></h2>
-						{{#each user.questions}}
-							<button class="btn btn-success btn-block question-tab" data-id="{{user.questions.id}}">{{user.questions.id}}</button>
-						{{/each}}
+						<div id="question-list-results"></div>
+						<script type="text/x-handlebars-template" id="question-list-template">
+							\{{#each questions}}
+								<button class="btn btn-success btn-block question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
+							\{{/each}}
+						</script>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-12 col-xs-12" id="user-results">
+			<div class="col-md-6 col-sm-12 col-xs-12 user-question-list">
 				<div class="box">
 					<div class="scroll">
-						<h3><strong>Question 1</strong></h3>
-						<h4>Your Answer:</h4>
-						<h5 class="tab">Your Answer</h5>
-						<h4>Correct Answer:</h4>
-						<h5 class="tab">Correct Answer</h5>
-						<h4>Class Breakdown</h4>
-						<br>
-						<img src="pie-chart-example.png" class="img-responsive" height="25%" width="25%">
-					</div>
+						<h2><strong>Directions</strong></h2>
+						<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
+						<div id="question-individual-results"></div>
+	<!-- 						<h3><strong>Question 1</strong></h3>
+							<h4>Correct Answer:  foo</h4>
+							<h5 class="tab">Users:  user1, user2, user3</h5>
+							<h4>Incorrect Answer:  bar</h4>
+							<h5 class="tab">Users:  user1, user2, user3</h5>
+							<h4>Incorrect Answer:  bar2</h4>
+							<h5 class="tab">Users:  user1, user2, user3</h5>
+							<h4>Incorrect Answer:  bar3</h4>
+							<h5 class="tab">Users:  Did somebody say bar?</h5>
+							<h3>Class Breakdown</h3>
+							<br>
+							<img src="pie-chart-example.png" class="img-responsive" height="50%" width="50%">
+ -->					</div>
 				</div>
 			</div>
 		</div>
+		<div class="row user-question">
+			<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+				<div class="center-box" id="user-question-box">
+					<h2>Question</h2>
+					<hr>  <!-- danger, warning, success, primary -->
+					<button class="btn btn-success btn-block" id="answer-a">Answer A</button>
+					<button class="btn btn-success btn-block" id="answer-b">Answer B</button>
+					<button class="btn btn-success btn-block" id="answer-c">Answer C</button>
+					<button class="btn btn-success btn-block" id="answer-d">Answer D</button>
+				</div>
+			</div>
+		</div>
+
 	</div>
 
 	<!-- jquery -->
@@ -76,6 +99,6 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js"></script>
 
   <!-- custom script -->
-  <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript" src="userscripts.js"></script>
 </body>
 </html>

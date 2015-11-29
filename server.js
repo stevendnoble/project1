@@ -173,6 +173,8 @@ app.get('/profile', function(req, res) {
 	}
 });
 
+
+var currentQuestion;
 //
 // How do I set the current question?  I want to access the database for one
 // question at a time.  I think I can make a global variable for current

@@ -1,10 +1,11 @@
 $(function() {
 
+$(function() {
+
 var $avatar = $('.avatar'),
 		$box = $('.box'),
 		$centerBox = $('.center-box'),
 		$centerBox2 = $('.center-box-2'),
-		$gotoQuestionBtn = $('#goto-question-btn'),
 		$questionBox = $('div#question-box'),
 		$scroll = $('.scroll'),
 		$window = $(window);
@@ -43,7 +44,6 @@ var userListSource = $userListTemplate.html(),
 		questionTemplate = Handlebars.compile(questionListSource);
 
 // Event handlers
-$gotoQuestionBtn.on('click', gotoQuestion);
 $avatar.on('click', changeAvatar);
 $window.on('resize', calculateHeight);
 
@@ -85,17 +85,6 @@ function calculateHeight() {
 	$scroll.css('height', height - 130);
 	$centerBox.css('margin-top', ((height - boxHeight - 150) / 2));	
 	$centerBox2.css('margin-top', ((height - boxHeight2 - 150) / 2));	
-}
-
-
-//
-//	Why do we have to do this?
-//	What is it actually doing?
-//
-function gotoQuestion() {
-	var newWindow = window.open('', '_blank');
-	newWindow.location.href = ('/question');
-	// $.get('/question');
 }
 
 function changeAvatar() {
@@ -200,4 +189,5 @@ function openDirectionsPane() {
 	$addQuestion.hide();
 }
 
+});
 });

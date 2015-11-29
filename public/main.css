@@ -144,8 +144,8 @@ hr.hr-avatar {
 	width: 250;
 }
 
-#user-list, #question-list, #individual-results,
-.add-question {
+.user-list, .question-list, .add-question, .breakdown,
+#user-question-box {
 	display: none;
 }
 
