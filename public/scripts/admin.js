@@ -248,9 +248,9 @@ function addToQuestionArray() {
 	// Ajax call to get question by id
 	$.get(questionUrl + '/' + id, function(data) {
 		questionToAdd = data;
-		console.log('data', data);
-		console.log('question', questionToAdd);
 		// Create an array of answers and shuffle the answers
+		console.log('qtaia', questionToAdd.incorrectanswers);
+		console.log('question', questionToAdd);
 		var answersArray = questionToAdd.incorrectanswers;
 		answersArray.push(questionToAdd.answer);
 		answersArray = shuffle(answersArray);
@@ -289,20 +289,7 @@ function addToQuestionArray() {
 	}
 }
 
-// Why do we have to do this?
-// What is it actually doing?
-// It seems like it should be possible to have a button redirect to another
-// page when you click it.  Adding an anchor tag to it messes up the button
-// group class, and adding the anchor tag just to the text makes the button
-// not fully responsive to clicking.
-// I solved my problem by making it a hidden section of my single page and
-// toggling the view, but it seems as though you should be able to make it
-// a separate page as well.  I ran into some problems refactoring it for this
-// way too.
 function gotoBreakdown() {
-	// var newWindow = window.open('', '_blank');
-	// newWindow.location.href = ('/breakdown');
-
 	// Should this be checking periodically to see if all users have answered?
 	// Could we just update with how many have answered at intervals of 5 seconds?
 	var index = 0;
@@ -311,10 +298,6 @@ function gotoBreakdown() {
 	calculateHeight();
 	// while(index < questionArray.length) {
 		var answersArray = questionArray[index].incorrectanswers;
-		console.log(answersArray);
-		answersArray.push(questionArray[index].answer);
-		console.log(answersArray);
-		answersArray = shuffle(answersArray);
 		$question.text(questionArray[index].text);
 		$answerA.text(answersArray[0]);
 		$answerB.text(answersArray[1]);
@@ -372,18 +355,5 @@ function refreshQuestions(questionResults) {
 	var questionListHtml = questionTemplate({questions: questionResults});
 	$questionListResults.append(questionListHtml);
 }
-
-// GENERAL QUESTIONS:
-
-// Can I not break up my js files into two and call a function from one
-// in the other if it is loaded after it? I ended up making separate js files
-// admin and user pages, but it could be more DRY if I was able to call functions
-// like calculateHeight() from within those pages.
-
-// The data that I am getting back from my server says that there are four incorrect
-// answers for the questions.  It is including the correct answer, but I can't find
-// where it is getting that.  Postman doesn't report that.
-
-
 
 });

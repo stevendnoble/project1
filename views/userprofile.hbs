@@ -18,7 +18,7 @@
 	{{> header}}
 	<div class="container-fluid">		
 		<div class="row" id="user-profile">
-			<div class="col-md-3 col-sm-6 col-xs-12"> <!-- User Profile -->
+			<div class="col-md-3 col-sm-6 col-xs-12 user-profile"> <!-- User Profile -->
 				<div class="box">
 					<div class="scroll">
 						<div class="row">
@@ -33,13 +33,83 @@
 						<h4>password:</h4>
 						<h4 class="tab">{{user.password}}</h4>
 						<hr>
-						<button class="btn btn-success btn-block" id="goto-question-btn">Answer Questions</button>
+						<button class="btn btn-success btn-block" id="user-view-results-btn">View Results</button>
+						<button class="btn btn-success btn-block" id="user-answer-questions-btn">Answer Questions</button>
+						<button class="btn btn-success btn-block" id="user-goto-questions-btn">Go To Questions</button>
 						<br>
 						<br>
 					</div>
 				</div> <!-- User Info -->
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 user-question-list"> <!-- Question List -->
+			<div class="col-md-9 col-sm-6 col-xs-12 user-profile" id="directions">
+				<div class="box">
+					<div class="scroll">
+						<h2>Directions</h2>
+						<h3>To get started:</h3>
+						<ol>
+							<h4><li>Have users sign up and enter a password.</li></h4>
+							<h4><li>Enter a question into the database.</li></h4>
+							<h4><li>Select the questions you would like to display.</li></h4>
+							<h4><li>Poll your students and view the results.</li></h4>
+						</ol>
+						<h3>To add questions:</h3>
+						<ol>
+							<h4><li>Click the [Add Question] button to open the form.</li></h4>
+							<h4><li>Fill out the form.</li></h4>
+							<h4><li>The label section does not get displayed with the question, but is used to keep track of questions in the database.  Name your questions wisely.</li></h4>
+							<h4><li>Enter the question, answer, and incorrect answer choices.</li></h4>
+							<h4><li>Press the [Preview] button to see how the question will appear to users.</li></h4>
+							<h4><li>Press the [Submit] button to enter the question into the database.</li></h4>
+						</ol>
+						<h3>To view questions and make them available to users:</h3>
+						<ol>
+							<h4><li>Click the [View Questions] button to open a list of all available questions.</li></h4>
+							<h4><li>Click on each question to review it and make sure you would like to use it.  If you would, click the [Add to List] button.</li></h4>
+							<h4><li>The button should change to green.  If you would like to deselect the question, click on it again and click the [Remove from List] button.</li></h4>
+							<h4><li>Once you have selected all of the questions you would like to use, click on the [Go to Questions] button under the Admin Profile.</li></h4>
+							<h4><li>After each question, click the [Next Question] button to move on.</li></h4>
+						</ol>
+						<h3>To view results by user:</h3>
+						<ol>
+							<h4><li>Click the [View Users] button to review the results by user</li></h4>
+							<h4><li>Choose a user to see their answers to each question</li></h4>
+						</ol>
+						<h3>To view results by user:</h3>
+						<ol>
+							<h4><li>Click the [View Results] button to review the breakdown of each question</li></h4>
+							<h4><li>Choose a question to see which users answered correctly or incorrectly.</li></h4>
+						</ol>
+					</div>						
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6 col-xs-12 user-profile user-view-results-list">
+				<div class="box">
+					<div class="scroll">
+						<h2 class="text-center"><strong>Questions</strong></h2>
+						<div id="question-list-results"></div> 
+						<!-- Line above not necessary -->
+						<!-- When iterating through, do if user.question?  This should only be showing questions that the user has answered ?????? -->
+						{{#each user.questions}}
+							<button class="btn btn-success btn-block question-tab" data-id="{{this._id}}">{{this.label}}</button>
+						{{/each}}
+						<!-- <script type="text/x-handlebars-template" id="question-list-template">
+							\{{#each questions}}
+								<button class="btn btn-success btn-block question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
+							\{{/each}}
+						</script> -->
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-12 col-xs-12 user-profile user-view-results-list">
+				<div class="box">
+					<div class="scroll">
+						<h2><strong>Directions</strong></h2>
+						<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
+						<div id="question-individual-results"></div>
+						</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6 col-xs-12 user-profile user-answer-question-list">
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Questions</strong></h2>
@@ -52,25 +122,13 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-12 col-xs-12 user-question-list">
+			<div class="col-md-6 col-sm-12 col-xs-12 user-profile user-answer-question-list">
 				<div class="box">
 					<div class="scroll">
 						<h2><strong>Directions</strong></h2>
 						<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
 						<div id="question-individual-results"></div>
-	<!-- 						<h3><strong>Question 1</strong></h3>
-							<h4>Correct Answer:  foo</h4>
-							<h5 class="tab">Users:  user1, user2, user3</h5>
-							<h4>Incorrect Answer:  bar</h4>
-							<h5 class="tab">Users:  user1, user2, user3</h5>
-							<h4>Incorrect Answer:  bar2</h4>
-							<h5 class="tab">Users:  user1, user2, user3</h5>
-							<h4>Incorrect Answer:  bar3</h4>
-							<h5 class="tab">Users:  Did somebody say bar?</h5>
-							<h3>Class Breakdown</h3>
-							<br>
-							<img src="pie-chart-example.png" class="img-responsive" height="50%" width="50%">
- -->					</div>
+						</div>
 				</div>
 			</div>
 		</div>

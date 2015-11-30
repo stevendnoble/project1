@@ -163,7 +163,8 @@ hr.hr-avatar {
 
 .user-list, .question-list, .add-question,
 .add-question-list, .breakdown, #user-question-box,
-#display-questions-btn {
+#display-questions-btn, .user-view-question-list,
+.user-answer-question-list, #user-goto-questions-btn {
 	display: none;
 }
 
