@@ -16,6 +16,9 @@ var express = require('express'),
 var User = require('./models/user'),
 		Question = require('./models/question');
 
+// Global variables
+var currentQuestion;
+
 // Middleware for auth
 app.use(cookieParser());
 app.use(session({
@@ -55,7 +58,7 @@ mongoose.connect('mongodb://localhost/pulsecheck-app');
 // About the App Page
 app.get('/', function(req, res) {
 	// Send the user to the about page
-	res.render('about');
+	res.render('about', {user: req.user});
 });
 
 // User Signup Page
@@ -147,21 +150,6 @@ app.get('/admin', function(req, res) {
 	}
 });
 
-// Admin page
-app.get('/breakdown', function(req, res) {
-	// Set main admin profile
-	if (req.user) {
-		console.log('user', req.user);
-		if (req.user.admin) {
-			res.render('breakdown', {user: req.user});
-		} else {	
-			res.redirect('/profile');
-		}
-	} else {
-		res.redirect('/login');
-	}
-});
-
 // User profile
 app.get('/profile', function(req, res) {
 	// If user is logged in, direct them to their profile
@@ -173,41 +161,12 @@ app.get('/profile', function(req, res) {
 	}
 });
 
-
-var currentQuestion;
 //
 // How do I set the current question?  I want to access the database for one
 // question at a time.  I think I can make a global variable for current
 // question and have the admin set it from their page.  But I don't know how to
 // get that information from mongo.
 //
-// User questions
-app.get('/question', function(req, res) {
-	// If user is logged in, let them see the question
-	if (req.user) {
-		console.log('user', req.user);
-		res.render('question', {user: req.user}, {question: currentQuestion});
-	} else {
-		res.redirect('/login');
-	}
-});
-
-// Admin display question and breakdown responses
-app.get('/breakdown', function(req, res) {
-	// If user is admin, let them see the question
-	// If user is logged in as a user but not admin, redirect
-	// to profile, otherwise, redirect to login
-	if (req.user) {
-		console.log('user', req.user);
-		if (req.user.admin) {
-			res.render('breakdown', {user: req.user});
-		} else {
-			res.redirect('/profile');
-		}
-	} else {
-		res.redirect('/login');
-	}
-});
 
 // Set up api routes for questions
 app.get('/api/questions', function(req, res) {

@@ -33,11 +33,12 @@
 						<h4 class="tab">{{#if user.admin}}yes{{else}}no{{/if}}</h4>
 						<h4>password:</h4>
 						<h4 class="tab">{{user.password}}</h4>
+						<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
+						<button class="btn btn-success btn-block" id="add-question-btn">Add Question</button>
+						<button class="btn btn-success btn-block" id="view-questions-btn">View Questions</button>
+						<button class="btn btn-success btn-block" id="display-questions-btn">Display Questions</button>
 						<button class="btn btn-success btn-block" id="user-btn">View Users</button>
 						<button class="btn btn-success btn-block" id="question-btn">View Results</button>
-						<button class="btn btn-success btn-block" id="add-question-btn">Add Question</button>
-						<button class="btn btn-success btn-block" id="display-question-btn">View Questions</button>
-						<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
 					</div>
 				</div>
 			</div>
@@ -47,22 +48,42 @@
 						<h2>Directions</h2>
 						<h3>To get started:</h3>
 						<ol>
-							<li>Have users sign up and enter a password</li>
-							<li>Enter a question into the database</li>
-							<li>Click the View Question button</li>
-							<li>Choose the question that you would like students to answer</li>
+							<h4><li>Have users sign up and enter a password.</li></h4>
+							<h4><li>Enter a question into the database.</li></h4>
+							<h4><li>Select the questions you would like to display.</li></h4>
+							<h4><li>Poll your students and view the results.</li></h4>
 						</ol>
-						<h3>To view results</h3>
+						<h3>To add questions:</h3>
 						<ol>
-							<li>Click the View Users button to review the results by user</li>
-							<li>Choose a user to see their answers to each question</li>
-							<li>Click the View Results button to review the breakdown of each question</li>
-							<li>Choose a question to see which users answered correctly or incorrectly.</li>
+							<h4><li>Click the [Add Question] button to open the form.</li></h4>
+							<h4><li>Fill out the form.</li></h4>
+							<h4><li>The label section does not get displayed with the question, but is used to keep track of questions in the database.  Name your questions wisely.</li></h4>
+							<h4><li>Enter the question, answer, and incorrect answer choices.</li></h4>
+							<h4><li>Press the [Preview] button to see how the question will appear to users.</li></h4>
+							<h4><li>Press the [Submit] button to enter the question into the database.</li></h4>
+						</ol>
+						<h3>To view questions and make them available to users:</h3>
+						<ol>
+							<h4><li>Click the [View Questions] button to open a list of all available questions.</li></h4>
+							<h4><li>Click on each question to review it and make sure you would like to use it.  If you would, click the [Add to List] button.</li></h4>
+							<h4><li>The button should change to green.  If you would like to deselect the question, click on it again and click the [Remove from List] button.</li></h4>
+							<h4><li>Once you have selected all of the questions you would like to use, click on the [Go to Questions] button under the Admin Profile.</li></h4>
+							<h4><li>After each question, click the [Next Question] button to move on.</li></h4>
+						</ol>
+						<h3>To view results by user:</h3>
+						<ol>
+							<h4><li>Click the [View Users] button to review the results by user</li></h4>
+							<h4><li>Choose a user to see their answers to each question</li></h4>
+						</ol>
+						<h3>To view results by user:</h3>
+						<ol>
+							<h4><li>Click the [View Results] button to review the breakdown of each question</li></h4>
+							<h4><li>Choose a question to see which users answered correctly or incorrectly.</li></h4>
 						</ol>
 					</div>						
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile user-list"> <!-- User List -->
+			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile user-list">
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Users</strong></h2>
@@ -96,7 +117,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile question-list"> <!-- Question List -->
+			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile question-list">
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Questions</strong></h2>
@@ -115,7 +136,7 @@
 						<h2><strong>Directions</strong></h2>
 						<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
 						<div id="question-individual-results"></div>
-	<!-- 						<h3><strong>Question 1</strong></h3>
+							<h3><strong>Question 1</strong></h3>
 							<h4>Correct Answer:  foo</h4>
 							<h5 class="tab">Users:  user1, user2, user3</h5>
 							<h4>Incorrect Answer:  bar</h4>
@@ -127,7 +148,31 @@
 							<h3>Class Breakdown</h3>
 							<br>
 							<img src="pie-chart-example.png" class="img-responsive" height="50%" width="50%">
- -->					</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile add-question-list">
+				<div class="box">
+					<div class="scroll">
+						<h2 class="text-center"><strong>Questions</strong></h2>
+						<h4>As you click questions, a preview will be shown to the right and the question will be added to the question list.  Click again to cancel.  Selected questions will have a green button.</h4>
+						<div id="add-question-list-results"></div>
+						<script type="text/x-handlebars-template" id="add-question-list-template">
+							\{{#each questions}}
+								<button class="btn btn-success btn-block question-tab click-to-select" data-id="\{{this._id}}">\{{this.label}}</button>
+							\{{/each}}
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-md-offset-1 col-sm-12 col-xs-12 admin-profile add-question-list">
+				<div class="center-box">
+					<h2 class="question">Question</h2>
+					<hr>
+					<button class="btn btn-success btn-block answer-a">Answer A</button>
+					<button class="btn btn-success btn-block answer-b">Answer B</button>
+					<button class="btn btn-success btn-block answer-c">Answer C</button>
+					<button class="btn btn-success btn-block answer-d">Answer D</button>
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile add-question">
@@ -142,51 +187,52 @@
 						  </div>
 						  <div class="form-group">
 						    <label for="question">Question:</label>
-						    <input type="text" class="form-control" name="text" id="question">
+						    <input type="text" class="form-control" name="text" id="text">
 						  </div>
 						  <div class="form-group">
 						    <label for="correct-answer">Correct Answer:</label>
-						    <input type="text" class="form-control" name="answer" id="correct-answer">
+						    <input type="text" class="form-control" name="answer" id="answer">
 						  </div>
 						  <div class="form-group">
 						    <label for="answer-choice-1">Answer Choices:</label>
-						    <input type="text" class="form-control" name="incorrectanswers[0]" id="answer-choice-1">
+						    <input type="text" class="form-control" name="incorrectanswers0" id="incorrectanswers0">
 						  </div>
 						  <div class="form-group">
-						    <input type="text" class="form-control" name="incorrectanswers[1]" id="answer-choice-2">
+						    <input type="text" class="form-control" name="incorrectanswers1" id="incorrectanswers1">
 						  </div>
 						  <div class="form-group">
-						    <input type="text" class="form-control" name="incorrectanswers[2]" id="answer-choice-3">
+						    <input type="text" class="form-control" name="incorrectanswers2" id="incorrectanswers2">
 						  </div>
-						  <button type="submit" class="btn btn-success" id="preview-question-btn">Preview</button>
+						  <button class="btn btn-success" id="preview-question-btn">Preview</button>
 						  <button type="submit" class="btn btn-success" id="submit-question-btn">Submit</button>
 						</form>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-3 col-xs-12 admin-profile add-question"> <!-- Add Question -->
-				<div class="center-box">
-					<h2>Question</h2>
+			<div class="col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-3 col-xs-12 admin-profile add-question">
+				<div class="center-box-4">
+					<h2 class="question">Question</h2>
 					<hr>
-					<button class="btn btn-success btn-block" id="answer-a">Answer A</button>
-					<button class="btn btn-success btn-block" id="answer-b">Answer B</button>
-					<button class="btn btn-success btn-block" id="answer-c">Answer C</button>
-					<button class="btn btn-success btn-block" id="answer-d">Answer D</button>
+					<button class="btn btn-success btn-block answer-a">Answer A</button>
+					<button class="btn btn-success btn-block answer-b">Answer B</button>
+					<button class="btn btn-success btn-block answer-c">Answer C</button>
+					<button class="btn btn-success btn-block answer-d">Answer D</button>
 				</div>
 			</div>
-			<div class="col-md-4 col-md-offset-1 breakdown"> <!-- Question -->
-				<div class="center-box" id="question-box">
-					<h2>Question</h2>
+			<div class="col-lg-6 breakdown"> <!-- Question -->
+				<div class="center-box-2" id="question-box">
+					<h2 class="question display-font">Question</h2>
 					<hr>
-					<button class="btn btn-success btn-block" id="answer-a">Answer A</button>
-					<button class="btn btn-success btn-block" id="answer-b">Answer B</button>
-					<button class="btn btn-success btn-block" id="answer-c">Answer C</button>
-					<button class="btn btn-success btn-block" id="answer-d">Answer D</button>
+					<button class="btn btn-success btn-block display-font answer-a">Answer A</button>
+					<button class="btn btn-success btn-block display-font answer-b">Answer B</button>
+					<button class="btn btn-success btn-block display-font answer-c">Answer C</button>
+					<button class="btn btn-success btn-block display-font answer-d">Answer D</button>
 				</div> 
 			</div>
-			<div class="col-md-4 col-md-offset-2 breakdown"> <!-- Pie Chart -->
-				<div class="center-box-2" id="pie-chart-canvas">
-					<h2 class="text-center">Class Breakdown</h2>
+			<div class="col-lg-6 breakdown"> <!-- Pie Chart -->
+				<div class="center-box-3" id="pie-chart-canvas">
+					<h2 class="text-center display-font">Class Breakdown</h2>
+					<hr>
 					<img src="pie-chart-example.png" class="img-responsive">
 				</div>
 			</div>
@@ -204,6 +250,6 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js"></script>
 
   <!-- custom script -->
-  <script type="text/javascript" src="admin.js"></script>
+  <script type="text/javascript" src="scripts/admin.js"></script>
 </body>
 </html>
