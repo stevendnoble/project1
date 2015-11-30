@@ -50,7 +50,11 @@ app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 
 // Connect to mongodb
-mongoose.connect('mongodb://localhost/pulsecheck-app');
+mongoose.connect(
+	process.env.MONGOLAB_URI ||
+	process.env.MONGOHQ_URL ||
+	'mongodb://localhost/pulsecheck-app'
+);
 
 //#################
 //# SET UP ROUTES #
