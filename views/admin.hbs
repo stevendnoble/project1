@@ -17,8 +17,9 @@
 <body>
 	{{> header}}
 	<div class="container-fluid">		
-		<div class="row">
-			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile"> <!-- Admin Profile Info -->
+		<div class="row" id="admin-profile">
+			<!-- Admin Profile Info -->
+			<div class="col-md-3 col-sm-6 col-xs-12">
 				<div class="box">
 					<div class="scroll">
 						<div class="row">
@@ -34,15 +35,16 @@
 						<h4>password:</h4>
 						<h4 class="tab">{{user.password}}</h4>
 						<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
-						<button class="btn btn-success btn-block" id="add-question-btn">Add Question</button>
+						<button class="btn btn-success btn-block" id="add-question-btn">Add New Question</button>
 						<button class="btn btn-success btn-block" id="view-questions-btn">View Questions</button>
 						<button class="btn btn-success btn-block" id="display-questions-btn">Display Questions</button>
-						<button class="btn btn-success btn-block" id="user-btn">View Users</button>
-						<button class="btn btn-success btn-block" id="question-btn">View Results</button>
+						<button class="btn btn-success btn-block" id="user-btn">User Results</button>
+						<button class="btn btn-success btn-block" id="question-btn">Question Results</button>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-9 col-sm-6 col-xs-12 admin-profile" id="directions"> <!-- Directions -->
+			<!-- [Directions] -->
+			<div class="col-md-9 col-sm-6 col-xs-12" id="directions">
 				<div class="box">
 					<div class="scroll">
 						<h2>Directions</h2>
@@ -83,87 +85,8 @@
 					</div>						
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile user-list">
-				<div class="box">
-					<div class="scroll">
-						<h2 class="text-center"><strong>Users</strong></h2>
-						<div id="user-list-results"></div>
-						<script type="text/x-handlebars-template" id="user-list-template">
-							\{{#each users}}
-								<button class="btn btn-success btn-block user-tab" data-id="\{{this._id}}">\{{this.name}}</button>
-							\{{/each}}
-						</script>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-sm-12 col-xs-12 admin-profile user-list">
-				<div class="box">
-					<div class="scroll">
-						<h2><strong>Directions</strong></h2>
-						<h3>Click on a user.  The results for that user will be displayed in this box.  It will include the user's answers to each question as well as general information about those questions.</h3>
-						<div id="user-individual-results"></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile question-list">
-				<div class="box">
-					<div class="scroll">
-						<h2 class="text-center"><strong>Questions</strong></h2>
-						<div id="question-list-results"></div>
-						<script type="text/x-handlebars-template" id="question-list-template">
-							\{{#each questions}}
-								<button class="btn btn-success btn-block question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
-							\{{/each}}
-						</script>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-sm-12 col-xs-12 admin-profile question-list">
-				<div class="box">
-					<div class="scroll">
-						<h2><strong>Directions</strong></h2>
-						<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
-						<div id="question-individual-results"></div>
-							<h3><strong>Question 1</strong></h3>
-							<h4>Correct Answer:  foo</h4>
-							<h5 class="tab">Users:  user1, user2, user3</h5>
-							<h4>Incorrect Answer:  bar</h4>
-							<h5 class="tab">Users:  user1, user2, user3</h5>
-							<h4>Incorrect Answer:  bar2</h4>
-							<h5 class="tab">Users:  user1, user2, user3</h5>
-							<h4>Incorrect Answer:  bar3</h4>
-							<h5 class="tab">Users:  Did somebody say bar?</h5>
-							<h3>Class Breakdown</h3>
-							<br>
-							<img src="pie-chart-example.png" class="img-responsive" height="50%" width="50%">
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile add-question-list">
-				<div class="box">
-					<div class="scroll">
-						<h2 class="text-center"><strong>Questions</strong></h2>
-						<h4>As you click questions, a preview will be shown to the right and the question will be added to the question list.  Click again to cancel.  Selected questions will have a green button.</h4>
-						<div id="add-question-list-results"></div>
-						<script type="text/x-handlebars-template" id="add-question-list-template">
-							\{{#each questions}}
-								<button class="btn btn-success btn-block question-tab click-to-select" data-id="\{{this._id}}">\{{this.label}}</button>
-							\{{/each}}
-						</script>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4 col-md-offset-1 col-sm-12 col-xs-12 admin-profile add-question-list">
-				<div class="center-box">
-					<h2 class="question">Question</h2>
-					<hr>
-					<button class="btn btn-success btn-block answer-a">Answer A</button>
-					<button class="btn btn-success btn-block answer-b">Answer B</button>
-					<button class="btn btn-success btn-block answer-c">Answer C</button>
-					<button class="btn btn-success btn-block answer-d">Answer D</button>
-				</div>
-			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 admin-profile add-question">
+			<!-- Form to [Add New Question] -->
+			<div class="col-md-3 col-sm-6 col-xs-12 add-question">
 				<div class="box">
 					<div class="scroll">
 						<h3>Fill in the following forms and click submit to insert a question</h1>
@@ -197,7 +120,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-3 col-xs-12 admin-profile add-question">
+			<!-- Preview for [Add New Question] -->
+			<div class="col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-3 col-xs-12 add-question">
 				<div class="center-box-4">
 					<h2 class="question">Question</h2>
 					<hr>
@@ -207,7 +131,86 @@
 					<button class="btn btn-success btn-block answer-d">Answer D</button>
 				</div>
 			</div>
-			<div class="col-lg-6 breakdown"> <!-- Question -->
+			<!-- Add questions to array from [View Questions] -->
+			<div class="col-md-3 col-sm-6 col-xs-12 add-question-list">
+				<div class="box">
+					<div class="scroll">
+						<h2 class="text-center"><strong>Questions</strong></h2>
+						<h4>As you click questions, a preview will be shown to the right and the question will be added to the question list.  Click again to cancel.  Selected questions will have a green button.</h4>
+						<div id="add-question-list-results"></div>
+						<script type="text/x-handlebars-template" id="add-question-list-template">
+							\{{#each questions}}
+								<button class="btn btn-success btn-block question-tab click-to-select" data-id="\{{this._id}}">\{{this.label}}</button>
+							\{{/each}}
+						</script>
+					</div>
+				</div>
+			</div>
+			<!-- Preview questions from [View Questions] -->
+			<div class="col-md-4 col-md-offset-1 col-sm-12 col-xs-12 add-question-list">
+				<div class="center-box">
+					<h2 class="question">Question</h2>
+					<hr>
+					<button class="btn btn-success btn-block answer-a">Answer A</button>
+					<button class="btn btn-success btn-block answer-b">Answer B</button>
+					<button class="btn btn-success btn-block answer-c">Answer C</button>
+					<button class="btn btn-success btn-block answer-d">Answer D</button>
+				</div>
+			</div>
+			<!-- [View Users] Pane -->
+			<div class="col-md-3 col-sm-6 col-xs-12 user-list">
+				<div class="box">
+					<div class="scroll">
+						<h2 class="text-center"><strong>Users</strong></h2>
+						<div id="user-list-results"></div>
+						<script type="text/x-handlebars-template" id="user-list-template">
+							\{{#each users}}
+								<button class="btn btn-success btn-block user-tab" data-id="\{{this._id}}">\{{this.name}}</button>
+							\{{/each}}
+						</script>
+					</div>
+				</div>
+			</div>
+			<!-- Individual results of [View Users] -->
+			<div class="col-md-6 col-sm-12 col-xs-12 user-list">
+				<div class="box">
+					<div class="scroll">
+						<div id="user-individual-results">
+							<h2><strong>Directions</strong></h2>
+							<h3>Click on a user.  The results for that user will be displayed in this box.  It will include the user's answers to each question as well as general information about those questions.</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- [View Results] Pane -->
+			<div class="col-md-3 col-sm-6 col-xs-12 question-list">
+				<div class="box">
+					<div class="scroll">
+						<h2 class="text-center"><strong>Questions</strong></h2>
+						<div id="question-list-results"></div>
+						<script type="text/x-handlebars-template" id="question-list-template">
+							\{{#each questions}}
+								<button class="btn btn-success btn-block question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
+							\{{/each}}
+						</script>
+					</div>
+				</div>
+			</div>
+			<!-- Individual questions from [View Results] -->
+			<div class="col-md-6 col-sm-12 col-xs-12 question-list">
+				<div class="box">
+					<div class="scroll">
+						<div id="question-individual-results">
+							<h2><strong>Directions</strong></h2>
+							<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" id="breakdown">
+			<!-- [Display Questions] -->
+			<div class="col-lg-6 breakdown">
 				<div class="center-box-2" id="question-box">
 					<h2 class="question display-font">Question</h2>
 					<hr>
@@ -217,14 +220,14 @@
 					<button class="btn btn-success btn-block display-font answer-d">Answer D</button>
 				</div> 
 			</div>
-			<div class="col-lg-6 breakdown"> <!-- Pie Chart -->
+			<!-- Pie Chart Breakdown in [Display Questions] -->
+			<div class="col-lg-6 breakdown">
 				<div class="center-box-3" id="pie-chart-canvas">
 					<h2 class="text-center display-font">Class Breakdown</h2>
 					<hr>
 					<img src="pie-chart-example.png" class="img-responsive">
 				</div>
 			</div>
-
 		</div>
 	</div>
 

@@ -7,9 +7,6 @@ var $avatar = $('.avatar'),
 		$centerBox2 = $('.center-box-2'),
 		$centerBox3 = $('.center-box-3'),
 		$centerBox4 = $('.center-box-4'),
-		// QuestionBox is used for manipulating just the question box to make
-		// the page more responsive.  It is currently non-functioning
-		$questionBox = $('div#question-box'),
 		$scroll = $('.scroll'),
 		$window = $(window);
 
@@ -48,7 +45,7 @@ var $addQuestionList = $('.add-question-list'),
 		$addQuestionListResults = $('#add-question-list-results'),
 		$addQuestionListTemplate = $('#add-question-list-template'),
 		$addQuestionTabBtn = $('.add-question-tab'),
-		$adminProfile = $('.admin-profile'), // To toggle entire profile on viewBreakdown
+		$adminProfile = $('#admin-profile'),
 		$breakdown = $('.breakdown');
 
 // Selectors for [View Results] and [View Users]
@@ -101,8 +98,9 @@ $addQuestionListResults.on('click', '.click-to-select', addToQuestionArray);
 $displayQuestionsBtn.on('click', gotoBreakdown);
 
 // Event handlers for detailed information by user or question
-$userTabBtn.on('click', loadUserInfo);
-// $questionTabBtn.on('click', loadQuestionInfo);
+// need to put handler on the 
+$userListResults.on('click', '.user-tab', loadUserInfo);
+$questionListResults.on('click', '.question-tab', loadQuestionInfo);
 
 // Generic functions
 calculateHeight();
@@ -113,23 +111,6 @@ function calculateHeight() {
 	var boxHeight2 = $centerBox2.height();
 	var boxHeight3 = $centerBox3.height();
 	var boxHeight4 = $centerBox4.height();
-	// Trying to adjust the height when on a small device
-	// if (width < 768) {
-	// 	$questionBox.removeClass('center-box');
-	// 	$questionBox.addClass('box');
-	// } else if (width > 768) {
-	// 	$questionBox.removeClass('box');		
-	// 	$questionBox.addClass('center-box');
-	// }
-	// if (width < 768) {
-	// 	$questionBox.removeAttr('margin-top');
-	// 	$questionBox.css('height', height - 110);
-	// 	$questionBox.css('margin', '20px 0px');
-	// } else if (width > 768) {
-	// 	$questionBox.removeAttr('height');		
-	// 	$questionBox.css('margin-top', ((height - boxHeight - 150) / 2));
-	// 	$questionBox.css('margin', '0px 20px');
-	// }
 	$box.css('height', height - 90);
 	$scroll.css('height', height - 130);
 	$centerBox.css('margin-top', ((height - boxHeight - 150) / 2));	
@@ -138,6 +119,7 @@ function calculateHeight() {
 	$centerBox4.css('margin-top', ((height - boxHeight4 - 150) / 2));	
 }
 
+// On click, changes the avatar image, but does not yet save to the database
 function changeAvatar() {
 	var avatarNumber = Number($avatar.attr('src').slice(14).slice(0, -4));
 	avatarNumber = (avatarNumber + 1) % 20;
@@ -146,7 +128,11 @@ function changeAvatar() {
 	// change avatar in the database
 }
 
-// Functions for [Add Question]
+//////////////////////////////////
+// Functions for [Add Question] //
+//////////////////////////////////
+
+// Open the add question pane and the preview question
 function addQuestionPane() {
 	event.preventDefault();
 	$directions.hide();
@@ -158,6 +144,7 @@ function addQuestionPane() {
 	calculateHeight();
 }
 
+// Add the information from the form to the preview
 function previewQuestion() {
 	event.preventDefault();
 	// Take form data and store it temporarily
@@ -175,6 +162,7 @@ function previewQuestion() {
 	$answerD.text(answers[2]);
 }
 
+// Post the question to the server (and then db)
 function submitQuestion() {
 	event.preventDefault();
 	// Take form values and modify them slightly
@@ -199,42 +187,7 @@ function submitQuestion() {
 	$formControl.val('');
 }
 
-// Function for [Directions]
-function openDirectionsPane() {
-	event.preventDefault();
-	$directions.show();
-	$userList.hide();
-	$questionList.hide();
-	$addQuestion.hide();
-	$displayQuestionsBtn.hide();
-	$addQuestionList.hide();
-}
-
-// Functions for [View Questions]
-function openAddQuestionListPane() {
-	questionArray = []; // every time this pane is opened it resets the question array
-	event.preventDefault();
-	$directions.hide();
-	$userList.hide();
-	$addQuestion.hide();
-	$questionList.hide();
-	$addQuestionList.show();
-	$displayQuestionsBtn.show();
-	$.get(questionUrl, function(data) {
-		questionResults = data.questions;
-		refreshQuestionList(questionResults);
-	});
-	calculateHeight();
-}
-
-function refreshQuestionList(questionResults) {
-	console.log('refreshing questions');
-	$addQuestionListResults.empty();
-	// Render the data
-	var addQuestionListHtml = addQuestionTemplate({questions: questionResults});
-	$addQuestionListResults.append(addQuestionListHtml);
-}
-
+// Shuffle the elements of an array (used for answers)
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex ;
   // While there remain elements to shuffle...
@@ -250,6 +203,53 @@ function shuffle(array) {
   return array;
 }
 
+///////////////////////////////
+// Function for [Directions] //
+///////////////////////////////
+
+// Open the directions pane
+function openDirectionsPane() {
+	event.preventDefault();
+	$directions.show();
+	$userList.hide();
+	$questionList.hide();
+	$addQuestion.hide();
+	$displayQuestionsBtn.hide();
+	$addQuestionList.hide();
+}
+
+////////////////////////////////////
+// Functions for [View Questions] //
+////////////////////////////////////
+
+// Open the view questions pane to add questions to the question array
+function openAddQuestionListPane() {
+	questionArray = []; // every time this pane is opened it resets the question array
+	event.preventDefault();
+	$directions.hide();
+	$userList.hide();
+	$addQuestion.hide();
+	$questionList.hide();
+	$addQuestionList.show();
+	$displayQuestionsBtn.show();
+	// Get the questions from the db
+	$.get(questionUrl, function(data) {
+		questionResults = data.questions;
+		refreshQuestionList(questionResults);
+	});
+	calculateHeight();
+}
+
+// Refresh the question list with the questions from the db
+function refreshQuestionList(questionResults) {
+	console.log('refreshing questions');
+	$addQuestionListResults.empty();
+	// Render the data
+	var addQuestionListHtml = addQuestionTemplate({questions: questionResults});
+	$addQuestionListResults.append(addQuestionListHtml);
+}
+
+// Adds selected question to the question array to be displayed
 function addToQuestionArray() {
 	// Get the id from the button
 	var id = $(this).attr('data-id');
@@ -285,6 +285,7 @@ function addToQuestionArray() {
 	}
 }
 
+// Opens the window to display the question and the breakdown of answers
 function gotoBreakdown() {
 	// Should this be checking periodically to see if all users have answered?
 	// Could we just update with how many have answered at intervals of 5 seconds?
@@ -301,7 +302,11 @@ function gotoBreakdown() {
 	// }
 }
 
-// Functions for [View Users] and [View Results]
+///////////////////////////////////////////////////
+// Functions for [View Users] and [View Results] //
+///////////////////////////////////////////////////
+
+// Open the users pane to view results by user
 function openUserPane() {
 	event.preventDefault();
 	$directions.hide();
@@ -316,6 +321,7 @@ function openUserPane() {
 	});
 }
 
+// Refreshes the users with results from db
 function refreshUsers(userResults) {
 	console.log('refreshing users');
 	$userListResults.empty();
@@ -324,11 +330,15 @@ function refreshUsers(userResults) {
 	$userListResults.append(userListHtml);
 }
 
+// Load the results of individual users
 function loadUserInfo() {
 	event.preventDefault();
+	$userIndividualResults.empty();
+	$userIndividualResults.text('coming soon...');
 	// Function will load individual results by user
 }
 
+// Opens the questions pane to view results by question
 function openQuestionPane() {
 	event.preventDefault();
 	$directions.hide();
@@ -344,11 +354,27 @@ function openQuestionPane() {
 	});
 }
 
+// Refreshes the questions with results from db
 function refreshQuestions(questionResults) {
 	console.log('refreshing questions');
 	// Render the data
 	var questionListHtml = questionTemplate({questions: questionResults});
 	$questionListResults.append(questionListHtml);
 }
+
+// Load the results of individual questions
+function loadQuestionInfo() {
+	$questionIndividualResults.empty();
+	$questionIndividualResults.text('coming soon...');
+	event.preventDefault();
+	// Function will load individual results by question
+}
+
+// Questions:
+//
+// Should I build the questionArray on the server instead of this file?
+// Is this restful?
+// How can I send an array from this file to the server file?
+// Should I be checking the server periodically for answers from users?
 
 });

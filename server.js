@@ -17,8 +17,8 @@ var User = require('./models/user'),
 		Question = require('./models/question');
 
 // Global variables
-var currentQuestion;
-var questionArray;
+// var currentQuestion;
+// var questionArray;
 
 // Middleware for auth
 app.use(cookieParser());

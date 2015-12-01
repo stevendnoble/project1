@@ -67,7 +67,7 @@ $answerD.on('click', checkAnswer);
 // $userTabBtn.on('click', loadUserInfo);
 // $questionTabBtn.on('click', loadQuestionInfo);
 
-// Needs to be part of both
+// Adjusts the height of boxes on the page
 calculateHeight();
 function calculateHeight() {
 	var height = $window.height();
@@ -80,6 +80,7 @@ function calculateHeight() {
 	$centerBox2.css('margin-top', ((height - boxHeight2 - 150) / 2));	
 }
 
+// On click, changes the avatar image, but does not yet save to the database
 function changeAvatar() {
 	var avatarNumber = Number($avatar.attr('src').slice(14).slice(0, -4));
 	avatarNumber = (avatarNumber + 1) % 20;
@@ -88,7 +89,12 @@ function changeAvatar() {
 	// change avatar in the database
 }
 
-// Functions for [View Results]
+//////////////////////////////////
+// Functions for [View Results] //
+//////////////////////////////////
+
+// Opens the pane to [View Results]
+// Questions are taken from the completed questions in the user's profile
 function openQuestionPane() {
 	event.preventDefault();
 	$directions.hide();
@@ -102,7 +108,11 @@ function openQuestionPane() {
 	// });
 }
 
-// Functions for [Answer Questions]
+//////////////////////////////////////
+// Functions for [Answer Questions] //
+//////////////////////////////////////
+
+// Opens the pane for [Answer Questions]
 function openUserAnswerQuestionListPane() {
 	questionArray = []; // every time this pane is opened it resets the question array
 	event.preventDefault();
@@ -118,6 +128,8 @@ function openUserAnswerQuestionListPane() {
 	calculateHeight();
 }
 
+// Refreshes the list of questions from the database
+// Currently includes all questions, later can be filtered for unanswered
 function refreshQuestionList(questionResults) {
 	console.log('refreshing questions');
 	console.log(questionResults);
@@ -126,6 +138,7 @@ function refreshQuestionList(questionResults) {
 	$questionListResults.append(questionListHtml);
 }
 
+// Adds selected question to the question array
 function addToQuestionArray() {
 	// Get the id from the button
 	var id = $(this).attr('data-id');
@@ -162,6 +175,7 @@ function addToQuestionArray() {
 	}
 }
 
+// Answer the selected questions in the question array
 function gotoQuestions() {
 	$userProfile.hide();
 	$userQuestionBox.show();
@@ -169,6 +183,7 @@ function gotoQuestions() {
 	// To be continued...
 }
 
+// When user clicks an answer, check to see if it is correct
 function checkAnswer() {
 	id = Number($(this).attr('id'));
 	console.log(id);
@@ -178,23 +193,5 @@ function checkAnswer() {
 		alert('incorrect :(');
 	}
 }
-
-
-// function gotoBreakdown() {
-// 	// Should this be checking periodically to see if all users have answered?
-// 	// Could we just update with how many have answered at intervals of 5 seconds?
-// 	var index = 0;
-// 	$adminProfile.hide();
-// 	$breakdown.show();
-// 	calculateHeight();
-// 	// while(index < questionArray.length) {
-// 		var answersArray = questionArray[index].incorrectanswers;
-// 		$question.text(questionArray[index].text);
-// 		$answerA.text(answersArray[0]);
-// 		$answerB.text(answersArray[1]);
-// 		$answerC.text(answersArray[2]);
-// 		$answerD.text(answersArray[3]);
-// 	// }
-// }
 
 });
