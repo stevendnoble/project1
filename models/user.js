@@ -24,7 +24,7 @@ var UserSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'Question'
 	}],
-	useranswer: [String]
+	useranswers: [String]
 });
 
 UserSchema.plugin(passportLocalMongoose, {

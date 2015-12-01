@@ -7,7 +7,7 @@ var $avatar = $('.avatar'),
 		$centerBox2 = $('.center-box-2'),
 		$questionBox = $('div#question-box'),
 		$directions = $('#directions'),
-		$questionListResults = $('#question-list-results'),
+		$questionListResults = $('.question-list-results'),
 		$questionListTemplate = $('#question-list-template'),
 		$scroll = $('.scroll'),
 		$userProfile = $('#user-profile'),
@@ -19,12 +19,18 @@ var $userViewResultsBtn = $('#user-view-results-btn'),
 		$userViewResultsList = $('.user-view-results-list');
 
 // Selectors for [Answer Questions]
-var $userAnswerQuestionsBtn = $('#user-answer-questions-btn');
-var $userAnswerQuestionsList = $('.user-answer-questions-list');
-var $gotoQuestionsBtn = $('#user-goto-questions-btn');
+var $userAnswerQuestionsBtn = $('#user-answer-questions-btn'),
+		$userAnswerQuestionsList = $('.user-answer-questions-list'),
+		$gotoQuestionsBtn = $('#user-goto-questions-btn'),
+		$question = $('.question'),
+		$answerA = $('.answer-a'),
+		$answerB = $('.answer-b'),
+		$answerC = $('.answer-c'),
+		$answerD = $('.answer-d');
 
-
-// Event Handlers
+// Global variables
+var questionArray = [];
+var index = 0;
 
 //##############
 //# Handlebars #
@@ -37,15 +43,6 @@ var questionResults = [],
 var questionListSource = $questionListTemplate.html(),
 		questionTemplate = Handlebars.compile(questionListSource);
 
-$.get(questionUrl, function(data) {
-	questionResults = data.questions;
-	refreshQuestions();
-});
-
-// On login, get user id and user information from db
-// var id = user._id;
-// console.log(id);
-
 // Event handlers for page
 $avatar.on('click', changeAvatar);
 $window.on('resize', calculateHeight);
@@ -57,8 +54,14 @@ $userViewResultsBtn.on('click', openQuestionPane);
 // Event handlers for [Answer Questions]
 $gotoQuestionsBtn.on('click', gotoQuestions);
 $userAnswerQuestionsBtn.on('click', openUserAnswerQuestionListPane);
-// $addQuestionListResults.on('click', '.click-to-select', addToQuestionArray);
+$questionListResults.on('click', '.click-to-select', addToQuestionArray);
 // $displayQuestionsBtn.on('click', gotoBreakdown);
+
+// Event handlers for answer buttons
+$answerA.on('click', checkAnswer);
+$answerB.on('click', checkAnswer);
+$answerC.on('click', checkAnswer);
+$answerD.on('click', checkAnswer);
 
 // Event handlers for detailed information by user or question
 // $userTabBtn.on('click', loadUserInfo);
@@ -71,23 +74,6 @@ function calculateHeight() {
 	var width = $window.width();
 	var boxHeight = $centerBox.height();
 	var boxHeight2 = $centerBox2.height();
-	// Trying to adjust the height when on a small device
-	// if (width < 768) {
-	// 	$questionBox.removeClass('center-box');
-	// 	$questionBox.addClass('box');
-	// } else if (width > 768) {
-	// 	$questionBox.removeClass('box');		
-	// 	$questionBox.addClass('center-box');
-	// }
-	// if (width < 768) {
-	// 	$questionBox.removeAttr('margin-top');
-	// 	$questionBox.css('height', height - 110);
-	// 	$questionBox.css('margin', '20px 0px');
-	// } else if (width > 768) {
-	// 	$questionBox.removeAttr('height');		
-	// 	$questionBox.css('margin-top', ((height - boxHeight - 150) / 2));
-	// 	$questionBox.css('margin', '0px 20px');
-	// }
 	$box.css('height', height - 90);
 	$scroll.css('height', height - 130);
 	$centerBox.css('margin-top', ((height - boxHeight - 150) / 2));	
@@ -109,34 +95,24 @@ function openQuestionPane() {
 	$gotoQuestionsBtn.hide();
 	$userViewResultsList.show();
 	$userAnswerQuestionsList.hide();
+	// This is all questions... we want to use server-side to append answered ones
 	// $.get(questionUrl, function(data) {
 	// 	questionResults = data.questions;
 	// 	refreshQuestions(questionResults);
 	// });
 }
 
-function refreshQuestions(questionResults) {
-	console.log('refreshing questions');
-	$questionListResults.empty();
-	// Render the data
-	var questionListHtml = questionTemplate({questions: questionResults});
-	$questionListResults.append(questionListHtml);
-}
-
-function gotoQuestions() {
-	$userProfile.hide();
-	$userQuestionBox.show();
-}
-
 // Functions for [Answer Questions]
 function openUserAnswerQuestionListPane() {
 	questionArray = []; // every time this pane is opened it resets the question array
 	event.preventDefault();
-	$gotoQuestionsBtn.hide();
+	$gotoQuestionsBtn.show();
+	$directions.hide();
 	$userViewResultsList.hide();
 	$userAnswerQuestionsList.show();
 	$.get(questionUrl, function(data) {
 		questionResults = data.questions;
+		$questionListResults.empty();
 		refreshQuestionList(questionResults);
 	});
 	calculateHeight();
@@ -144,74 +120,65 @@ function openUserAnswerQuestionListPane() {
 
 function refreshQuestionList(questionResults) {
 	console.log('refreshing questions');
-	$QuestionListResults.empty();
+	console.log(questionResults);
 	// Render the data
-	var QuestionListHtml = QuestionTemplate({questions: questionResults});
-	$QuestionListResults.append(QuestionListHtml);
+	var questionListHtml = questionTemplate({questions: questionResults});
+	$questionListResults.append(questionListHtml);
 }
 
-// function shuffle(array) {
-//   var currentIndex = array.length, temporaryValue, randomIndex ;
-//   // While there remain elements to shuffle...
-//   while (0 !== currentIndex) {
-//     // Pick a remaining element...
-//     randomIndex = Math.floor(Math.random() * currentIndex);
-//     currentIndex -= 1;
-//     // And swap it with the current element.
-//     temporaryValue = array[currentIndex];
-//     array[currentIndex] = array[randomIndex];
-//     array[randomIndex] = temporaryValue;
-//   }
-//   return array;
-// }
+function addToQuestionArray() {
+	// Get the id from the button
+	var id = $(this).attr('data-id');
+	var questionToAdd;
+	// Ajax call to get question by id
+	$.get(questionUrl + '/' + id, function(data) {
+		questionToAdd = data;
+		// Create an array of answers and shuffle the answers
+		console.log('question', questionToAdd);
+		// Preview the question to make sure it is the correct one to add to the array
+		$question.text(questionToAdd.text);
+		$answerA.text(questionToAdd.answers[0]);
+		$answerB.text(questionToAdd.answers[1]);
+		$answerC.text(questionToAdd.answers[2]);
+		$answerD.text(questionToAdd.answers[3]);
+		// Search for the id in the array
+		var notInArray = true;
+		for (var i = 0; i < questionArray.length; i++) {
+			if (questionArray[i]._id == id) {
+				notInArray = false;
+				questionArray.splice(i, 1);
+				console.log('deleted', questionToAdd, 'array', questionArray);
+			}
+		}
+		if (notInArray) {
+			questionArray.push(questionToAdd);
+			console.log('added', questionToAdd, 'array', questionArray);
+		}
+	});
+	if ($(this).hasClass('question-tab')) {
+		$(this).removeClass('question-tab');
+	} else {
+		$(this).addClass('question-tab');
+	}
+}
 
-// function addToQuestionArray() {
-// 	// Get the id from the button
-// 	var id = $(this).attr('data-id');
-// 	var questionToAdd;
-// 	// Ajax call to get question by id
-// 	$.get(questionUrl + '/' + id, function(data) {
-// 		questionToAdd = data;
-// 		// Create an array of answers and shuffle the answers
-// 		console.log('qtaia', questionToAdd.incorrectanswers);
-// 		console.log('question', questionToAdd);
-// 		var answersArray = questionToAdd.incorrectanswers;
-// 		answersArray.push(questionToAdd.answer);
-// 		answersArray = shuffle(answersArray);
-// 		console.log(answersArray);
-// 		// Preview the question to make sure it is the correct one to add to the array
-// 		$question.text(questionToAdd.text);
-// 		$answerA.text(answersArray[0]);
-// 		$answerB.text(answersArray[1]);
-// 		$answerC.text(answersArray[2]);
-// 		$answerD.text(answersArray[3]);
-// 		// Search for the id in the array
-// 		var notInArray = true;
-// 		for (var i = 0; i < questionArray.length; i++) {
-// 			if (questionArray[i]._id == id) {
-// 				notInArray = false;
-// 				questionArray.splice(i, 1);
-// 				console.log('deleted', questionArray);
-// 			}
-// 		}
-// 		if (notInArray) {
-// 			questionArray.push(questionToAdd);
-// 			console.log('added', questionArray);
-// 		}
-// 		// var index = 0;
-// 		// if (index === -1) {
-// 		// 	questionArray.push(questionToAdd);
-// 		// } else {
-// 		// 	questionArray = questionArray.filter(function(element) {return element._id != id;});
-// 		// 	console.log(questionArray);
-// 		// }
-// 	});
-// 	if ($(this).hasClass('question-tab')) {
-// 		$(this).removeClass('question-tab');
-// 	} else {
-// 		$(this).addClass('question-tab');
-// 	}
-// }
+function gotoQuestions() {
+	$userProfile.hide();
+	$userQuestionBox.show();
+	// Will contain code for answering questions...
+	// To be continued...
+}
+
+function checkAnswer() {
+	id = Number($(this).attr('id'));
+	console.log(id);
+	if(questionArray[index].correctanswer === questionArray[index].answers[id]) {
+		alert('correct!');
+	} else {
+		alert('incorrect :(');
+	}
+}
+
 
 // function gotoBreakdown() {
 // 	// Should this be checking periodically to see if all users have answered?

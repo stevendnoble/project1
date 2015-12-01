@@ -71,8 +71,7 @@ app.get('/signup', function(req, res) {
 	// res.render('signup', {user: req.user});
 	// if user is logged in don't let them see signup view
 	if (req.user) {
-		console.log(req.user.username + ' tried to sign up.  Redirected to profile.');
-		console.log('user', req.user);
+		console.log(req.user.username + ' tried to sign up.  Redirected to profile.');		
 		res.redirect('/profile');
 	} else {
 		res.render('signup', {user: req.user});
@@ -98,7 +97,11 @@ app.post('/signup', function(req, res) {
 			function(err, newUser) {
 				passport.authenticate('local')(req, res, function() {
 					console.log(req.user.username + ' signed up. Redirected to profile.');
-					res.redirect('/profile');
+					if(req.user.admin) {
+						res.redirect('/admin');
+					} else {
+						res.redirect('/profile');
+					}
 				});
 			}
 		);
@@ -166,13 +169,6 @@ app.get('/profile', function(req, res) {
 	}
 });
 
-//
-// How do I set the current question?  I want to access the database for one
-// question at a time.  I think I can make a global variable for current
-// question and have the admin set it from their page.  But I don't know how to
-// get that information from mongo.
-//
-
 // Set up api routes for questions
 app.get('/api/questions', function(req, res) {
 	Question.find(function(err, allQuestions) {
@@ -189,6 +185,8 @@ app.post('/api/questions', function(req, res) {
 	// if (req.user.admin) {
 		// Use form data to create new question
 		var newQuestion = new Question(req.body);
+		console.log('req.body', req.body);
+		console.log('newQuestion', newQuestion);
 		newQuestion.save(function(err, savedQuestion) {
 			if (err) {
 				// console.log('err', err);
@@ -242,12 +240,12 @@ app.put('/api/questions/:id', function(req, res) {
 			// Update the question's attributes
 			foundQuestion.label = req.body.label;
 			foundQuestion.text = req.body.text;
-			foundQuestion.answer = req.body.answer;
-			foundQuestion.incorrectanswers = req.body.incorrectanswers;
-			foundQuestion.userscorrect = req.body.userscorrect;
-			foundQuestion.usersincorrect0 = req.body.usersincorrect0;
-			foundQuestion.usersincorrect1 = req.body.usersincorrect1;
-			foundQuestion.usersincorrect2 = req.body.usersincorrect2;
+			foundQuestion.correctanswer = req.body.correctanswer;
+			foundQuestion.answers = req.body.answers;
+			foundQuestion.usersanswers0 = req.body.usersanswers0;
+			foundQuestion.usersanswers1 = req.body.usersanswers1;
+			foundQuestion.usersanswers2 = req.body.usersanswers2;
+			foundQuestion.usersanswers3 = req.body.usersanswers3;
 			// Save updated question
 			foundQuestion.save(function(err, savedQuestion) {
 				res.json(savedQuestion);
@@ -316,7 +314,7 @@ app.delete('/api/users/:id', function(req, res) {
 // I think this will mess up the password field.
 // Could we create a second referenced set for the updateable
 // fields in users?
-//   name, username, avatar, questions, useranswer
+//   name, username, avatar, questions, useranswers
 //
 app.put('/api/users/:id', function(req, res) {
 	// Find the url from the parameters
@@ -335,7 +333,7 @@ app.put('/api/users/:id', function(req, res) {
 			foundUser.avatar = req.body.avatar;
 			foundUser.admin = req.body.admin;
 			foundUser.questions = req.body.questions;
-			foundUser.useranswer = req.body.useranswer;
+			foundUser.useranswers = req.body.useranswers;
 			console.log('foundUser', foundUser);
 			// Save updated user
 			foundUser.save(function(err, savedUser) {

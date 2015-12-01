@@ -29,10 +29,10 @@ var $addQuestionBtn = $('#add-question-btn'),
 		$previewQuestionBtn = $('#preview-question-btn'),
 		$submitQuestionBtn = $('#submit-question-btn'),
 		// [Submit]/[Preview]
-		$answer = $('#answer'),
-		$incorrectanswers0 = $('#incorrectanswers0'),
-		$incorrectanswers1 = $('#incorrectanswers1'),
-		$incorrectanswers2 = $('#incorrectanswers2'),
+		$correctanswer = $('#correctanswer'),
+		$answers0 = $('#answers0'),
+		$answers1 = $('#answers1'),
+		$answers2 = $('#answers2'),
 		$label = $('#label'),
 		$text = $('#text'),
 		// [Preview]
@@ -78,7 +78,8 @@ var userListSource = $userListTemplate.html(),
 		addQuestionTemplate = Handlebars.compile(addQuestionListSource);
 
 // Global variables
-questionArray = []; // Array for questions to be displayed to students
+var questionArray = []; // Array for questions to be displayed to students
+var index = 0;
 
 // Event handlers for page
 $avatar.on('click', changeAvatar);
@@ -159,31 +160,39 @@ function addQuestionPane() {
 
 function previewQuestion() {
 	event.preventDefault();
+	// Take form data and store it temporarily
 	var text = $text.val();
-	var answer = $answer.val();
-	var incorrectanswers = [];
-	incorrectanswers[0] = $incorrectanswers0.val();
-	incorrectanswers[1] = $incorrectanswers1.val();
-	incorrectanswers[2] = $incorrectanswers2.val();
+	var correctanswer = $correctanswer.val();
+	var answers = [];
+	answers[0] = $answers0.val();
+	answers[1] = $answers1.val();
+	answers[2] = $answers2.val();
+	// Add text to the preview Question
 	$question.text(text);
-	$answerA.text(answer);
-	$answerB.text(incorrectanswers[0]);
-	$answerC.text(incorrectanswers[1]);
-	$answerD.text(incorrectanswers[2]);
+	$answerA.text(correctanswer);
+	$answerB.text(answers[0]);
+	$answerC.text(answers[1]);
+	$answerD.text(answers[2]);
 }
 
 function submitQuestion() {
 	event.preventDefault();
+	// Take form values and modify them slightly
 	var newQuestion = {};
+	var correctanswer = $correctanswer.val();
+	var answers = [];
+	answers[0] = $answers0.val();
+	answers[1] = $answers1.val();
+	answers[2] = $answers2.val();
+	answers.push(correctanswer);
+	answers = shuffle(answers);
+	// Add values to our newQuestion object
 	newQuestion.label = $label.val();
 	newQuestion.text = $text.val();
-	newQuestion.answer = $answer.val();
-	var incorrectanswers = [];
-	incorrectanswers[0] = $incorrectanswers0.val();
-	incorrectanswers[1] = $incorrectanswers1.val();
-	incorrectanswers[2] = $incorrectanswers2.val();
-	newQuestion.incorrectanswers = incorrectanswers;
+	newQuestion.correctanswer = correctanswer;
+	newQuestion.answers = answers;
 	console.log('newQuestion', newQuestion);
+	// Add newQuestion to the db and clear the form
 	$.post(questionUrl, newQuestion, function(data) {
 		console.log(data);
 	});
@@ -249,38 +258,25 @@ function addToQuestionArray() {
 	$.get(questionUrl + '/' + id, function(data) {
 		questionToAdd = data;
 		// Create an array of answers and shuffle the answers
-		console.log('qtaia', questionToAdd.incorrectanswers);
-		console.log('question', questionToAdd);
-		var answersArray = questionToAdd.incorrectanswers;
-		answersArray.push(questionToAdd.answer);
-		answersArray = shuffle(answersArray);
-		console.log(answersArray);
 		// Preview the question to make sure it is the correct one to add to the array
 		$question.text(questionToAdd.text);
-		$answerA.text(answersArray[0]);
-		$answerB.text(answersArray[1]);
-		$answerC.text(answersArray[2]);
-		$answerD.text(answersArray[3]);
+		$answerA.text(questionToAdd.answers[0]);
+		$answerB.text(questionToAdd.answers[1]);
+		$answerC.text(questionToAdd.answers[2]);
+		$answerD.text(questionToAdd.answers[3]);
 		// Search for the id in the array
 		var notInArray = true;
 		for (var i = 0; i < questionArray.length; i++) {
 			if (questionArray[i]._id == id) {
 				notInArray = false;
 				questionArray.splice(i, 1);
-				console.log('deleted', questionArray);
+				console.log('deleted', questionToAdd, 'array', questionArray);
 			}
 		}
 		if (notInArray) {
 			questionArray.push(questionToAdd);
-			console.log('added', questionArray);
+			console.log('added', questionToAdd, 'array', questionArray);
 		}
-		// var index = 0;
-		// if (index === -1) {
-		// 	questionArray.push(questionToAdd);
-		// } else {
-		// 	questionArray = questionArray.filter(function(element) {return element._id != id;});
-		// 	console.log(questionArray);
-		// }
 	});
 	if ($(this).hasClass('question-tab')) {
 		$(this).removeClass('question-tab');
@@ -292,17 +288,16 @@ function addToQuestionArray() {
 function gotoBreakdown() {
 	// Should this be checking periodically to see if all users have answered?
 	// Could we just update with how many have answered at intervals of 5 seconds?
-	var index = 0;
 	$adminProfile.hide();
 	$breakdown.show();
 	calculateHeight();
 	// while(index < questionArray.length) {
 		var answersArray = questionArray[index].incorrectanswers;
 		$question.text(questionArray[index].text);
-		$answerA.text(answersArray[0]);
-		$answerB.text(answersArray[1]);
-		$answerC.text(answersArray[2]);
-		$answerD.text(answersArray[3]);
+		$answerA.text(questionArray[index].answers[0]);
+		$answerB.text(questionArray[index].answers[1]);
+		$answerC.text(questionArray[index].answers[2]);
+		$answerD.text(questionArray[index].answers[3]);
 	// }
 }
 
@@ -344,13 +339,13 @@ function openQuestionPane() {
 	$questionList.show();
 	$.get(questionUrl, function(data) {
 		questionResults = data.questions;
+		$questionListResults.empty();
 		refreshQuestions(questionResults);
 	});
 }
 
 function refreshQuestions(questionResults) {
 	console.log('refreshing questions');
-	$questionListResults.empty();
 	// Render the data
 	var questionListHtml = questionTemplate({questions: questionResults});
 	$questionListResults.append(questionListHtml);

@@ -5,24 +5,24 @@ var mongoose = require('mongoose'),
 var QuestionSchema = new Schema({
 	label: String,
 	text: String,
-	answer: String,
-	incorrectanswers: [String],
-	userscorrect: [
+	correctanswer: String,
+	answers: [String],
+	usersanswers0: [
 	{
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	}],
-	usersincorrect0: [
+	usersanswers1: [
 	{
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	}],
-	usersincorrect1: [
+	usersanswers2: [
 	{
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	}],
-	usersincorrect2: [
+	usersanswers3: [
 	{
 		type: Schema.Types.ObjectId,
 		ref: 'User'

@@ -85,8 +85,8 @@
 			<div class="col-md-3 col-sm-6 col-xs-12 user-profile user-view-results-list">
 				<div class="box">
 					<div class="scroll">
-						<h2 class="text-center"><strong>Questions</strong></h2>
-						<div id="question-list-results"></div> 
+						<h2 class="text-center"><strong>Answered Questions</strong></h2>
+						<div class="question-list-results"></div> 
 						<!-- Line above not necessary -->
 						<!-- When iterating through, do if user.question?  This should only be showing questions that the user has answered ?????? -->
 						{{#each user.questions}}
@@ -109,20 +109,20 @@
 						</div>
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-6 col-xs-12 user-profile user-answer-question-list">
+			<div class="col-md-3 col-sm-6 col-xs-12 user-profile user-answer-questions-list">
 				<div class="box">
 					<div class="scroll">
-						<h2 class="text-center"><strong>Questions</strong></h2>
-						<div id="question-list-results"></div>
+						<h2 class="text-center"><strong>All Questions</strong></h2>
+						<div class="question-list-results"></div>
 						<script type="text/x-handlebars-template" id="question-list-template">
 							\{{#each questions}}
-								<button class="btn btn-success btn-block question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
+								<button class="btn btn-success btn-block click-to-select question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
 							\{{/each}}
 						</script>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 col-sm-12 col-xs-12 user-profile user-answer-question-list">
+			<div class="col-md-6 col-sm-12 col-xs-12 user-profile user-answer-questions-list">
 				<div class="box">
 					<div class="scroll">
 						<h2><strong>Directions</strong></h2>
@@ -135,12 +135,12 @@
 		<div class="row user-question">
 			<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
 				<div class="center-box" id="user-question-box">
-					<h2>Question</h2>
+					<h2 class="question">Question</h2>
 					<hr>  <!-- danger, warning, success, primary -->
-					<button class="btn btn-success btn-block" id="answer-a">Answer A</button>
-					<button class="btn btn-success btn-block" id="answer-b">Answer B</button>
-					<button class="btn btn-success btn-block" id="answer-c">Answer C</button>
-					<button class="btn btn-success btn-block" id="answer-d">Answer D</button>
+					<button class="btn btn-success btn-block answer-a" id="0">Answer A</button>
+					<button class="btn btn-success btn-block answer-b" id="1">Answer B</button>
+					<button class="btn btn-success btn-block answer-c" id="2">Answer C</button>
+					<button class="btn btn-success btn-block answer-d" id="3">Answer D</button>
 				</div>
 			</div>
 		</div>
