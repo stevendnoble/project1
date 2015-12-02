@@ -46,7 +46,9 @@ var $addQuestionList = $('.add-question-list'),
 		$addQuestionListTemplate = $('#add-question-list-template'),
 		$addQuestionTabBtn = $('.add-question-tab'),
 		$adminProfile = $('#admin-profile'),
-		$breakdown = $('.breakdown');
+		$breakdown = $('.breakdown'),
+		$nextQuestion = $('#next-question'),
+		$pieChartCanvas = $('#pie-chart-canvas');
 
 // Selectors for [View Results] and [View Users]
 var $questionIndividualResults = $('#question-individual-results'),
@@ -104,6 +106,7 @@ $submitQuestionBtn.on('click', submitQuestion);
 // Event handlers for [View Questions]
 $addQuestionListResults.on('click', '.click-to-select', selectQuestion);
 $displayQuestionsBtn.on('click', gotoBreakdown);
+$nextQuestion.on('click', displayNextQuestion);
 
 // Event handlers for detailed information by user or question
 // need to put handler on the 
@@ -308,14 +311,25 @@ function gotoBreakdown() {
 	// Could we just update with how many have answered at intervals of 5 seconds?
 	$adminProfile.hide();
 	$breakdown.show();
+	$question.text(questionArray[index].text);
+	$answerA.text(questionArray[index].answers[0]);
+	$answerB.text(questionArray[index].answers[1]);
+	$answerC.text(questionArray[index].answers[2]);
+	$answerD.text(questionArray[index].answers[3]);
 	calculateHeight();
-	// while(index < questionArray.length) {
-		$question.text(questionArray[index].text);
-		$answerA.text(questionArray[index].answers[0]);
-		$answerB.text(questionArray[index].answers[1]);
-		$answerC.text(questionArray[index].answers[2]);
-		$answerD.text(questionArray[index].answers[3]);
-	// }
+}
+
+// Increments index and displays next question with breakdown
+function displayNextQuestion() {
+	if(index === questionArray.length-1) {
+		$pieChartCanvas.empty();
+		$pieChartCanvas.text('You have displayed all of the assigned questions. Please return to your profile to review the results.');
+		index = 0;
+		calculateHeight();
+	} else {
+		index++;
+		gotoBreakdown();
+	}
 }
 
 ///////////////////////////////////////////////////

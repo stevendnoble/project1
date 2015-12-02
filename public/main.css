@@ -169,10 +169,10 @@ hr.hr-avatar {
 }
 
 .display-font {
-	font-size: 40px;
+	font-size: 32px;
 }
 
-#question-box button.btn {
+#question-box button.btn, #pie-chart-canvas button.btn {
 	border-radius: 40px;
 }
 

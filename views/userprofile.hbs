@@ -17,6 +17,10 @@
 <body>
 	{{> header}}
 	<div class="container-fluid">
+	<div class="row" id="userinfo">
+		<div id="userid">{{user.id}}</div>
+		<div id="username">{{user.username}}</div>
+	</div>
 		<div class="row" id="user-profile">
 			<!-- User Profile -->
 			<div class="col-md-3 col-sm-6 col-xs-12">
@@ -88,18 +92,12 @@
 			<div class="col-md-3 col-sm-6 col-xs-12 user-view-results-list">
 				<div class="box">
 					<div class="scroll">
-						<h2 class="text-center"><strong>Answered Questions</strong></h2>
-						<div class="question-list-results"></div> 
-						<!-- Line above not necessary -->
-						<!-- When iterating through, do if user.question?  This should only be showing questions that the user has answered ?????? -->
-						{{#each user.questions}}
-							<button class="btn btn-success btn-block question-tab" data-id="{{_id}}">{{label}}</button>
-						{{/each}}
-						<!-- <script type="text/x-handlebars-template" id="question-list-template">
-							\{{#each questions}}
-								<button class="btn btn-success btn-block question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
-							\{{/each}}
-						</script> -->
+						<div id="answered-questions">
+							<h2 class="text-center"><strong>Answered Questions</strong></h2>
+							{{#each user.questions}}
+								<button class="btn btn-success btn-block click-to-select question-tab" data-id="{{_id}}">{{label}}</button>
+							{{/each}}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -109,33 +107,23 @@
 					<div class="scroll">
 						<div id="question-individual-results">
 							<h2><strong>Directions</strong></h2>
-							<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
+							<h3>Click on a question.  The results for that question will be displayed in this box.  It will show the question, answer choices, and a display of the breakdown for the question.</h3>
 						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Questions List for [Answer Questions] Button -->
-			<div class="col-md-3 col-sm-6 col-xs-12 user-answer-questions-list">
-				<div class="box">
-					<div class="scroll">
-						<h2 class="text-center"><strong>All Questions</strong></h2>
-						<div class="question-list-results"></div>
-						<script type="text/x-handlebars-template" id="question-list-template">
-							\{{#each questions}}
-								<button class="btn btn-success btn-block click-to-select question-tab" data-id="\{{this._id}}">\{{this.label}}</button>
+						<script type="text/x-handlebars-template" id="results-template">
+							<h2>\{{label}}</h2>
+							<h4><strong>Question:</strong>  \{{question}}</h4>
+							<h4><strong>Answer Choices:</strong></h4>
+							<ul>
+							\{{#each answers}}
+								<h4><li>\{{this}}</li></h4>
 							\{{/each}}
+							</ul>
+							<h4><strong>Correct Answer:</strong>  \{{correctanswer}}</h4>
+							<h4><strong>Your Answer:</strong>  \{{useranswer}}</h4>
+							<h3><strong>\{{message}}</strong></h3>
+							<h4><strong>Answers Breakdown:</strong></h4>
 						</script>
 					</div>
-				</div>
-			</div>
-			<!-- Directions for [Answer Questions] Button -->
-			<div class="col-md-6 col-sm-12 col-xs-12 user-answer-questions-list">
-				<div class="box">
-					<div class="scroll">
-						<h2><strong>Directions</strong></h2>
-						<h3>Click on a question.  The button should turn green.  To deselect the question, just click on it again.</h3>
-						<h3>When you are ready to answer the selected questions, click on the [Go to Questions] button on the left panel.</h3>
-						</div>
 				</div>
 			</div>
 		</div>
