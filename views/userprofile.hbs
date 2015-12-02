@@ -101,7 +101,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- Individual Results from [View Results] -->
+			<!-- Individual Results from [View Results] with Pie Charts -->
 			<div class="col-md-6 col-sm-12 col-xs-12 user-view-results-list">
 				<div class="box">
 					<div class="scroll">
@@ -110,7 +110,8 @@
 							<h3>Click on a question.  The results for that question will be displayed in this box.  It will show the question, answer choices, and a display of the breakdown for the question.</h3>
 						</div>
 						<script type="text/x-handlebars-template" id="results-template">
-							<h2>\{{label}}</h2>
+							<h2><strong>\{{label}}</strong></h2>
+							<hr>
 							<h4><strong>Question:</strong>  \{{question}}</h4>
 							<h4><strong>Answer Choices:</strong></h4>
 							<ul>
@@ -121,13 +122,16 @@
 							<h4><strong>Correct Answer:</strong>  \{{correctanswer}}</h4>
 							<h4><strong>Your Answer:</strong>  \{{useranswer}}</h4>
 							<h3><strong>\{{message}}</strong></h3>
-							<h4><strong>Answers Breakdown:</strong></h4>
+							<hr>
+							<h2><strong>Answers Breakdown:</strong></h2>
+							<br>
+							<canvas id="breakdown-pie-chart" width="400" height="400"></canvas>
 						</script>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- Actual PulseCheck App -->
+		<!-- Actual PulseCheck App Question View -->
 		<div class="row" id="user-question">
 			<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
 				<div class="center-box" id="user-question-box">
@@ -140,7 +144,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- Actual PulseCheck App -->
+		<!-- Actual PulseCheck App Response View -->
 		<div class="row" id="user-response">
 			<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
 				<div class="center-box-2" id="user-response-box">
@@ -151,6 +155,9 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- chartjs -->
+	<script type="text/javascript" src="scripts/Chart.js"></script>
 
 	<!-- jquery -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>

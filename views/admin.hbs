@@ -204,13 +204,29 @@
 							<h2><strong>Directions</strong></h2>
 							<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
 						</div>
+						<script type="text/x-handlebars-template" id="question-results-template">
+							<h2><strong>\{{label}}</strong></h2>
+							<hr>
+							<h4><strong>Question:</strong>  \{{text}}</h4>
+							<h4><strong>Answer Choices:</strong></h4>
+							<ul>
+							\{{#each answers}}
+								<h4><li>\{{this}}</li></h4>
+							\{{/each}}
+							</ul>
+							<h4><strong>Correct Answer:</strong>  \{{correctanswer}}</h4>
+							<hr>
+							<h2><strong>Answers Breakdown:</strong></h2>
+							<br>
+							<canvas class="breakdown-pie-chart" width="400" height="400"></canvas>
+						</script>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row" id="breakdown">
 			<!-- [Display Questions] -->
-			<div class="col-md-4 col-md-offset-1 breakdown">
+			<div class="col-md-5 col-md-offset-1 breakdown">
 				<div class="center-box-2" id="question-box">
 					<h2 class="question display-font">Question</h2>
 					<hr>
@@ -221,17 +237,22 @@
 				</div> 
 			</div>
 			<!-- Pie Chart Breakdown in [Display Questions] -->
-			<div class="col-md-4 col-md-offset-2 breakdown">
-				<div class="center-box-3" id="pie-chart-canvas">
+			<div class="col-md-4 col-md-offset-1 breakdown">
+				<div class="center-box-3 display-font" id="pie-chart-canvas">
 					<h2 class="text-center display-font">Class Breakdown</h2>
 					<hr>
-					<img src="pie-chart-example.png" class="img-responsive">
+					<canvas class="breakdown-pie-chart" id="display-questions-canvas" width="400" height="400"></canvas>
+					<h3 class="calculate-results-toggle">Click the button below to see the results.</h3>
 					<hr>
-					<button class="btn btn-success btn-block display-font" id="next-question">Next Question</button>
+					<button class="btn btn-success btn-block calculate-results-toggle" id="calculate-results">Calculate Results</button>
+					<button class="btn btn-success btn-block" id="next-question">Next Question</button>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<!-- chartjs -->
+	<script type="text/javascript" src="scripts/Chart.js"></script>
 
 	<!-- jquery -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>

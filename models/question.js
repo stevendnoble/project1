@@ -5,14 +5,24 @@ var mongoose = require('mongoose'),
 var QuestionSchema = new Schema({
 	label: {
 		type: String,
-		unique: true
+		unique: true,
+		required: true
 	},
-	text: String,
-	correctanswer: String,
-	answers: [String],
+	text: {
+		type: String,
+		required: true
+	},
+	correctanswer: {
+		type: String,
+		required: true
+	},
+	answers: {
+		type: [String],
+		required: true
+	},
 	show: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	usersanswers0: [String],
 	usersanswers1: [String],

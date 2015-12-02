@@ -119,20 +119,18 @@ function displayIndividualResults() {
 		var useranswer;
 		if (selectedQuestion.usersanswers0.indexOf(username) !== -1) {
 			useranswer = selectedQuestion.answers[0];
-		} else if (selectedQuestion.usersanswers0.indexOf(username) !== -1) {
+		} else if (selectedQuestion.usersanswers1.indexOf(username) !== -1) {
 			useranswer = selectedQuestion.answers[1];
-		} else if (selectedQuestion.usersanswers0.indexOf(username) !== -1) {
+		} else if (selectedQuestion.usersanswers2.indexOf(username) !== -1) {
 			useranswer = selectedQuestion.answers[2];
-		} else if (selectedQuestion.usersanswers0.indexOf(username) !== -1) {
+		} else if (selectedQuestion.usersanswers3.indexOf(username) !== -1) {
 			useranswer = selectedQuestion.answers[3];
-		} else {
-			alert('error in displayIndividualResults() at useranswer');
 		}
 		var message;
 		if (useranswer === selectedQuestion.correctanswer) {
 			message = 'Excellent Job!  You were correct.';
 		} else {
-			message = 'Nice try.';
+			message = 'Nice try. Better luck next time!';
 		}
 		var dataToAppend = {
 			label: selectedQuestion.label,
@@ -144,10 +142,72 @@ function displayIndividualResults() {
 		};
 		var htmlResults = template(dataToAppend);
 		$questionIndividualResults.append(htmlResults);
+		plotGraph(selectedQuestion);
 	});
-	//
-	//	PIE CHART!!!
-	//
+}
+
+function plotGraph(selectedQuestion) {
+	// 1. add canvas
+	// 2. add var $breakdownPieChart = $('#breakdown-pie-chart');
+	//    edit boxwidth = $ to measure the correct box width
+	// 3. add code below
+
+	var $breakdownPieChart = $('#breakdown-pie-chart');
+
+	// If canvas is bigger than the box-width, make the canvas smaller
+	var boxwidth = $questionIndividualResults.width();
+	if (boxwidth < 400) {
+		$breakdownPieChart.attr('width', width);
+		$breakdownPieChart.attr('height', width);
+	}
+
+	// Get context with jQuery - using jQuery's .get() method.
+	var ctx = $breakdownPieChart.get(0).getContext("2d");
+	// Create an array for values and labels
+	var values = [];
+	values.push(selectedQuestion.usersanswers0.length);
+	values.push(selectedQuestion.usersanswers1.length);
+	values.push(selectedQuestion.usersanswers2.length);
+	values.push(selectedQuestion.usersanswers3.length);
+	console.log('unadjusted values', values);
+	var labels = selectedQuestion.answers;
+	console.log('unadjusted labels', labels);
+	// Determine the index of the correct answer, and move that to the first spot
+	// to always display the correct answer as green.
+	console.log(selectedQuestion);
+	var correctIndex = labels.indexOf(selectedQuestion.correctanswer);
+	var correctValue = values.splice(correctIndex, 1);
+	values.unshift(correctValue[0]);
+	var correctLabel = labels.splice(correctIndex, 1);
+	labels.unshift(correctLabel[0]);
+
+	// Add data and options
+	var data = [{
+    value: values[0],
+    color: "#369836",
+    highlight: "#8AD48A",
+    label: labels[0]
+  }, {
+    value: values[1],
+    color: "#BE7B43",
+    highlight: "#FFCFA7",
+    label: labels[1]
+  }, {
+    value: values[2],
+    color: "#287272",
+    highlight: "#6EA8A8",
+    label: labels[2]
+  }, {
+    value: values[3],
+    color: "#BE4343",
+    highlight: "#FFA7A7",
+    label: labels[3]
+  }];
+
+  var options;
+
+	// Create a pie chart using the data
+	var myPieChart = new Chart(ctx).Pie(data, options);
 }
 
 //////////////////////////////////////

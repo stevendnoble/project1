@@ -48,13 +48,17 @@ var $addQuestionList = $('.add-question-list'),
 		$adminProfile = $('#admin-profile'),
 		$breakdown = $('.breakdown'),
 		$nextQuestion = $('#next-question'),
-		$pieChartCanvas = $('#pie-chart-canvas');
+		$pieChartCanvas = $('#pie-chart-canvas'),
+		$displayQuestionsCanvas = $('#display-questions-canvas'),
+		$calculateResultsToggle = $('.calculate-results-toggle'),
+		$calculateResults = $('#calculate-results');
 
 // Selectors for [View Results] and [View Users]
 var $questionIndividualResults = $('#question-individual-results'),
 		$questionList = $('.question-list'),
 		$questionListResults = $('#question-list-results'),
 		$questionListTemplate = $('#question-list-template'),
+		$questionResultsTemplate = $('#question-results-template'),
 		$questionTabBtn = $('.question-tab'),
 		$userIndividualResults = $('#user-individual-results'),
 		$userList = $('.user-list'),
@@ -74,11 +78,14 @@ var userListSource = $userListTemplate.html(),
 		questionListSource = $questionListTemplate.html(),
 		questionTemplate = Handlebars.compile(questionListSource),
 		addQuestionListSource = $addQuestionListTemplate.html(),
-		addQuestionTemplate = Handlebars.compile(addQuestionListSource);
+		addQuestionTemplate = Handlebars.compile(addQuestionListSource),
+		questionResultsSource = $questionResultsTemplate.html(),
+		questionResultsTemplate = Handlebars.compile(questionResultsSource);
 
 // Global variables
 var questionArray = []; // Array for questions to be displayed to students
 var index = 0;
+var ctx;
 
 // Add all questions to the questionArray and filter out questions which are not to be shown
 $.get(questionUrl, function(data) {
@@ -107,11 +114,13 @@ $submitQuestionBtn.on('click', submitQuestion);
 $addQuestionListResults.on('click', '.click-to-select', selectQuestion);
 $displayQuestionsBtn.on('click', gotoBreakdown);
 $nextQuestion.on('click', displayNextQuestion);
+$calculateResults.on('click', calculateResults);
 
 // Event handlers for detailed information by user or question
 // need to put handler on the 
 $userListResults.on('click', '.user-tab', loadUserInfo);
 $questionListResults.on('click', '.question-tab', loadQuestionInfo);
+$
 
 // Generic functions
 calculateHeight();
@@ -137,6 +146,60 @@ function changeAvatar() {
 	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
 	$avatar.attr('src', avatarFile);
 	// change avatar in the database
+}
+
+// Plots the graph of the selected question
+function plotGraph(selectedQuestion, boxwidth) {
+	var $breakdownPieChart = $('.breakdown-pie-chart');
+	// If canvas is bigger than the box-width, make the canvas smaller
+	if (boxwidth < 400) {
+		$breakdownPieChart.attr('width', boxwidth);
+		$breakdownPieChart.attr('height', boxwidth);
+	}
+	// Get context with jQuery - using jQuery's .get() method.
+	ctx = $breakdownPieChart.get(0).getContext("2d");
+	// Create an array for values and labels
+	var values = [];
+	values.push(selectedQuestion.usersanswers0.length);
+	values.push(selectedQuestion.usersanswers1.length);
+	values.push(selectedQuestion.usersanswers2.length);
+	values.push(selectedQuestion.usersanswers3.length);
+	console.log('unadjusted values', values);
+	var labels = selectedQuestion.answers;
+	console.log('unadjusted labels', labels);
+	// Determine the index of the correct answer, and move that to the first spot
+	// to always display the correct answer as green.
+	console.log(selectedQuestion);
+	var correctIndex = labels.indexOf(selectedQuestion.correctanswer);
+	var correctValue = values.splice(correctIndex, 1);
+	values.unshift(correctValue[0]);
+	var correctLabel = labels.splice(correctIndex, 1);
+	labels.unshift(correctLabel[0]);
+	// Add data and options
+	var data = [{
+    value: values[0],
+    color: "#369836",
+    highlight: "#8AD48A",
+    label: labels[0]
+  }, {
+    value: values[1],
+    color: "#BE7B43",
+    highlight: "#FFCFA7",
+    label: labels[1]
+  }, {
+    value: values[2],
+    color: "#287272",
+    highlight: "#6EA8A8",
+    label: labels[2]
+  }, {
+    value: values[3],
+    color: "#BE4343",
+    highlight: "#FFA7A7",
+    label: labels[3]
+  }];
+  var options;
+	// Create a pie chart using the data
+	var myPieChart = new Chart(ctx).Pie(data, options);
 }
 
 ///////////////////////////////
@@ -307,20 +370,31 @@ function selectQuestion() {
 
 // Opens the window to display the question and the breakdown of answers
 function gotoBreakdown() {
-	// Should this be checking periodically to see if all users have answered?
-	// Could we just update with how many have answered at intervals of 5 seconds?
 	$adminProfile.hide();
 	$breakdown.show();
-	$question.text(questionArray[index].text);
-	$answerA.text(questionArray[index].answers[0]);
-	$answerB.text(questionArray[index].answers[1]);
-	$answerC.text(questionArray[index].answers[2]);
-	$answerD.text(questionArray[index].answers[3]);
-	calculateHeight();
+	$calculateResultsToggle.show();
+		if (questionArray.length === 0) {
+		$pieChartCanvas.empty();
+		$pieChartCanvas.text('You have answered all of the assigned questions. Please return to your profile to review your results.');
+		calculateHeight();
+	} else {
+		$question.text(questionArray[index].text);
+		$answerA.text(questionArray[index].answers[0]);
+		$answerB.text(questionArray[index].answers[1]);
+		$answerC.text(questionArray[index].answers[2]);
+		$answerD.text(questionArray[index].answers[3]);
+		calculateHeight();
+	}
 }
 
 // Increments index and displays next question with breakdown
 function displayNextQuestion() {
+	$nextQuestion.hide();
+	$displayQuestionsCanvas.hide();
+	var $breakdownPieChart = $('.breakdown-pie-chart');
+	ctx.clearRect(0, 0, $breakdownPieChart.width(), $breakdownPieChart.height());
+	$calculateResultsToggle.show();
+	calculateHeight();
 	if(index === questionArray.length-1) {
 		$pieChartCanvas.empty();
 		$pieChartCanvas.text('You have displayed all of the assigned questions. Please return to your profile to review the results.');
@@ -332,9 +406,18 @@ function displayNextQuestion() {
 	}
 }
 
-///////////////////////////////////////////////////
-// Functions for [View Users] and [View Results] //
-///////////////////////////////////////////////////
+function calculateResults() {
+	var boxwidth = $pieChartCanvas.width();
+	$displayQuestionsCanvas.show();
+	plotGraph(questionArray[index], boxwidth);
+	$calculateResultsToggle.hide();
+	$nextQuestion.show();
+	calculateHeight();
+}
+
+/////////////////////////////////////////////////////////
+// Functions for [User Results] and [Question Results] //
+/////////////////////////////////////////////////////////
 
 // Open the users pane to view results by user
 function openUserPane() {
@@ -365,6 +448,7 @@ function loadUserInfo() {
 	event.preventDefault();
 	$userIndividualResults.empty();
 	$userIndividualResults.text('coming soon...');
+
 	// Function will load individual results by user
 }
 
@@ -394,14 +478,29 @@ function refreshQuestions(questionResults) {
 
 // Load the results of individual questions
 function loadQuestionInfo() {
-	$questionIndividualResults.empty();
-	$questionIndividualResults.text('coming soon...');
 	event.preventDefault();
-	// Function will load individual results by question
+	$questionIndividualResults.empty();
+	// Get id from button press
+	var id = $(this).attr('data-id');
+	// Ajax call to get question from db
+	$.get(questionUrl + id, function(data) {
+		var questionInfo = data;
+		console.log(questionInfo);
+		// Function will load individual results by question
+		var questionResultsHtml = questionResultsTemplate(questionInfo);
+		$questionIndividualResults.append(questionResultsHtml);
+		var $breakdownPieChart = $('#breakdown-pie-chart');
+		$breakdownPieChart.show();
+		var boxwidth = $questionIndividualResults.width();
+		plotGraph(questionInfo, boxwidth);
+	});
 }
 
-// Questions:
-//
-// Should I be checking the server periodically for answers from users?
+
+
+
+
+// var boxwidth = $questionIndividualResults.width();
+// plotGraph(selectedQuestion, boxwidth);
 
 });

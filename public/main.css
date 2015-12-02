@@ -164,7 +164,8 @@ hr.hr-avatar {
 #userinfo, .user-list, .question-list, .add-question,
 .add-question-list, .breakdown, #user-question, #user-response,
 #display-questions-btn, .user-view-results-list,
-.user-answer-questions-list, #user-goto-questions-btn {
+.user-answer-questions-list, #user-goto-questions-btn,
+#display-questions-canvas, #next-question {
 	display: none;
 }
 
