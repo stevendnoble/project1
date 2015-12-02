@@ -93,7 +93,7 @@
 						<!-- Line above not necessary -->
 						<!-- When iterating through, do if user.question?  This should only be showing questions that the user has answered ?????? -->
 						{{#each user.questions}}
-							<button class="btn btn-success btn-block question-tab" data-id="{{this._id}}">{{this.label}}</button>
+							<button class="btn btn-success btn-block question-tab" data-id="{{_id}}">{{label}}</button>
 						{{/each}}
 						<!-- <script type="text/x-handlebars-template" id="question-list-template">
 							\{{#each questions}}
@@ -140,7 +140,7 @@
 			</div>
 		</div>
 		<!-- Actual PulseCheck App -->
-		<div class="row user-question">
+		<div class="row" id="user-question">
 			<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
 				<div class="center-box" id="user-question-box">
 					<h2 class="question">Question</h2>
@@ -152,7 +152,16 @@
 				</div>
 			</div>
 		</div>
-
+		<!-- Actual PulseCheck App -->
+		<div class="row" id="user-response">
+			<div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+				<div class="center-box-2" id="user-response-box">
+					<h1 class="question-response">Response</h1>
+					<hr>
+					<button class="btn btn-success btn-block" id="next-question">Next</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<!-- jquery -->

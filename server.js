@@ -10,15 +10,10 @@ var express = require('express'),
 		session = require('express-session'),
 		passport = require('passport'),
 		LocalStrategy = require('passport-local').Strategy;
-		// var oauth = require('./oauth.js');
 
 // Require models
 var User = require('./models/user'),
 		Question = require('./models/question');
-
-// Global variables
-// var currentQuestion;
-// var questionArray;
 
 // Middleware for auth
 app.use(cookieParser());
@@ -83,7 +78,6 @@ app.post('/signup', function(req, res) {
 	if(req.user) {
 		res.redirect('/profile');
 		console.log(req.user.username + ' tried to sign up.  Redirected to profile.');
-		console.log('user', req.user);
 	} else {
 		if (req.body.key == "administrator") {
 			req.body.key = true;
@@ -114,7 +108,6 @@ app.get('/login', function(req, res) {
 	if (req.user) {
 		if (req.user.admin) {
 			console.log(req.user.username + ' tried to log in again.  Redirected to admin.');
-			console.log('user', req.user);
 			res.redirect('/admin');
 		} else {
 			console.log(req.user.username + ' tried to log in again.  Redirected to profile.');
@@ -129,7 +122,6 @@ app.post('/login', passport.authenticate('local'), function(req, res) {
 	// If admin, send to admin page.  If not, send to user page.
 	if (req.user.admin) {
 		console.log(req.user.username + ' logged in.  Redirected to admin.');
-		console.log('user', req.user);
 		res.redirect('/admin');		
 	} else {
 		console.log(req.user.username + ' logged in.  Redirected to profile.');
@@ -149,7 +141,6 @@ app.get('/admin', function(req, res) {
 	if (req.user) {
 		if (req.user.admin) {
 			res.render('admin', {user: req.user});
-			console.log('user', req.user);
 		} else {
 			res.redirect('/profile');
 		}
@@ -162,8 +153,11 @@ app.get('/admin', function(req, res) {
 app.get('/profile', function(req, res) {
 	// If user is logged in, direct them to their profile
 	if (req.user) {
-		console.log('user', req.user);
-		res.render('userprofile', {user: req.user});
+		User.findOne({_id: req.user._id})
+		.populate('questions')
+		.exec(function(err, foundUser) {
+			res.render('userprofile', {user: foundUser});
+		});
 	} else {
 		res.redirect('/login');
 	}
@@ -173,32 +167,30 @@ app.get('/profile', function(req, res) {
 app.get('/api/questions', function(req, res) {
 	Question.find(function(err, allQuestions) {
 		if (err) {
+			console.log('GET Question Error: ', err);
 			res.json(err);
 		} else {
-			console.log(allQuestions);
 			res.json({questions: allQuestions});
 		}
 	});
 });
 
 app.post('/api/questions', function(req, res) {
-	// if (req.user.admin) {
+	if (req.user.admin) {
 		// Use form data to create new question
 		var newQuestion = new Question(req.body);
-		console.log('req.body', req.body);
-		console.log('newQuestion', newQuestion);
 		newQuestion.save(function(err, savedQuestion) {
 			if (err) {
-				// console.log('err', err);
+				console.log('POST Question Error: ', err);
 				res.json(err);
 			} else {
-				// console.log('savedQ', savedQuestion);
+				console.log('Saved Question');
 				res.json(savedQuestion);			
 			}
 		});
-	// } else {
-		// res.status(401).json({ error: 'Unauthorized' });
-	// }
+	} else {
+		res.status(401).json({ error: 'Unauthorized' });
+	}
 });
 
 app.get('/api/questions/:id', function(req, res) {
@@ -207,6 +199,7 @@ app.get('/api/questions/:id', function(req, res) {
 	// Find question in db using id
 	Question.findOne({ _id: questionId }, function(err, foundQuestion) {
 		if (err) {
+			console.log('GET Question Error: ', err);
 			res.json(err);
 		} else {
 			res.json(foundQuestion);
@@ -220,32 +213,32 @@ app.delete('/api/questions/:id', function(req, res) {
 	// Find question in the db using the id
 	Question.findOneAndRemove({ _id: questionId }, function(err, deletedQuestion) {
 		if (err) {
-			console.log(err);
+			console.log('DELETE Question Error: ', err);
+			res.json(err);
 		} else {
 			res.json(deletedQuestion);
 		}
 	});
 });
 
-app.put('/api/questions/:id', function(req, res) {
+app.patch('/api/questions/:id', function(req, res) {
 	// Find the url from the parameters
 	var questionId = req.params.id;
-	console.log('qId', questionId);
 	// Find question in the db using the id
 	Question.findOne({ _id: questionId }, function(err, foundQuestion) {
 		if (err) {
-			console.log('we have an error.');
-			console.log(err);
+			console.log('PUT Question Error: ', err);
 		} else {
 			// Update the question's attributes
-			foundQuestion.label = req.body.label;
-			foundQuestion.text = req.body.text;
-			foundQuestion.correctanswer = req.body.correctanswer;
-			foundQuestion.answers = req.body.answers;
-			foundQuestion.usersanswers0 = req.body.usersanswers0;
-			foundQuestion.usersanswers1 = req.body.usersanswers1;
-			foundQuestion.usersanswers2 = req.body.usersanswers2;
-			foundQuestion.usersanswers3 = req.body.usersanswers3;
+			foundQuestion.label = req.body.label || foundQuestion.label;
+			foundQuestion.text = req.body.text || foundQuestion.text;
+			foundQuestion.correctanswer = req.body.correctanswer || foundQuestion.correctanswer;
+			foundQuestion.answers = req.body.answers || foundQuestion.answers;
+			foundQuestion.show = req.body.show || foundQuestion.show;
+			foundQuestion.usersanswers0 = req.body.usersanswers0 || foundQuestion.usersanswers0;
+			foundQuestion.usersanswers1 = req.body.usersanswers1 || foundQuestion.usersanswers1;
+			foundQuestion.usersanswers2 = req.body.usersanswers2 || foundQuestion.usersanswers2;
+			foundQuestion.usersanswers3 = req.body.usersanswers3 || foundQuestion.usersanswers3;
 			// Save updated question
 			foundQuestion.save(function(err, savedQuestion) {
 				res.json(savedQuestion);
@@ -258,6 +251,7 @@ app.put('/api/questions/:id', function(req, res) {
 app.get('/api/users', function(req, res) {
 	User.find(function(err, allUsers) {
 		if (err) {
+			console.log('GET User Error: ', err);
 			res.json(err);
 		} else {
 			console.log(allUsers);
@@ -267,21 +261,16 @@ app.get('/api/users', function(req, res) {
 });
 
 app.post('/api/users', function(req, res) {
-	// if (req.user.admin) {
-		// Use form data to create new user
-		var newUser = new User(req.body);
-		newUser.save(function(err, savedUser) {
-			if (err) {
-				// console.log('err', err);
-				res.json(err);
-			} else {
-				// console.log('savedQ', savedQuestion);
-				res.json(savedUser);			
-			}
-		});
-	// } else {
-		// res.status(401).json({ error: 'Unauthorized' });
-	// }
+	// Use form data to create new user
+	var newUser = new User(req.body);
+	newUser.save(function(err, savedUser) {
+		if (err) {
+			console.log('POST User Error: ', err);
+			res.json(err);
+		} else {
+			res.json(savedUser);			
+		}
+	});
 });
 
 app.get('/api/users/:id', function(req, res) {
@@ -290,6 +279,7 @@ app.get('/api/users/:id', function(req, res) {
 	// Find user in db using id
 	User.findOne({ _id: userId }, function(err, foundUser) {
 		if (err) {
+			console.log('GET User Error: ', err);
 			res.json(err);
 		} else {
 			res.json(foundUser);
@@ -303,43 +293,64 @@ app.delete('/api/users/:id', function(req, res) {
 	// Find user in the db using the id
 	User.findOneAndRemove({ _id: userId }, function(err, deletedUser) {
 		if (err) {
-			console.log(err);
+			console.log('DELETE User Error: ', err);
+			res.json(err);
 		} else {
 			res.json(deletedUser);
 		}
 	});
 });
 
-//
-// I think this will mess up the password field.
-// Could we create a second referenced set for the updateable
-// fields in users?
-//   name, username, avatar, questions, useranswers
-//
-app.put('/api/users/:id', function(req, res) {
+app.patch('/api/users/:id', function(req, res) {
 	// Find the url from the parameters
 	var userId = req.params.id;
 	// Find user in the db using the id
 	User.findOne({ _id: userId }, function(err, foundUser) {
 		if (err) {
-			console.log('we have an error.');
-			console.log(err);
+			console.log('PATCH User Error: ', err);
+			res.json(err);
 		} else {
 			// Update the user's attributes
-			console.log(req.body);
-			foundUser.name = req.body.name;
-			foundUser.username = req.body.username;
-			foundUser.password = foundUser.password;
-			foundUser.avatar = req.body.avatar;
-			foundUser.admin = req.body.admin;
-			foundUser.questions = req.body.questions;
-			foundUser.useranswers = req.body.useranswers;
-			console.log('foundUser', foundUser);
+			console.log('PATCH req.body', req.body);
+			foundUser.name = req.body.name || foundUser.name;
+			foundUser.username = req.body.username || foundUser.username;
+			foundUser.password = req.body.password || foundUser.password;
+			foundUser.avatar = req.body.avatar || foundUser.avatar;
+			foundUser.admin = req.body.admin || foundUser.admin;
+			foundUser.questions = req.body.questions || foundUser.questions;
+			foundUser.useranswers = req.body.useranswers || foundUser.useranswers;
+			console.log('PATCH foundUser (after)', foundUser);
 			// Save updated user
 			foundUser.save(function(err, savedUser) {
 				res.json(savedUser);
 			});
 		}
+	});
+});
+
+app.patch('/api/questions/:questionId/answers', function(req, res) {
+	// In req, takes in userId, username, useranswerIndex, and useranswer
+	var questionId = req.params.questionId;
+	var useranswerIndex = req.body.useranswerIndex; // number 0, 1, 2, or 3
+	var useranswer = req.body.useranswer;
+	User.findOne({ _id: req.user._id }, function(err, foundUser) {
+		foundUser.questions.push(questionId);
+		foundUser.useranswers.push(useranswer);
+		foundUser.save();
+	});
+	Question.findOne({ _id: questionId }, function(err, foundQuestion) {
+		if (useranswerIndex === '0') {
+			foundQuestion.usersanswers0.push(req.user.username);
+		} else if (useranswerIndex === '1') {
+			foundQuestion.usersanswers1.push(req.user.username);
+		} else if (useranswerIndex === '2') {
+			foundQuestion.usersanswers2.push(req.user.username);
+		} else if (useranswerIndex === '3') {
+			foundQuestion.usersanswers3.push(req.user.username);
+		}	else {
+			console.log('POST Answer Error');
+		}
+		foundQuestion.save();
 	});
 });
 

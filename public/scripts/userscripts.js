@@ -10,8 +10,9 @@ var $avatar = $('.avatar'),
 		$questionListResults = $('.question-list-results'),
 		$questionListTemplate = $('#question-list-template'),
 		$scroll = $('.scroll'),
+		$userid = $('#userid'),
+		$username = $('#username'),
 		$userProfile = $('#user-profile'),
-		$userQuestionBox = $('#user-question-box'),
 		$window = $(window);
 
 // Selectors for [View Results]
@@ -26,7 +27,11 @@ var $userAnswerQuestionsBtn = $('#user-answer-questions-btn'),
 		$answerA = $('.answer-a'),
 		$answerB = $('.answer-b'),
 		$answerC = $('.answer-c'),
-		$answerD = $('.answer-d');
+		$answerD = $('.answer-d'),
+		$questionResponse = $('.question-response'),
+		$userQuestion = $('#user-question'),
+		$userResponse = $('#user-response'),
+		$nextQuestion = $('#next-question');
 
 // Global variables
 var questionArray = [];
@@ -52,10 +57,8 @@ $userViewResultsBtn.on('click', openQuestionPane);
 // $viewQuestionsBtn.on('click', openAddQuestionListPane);
 
 // Event handlers for [Answer Questions]
-$gotoQuestionsBtn.on('click', gotoQuestions);
-$userAnswerQuestionsBtn.on('click', openUserAnswerQuestionListPane);
-$questionListResults.on('click', '.click-to-select', addToQuestionArray);
-// $displayQuestionsBtn.on('click', gotoBreakdown);
+$userAnswerQuestionsBtn.on('click', createQuestionArray);
+$nextQuestion.on('click', displayNextQuestion);
 
 // Event handlers for answer buttons
 $answerA.on('click', checkAnswer);
@@ -112,86 +115,75 @@ function openQuestionPane() {
 // Functions for [Answer Questions] //
 //////////////////////////////////////
 
-// Opens the pane for [Answer Questions]
-function openUserAnswerQuestionListPane() {
-	questionArray = []; // every time this pane is opened it resets the question array
-	event.preventDefault();
-	$gotoQuestionsBtn.show();
-	$directions.hide();
-	$userViewResultsList.hide();
-	$userAnswerQuestionsList.show();
+// Add all questions to the questionArray and filter out questions which are not to be shown
+// Runs displayQuestions within the callback function
+function createQuestionArray() {
 	$.get(questionUrl, function(data) {
-		questionResults = data.questions;
-		$questionListResults.empty();
-		refreshQuestionList(questionResults);
-	});
-	calculateHeight();
+		questionArray = data.questions ;
+		questionArray = questionArray.filter(function(question) {
+			return question.show;
+		});
+		displayQuestion();
+	});	
 }
 
-// Refreshes the list of questions from the database
-// Currently includes all questions, later can be filtered for unanswered
-function refreshQuestionList(questionResults) {
-	console.log('refreshing questions');
-	console.log(questionResults);
-	// Render the data
-	var questionListHtml = questionTemplate({questions: questionResults});
-	$questionListResults.append(questionListHtml);
-}
-
-// Adds selected question to the question array
-function addToQuestionArray() {
-	// Get the id from the button
-	var id = $(this).attr('data-id');
-	var questionToAdd;
-	// Ajax call to get question by id
-	$.get(questionUrl + '/' + id, function(data) {
-		questionToAdd = data;
-		// Create an array of answers and shuffle the answers
-		console.log('question', questionToAdd);
-		// Preview the question to make sure it is the correct one to add to the array
-		$question.text(questionToAdd.text);
-		$answerA.text(questionToAdd.answers[0]);
-		$answerB.text(questionToAdd.answers[1]);
-		$answerC.text(questionToAdd.answers[2]);
-		$answerD.text(questionToAdd.answers[3]);
-		// Search for the id in the array
-		var notInArray = true;
-		for (var i = 0; i < questionArray.length; i++) {
-			if (questionArray[i]._id == id) {
-				notInArray = false;
-				questionArray.splice(i, 1);
-				console.log('deleted', questionToAdd, 'array', questionArray);
-			}
-		}
-		if (notInArray) {
-			questionArray.push(questionToAdd);
-			console.log('added', questionToAdd, 'array', questionArray);
-		}
-	});
-	if ($(this).hasClass('question-tab')) {
-		$(this).removeClass('question-tab');
-	} else {
-		$(this).addClass('question-tab');
-	}
-}
-
-// Answer the selected questions in the question array
-function gotoQuestions() {
+function displayQuestion() {
+	$userResponse.hide();
 	$userProfile.hide();
-	$userQuestionBox.show();
-	// Will contain code for answering questions...
-	// To be continued...
+	$userQuestion.show();
+	$nextQuestion.show();
+	calculateHeight();
+	$question.text(questionArray[index].text);
+	$answerA.text(questionArray[index].answers[0]);
+	$answerB.text(questionArray[index].answers[1]);
+	$answerC.text(questionArray[index].answers[2]);
+	$answerD.text(questionArray[index].answers[3]);
 }
 
-// When user clicks an answer, check to see if it is correct
-function checkAnswer() {
-	id = Number($(this).attr('id'));
-	console.log(id);
-	if(questionArray[index].correctanswer === questionArray[index].answers[id]) {
-		alert('correct!');
+function displayNextQuestion() {
+	if(index === questionArray.length-1) {
+		$questionResponse.text('You have answered the last question. Please return to your profile to review your results.');
+		$nextQuestion.hide();
+		calculateHeight();
 	} else {
-		alert('incorrect :(');
+		index++;
+		displayQuestion();
 	}
+}
+
+// When user clicks an answer, checks to see if it is correct
+// Submit answer to the server. Provide a response to the user.
+//Gives a link to the next question.
+function checkAnswer() {
+	var answerIndex = Number($(this).attr('id'));
+	var questionId = questionArray[index]._id;
+	var username = $username.text();
+	var userid = $userid.text();
+	console.log('answerIndex', answerIndex, 'questionId', questionId);
+	console.log('username', username, 'userid', userid);
+	if(questionArray[index].correctanswer === questionArray[index].answers[answerIndex]) {
+		$questionResponse.text('Correct!');
+	} else {
+		$questionResponse.text('Sorry :(  You are incorrect');
+	}
+	$userQuestion.hide();
+	$userResponse.show();
+	calculateHeight();
+
+	$.ajax({
+		type: 'PATCH',
+		url: questionUrl + '/' + questionId + '/answers',
+		data: {
+						userId: userid,
+						username: username,
+						useranswerIndex: answerIndex,
+						useranswer: questionArray[index].answers[answerIndex]
+					},
+		success: function(data) {
+			console.log('updated database');
+			questionArray.push(data);
+		}
+	});
 }
 
 });

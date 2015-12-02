@@ -140,7 +140,7 @@
 						<div id="add-question-list-results"></div>
 						<script type="text/x-handlebars-template" id="add-question-list-template">
 							\{{#each questions}}
-								<button class="btn btn-success btn-block question-tab click-to-select" data-id="\{{this._id}}">\{{this.label}}</button>
+								<button class="btn btn-success btn-block \{{#unless this.show}}question-tab\{{/unless}} click-to-select" data-id="\{{this._id}}">\{{this.label}}</button>
 							\{{/each}}
 						</script>
 					</div>

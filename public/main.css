@@ -161,8 +161,8 @@ hr.hr-avatar {
 	width: 250;
 }
 
-.user-list, .question-list, .add-question,
-.add-question-list, .breakdown, #user-question-box,
+#userinfo, .user-list, .question-list, .add-question,
+.add-question-list, .breakdown, #user-question, #user-response,
 #display-questions-btn, .user-view-results-list,
 .user-answer-questions-list, #user-goto-questions-btn {
 	display: none;

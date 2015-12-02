@@ -62,8 +62,8 @@ var $questionIndividualResults = $('#question-individual-results'),
 
 // URLs for api calls to the database
 var baseUrl = '/',
-		questionUrl = baseUrl + 'api/questions',
-		userUrl = baseUrl + 'api/users';
+		questionUrl = baseUrl + 'api/questions/',
+		userUrl = baseUrl + 'api/users/';
 
 // Handlebars templates and compilers for adding user buttons and
 // question buttons to the [View Results] and [View Users] buttons
@@ -77,6 +77,14 @@ var userListSource = $userListTemplate.html(),
 // Global variables
 var questionArray = []; // Array for questions to be displayed to students
 var index = 0;
+
+// Add all questions to the questionArray and filter out questions which are not to be shown
+$.get(questionUrl, function(data) {
+	questionArray = data.questions ;
+	questionArray = questionArray.filter(function(question) {
+		return question.show;
+	});
+});
 
 // Event handlers for page
 $avatar.on('click', changeAvatar);
@@ -94,7 +102,7 @@ $previewQuestionBtn.on('click', previewQuestion);
 $submitQuestionBtn.on('click', submitQuestion);
 
 // Event handlers for [View Questions]
-$addQuestionListResults.on('click', '.click-to-select', addToQuestionArray);
+$addQuestionListResults.on('click', '.click-to-select', selectQuestion);
 $displayQuestionsBtn.on('click', gotoBreakdown);
 
 // Event handlers for detailed information by user or question
@@ -126,6 +134,21 @@ function changeAvatar() {
 	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
 	$avatar.attr('src', avatarFile);
 	// change avatar in the database
+}
+
+///////////////////////////////
+// Function for [Directions] //
+///////////////////////////////
+
+// Open the directions pane
+function openDirectionsPane() {
+	event.preventDefault();
+	$directions.show();
+	$userList.hide();
+	$questionList.hide();
+	$addQuestion.hide();
+	$displayQuestionsBtn.hide();
+	$addQuestionList.hide();
 }
 
 //////////////////////////////////
@@ -179,10 +202,9 @@ function submitQuestion() {
 	newQuestion.text = $text.val();
 	newQuestion.correctanswer = correctanswer;
 	newQuestion.answers = answers;
-	console.log('newQuestion', newQuestion);
 	// Add newQuestion to the db and clear the form
 	$.post(questionUrl, newQuestion, function(data) {
-		console.log(data);
+		console.log('question added');
 	});
 	$formControl.val('');
 }
@@ -203,28 +225,13 @@ function shuffle(array) {
   return array;
 }
 
-///////////////////////////////
-// Function for [Directions] //
-///////////////////////////////
-
-// Open the directions pane
-function openDirectionsPane() {
-	event.preventDefault();
-	$directions.show();
-	$userList.hide();
-	$questionList.hide();
-	$addQuestion.hide();
-	$displayQuestionsBtn.hide();
-	$addQuestionList.hide();
-}
-
 ////////////////////////////////////
 // Functions for [View Questions] //
 ////////////////////////////////////
 
 // Open the view questions pane to add questions to the question array
 function openAddQuestionListPane() {
-	questionArray = []; // every time this pane is opened it resets the question array
+	// questionArray = []; // every time this pane is opened it resets the question array
 	event.preventDefault();
 	$directions.hide();
 	$userList.hide();
@@ -250,12 +257,12 @@ function refreshQuestionList(questionResults) {
 }
 
 // Adds selected question to the question array to be displayed
-function addToQuestionArray() {
+function selectQuestion() {
 	// Get the id from the button
 	var id = $(this).attr('data-id');
 	var questionToAdd;
 	// Ajax call to get question by id
-	$.get(questionUrl + '/' + id, function(data) {
+	$.get(questionUrl + id, function(data) {
 		questionToAdd = data;
 		// Create an array of answers and shuffle the answers
 		// Preview the question to make sure it is the correct one to add to the array
@@ -264,24 +271,34 @@ function addToQuestionArray() {
 		$answerB.text(questionToAdd.answers[1]);
 		$answerC.text(questionToAdd.answers[2]);
 		$answerD.text(questionToAdd.answers[3]);
-		// Search for the id in the array
-		var notInArray = true;
-		for (var i = 0; i < questionArray.length; i++) {
-			if (questionArray[i]._id == id) {
-				notInArray = false;
-				questionArray.splice(i, 1);
-				console.log('deleted', questionToAdd, 'array', questionArray);
-			}
-		}
-		if (notInArray) {
-			questionArray.push(questionToAdd);
-			console.log('added', questionToAdd, 'array', questionArray);
-		}
 	});
+	// Change the color of the button and value of show in the database
 	if ($(this).hasClass('question-tab')) {
 		$(this).removeClass('question-tab');
+		$.ajax({
+			type: 'PATCH',
+			url: questionUrl + id,
+			data: {show: true},
+			success: function(data) {
+				console.log('changed to show, added to array');
+				questionArray.push(data);
+			}
+		});
 	} else {
 		$(this).addClass('question-tab');
+		$.ajax({
+			type: 'PATCH',
+			url: questionUrl + id,
+			data: {show: false},
+			success: function(data) {
+				console.log('changed to not show, deleted from array');
+				for (var i = 0; i < questionArray.length; i++) {
+					if (questionArray[i]._id == id) {
+						questionArray.splice(i, 1);
+					}
+				}
+			}
+		});
 	}
 }
 
@@ -293,7 +310,6 @@ function gotoBreakdown() {
 	$breakdown.show();
 	calculateHeight();
 	// while(index < questionArray.length) {
-		var answersArray = questionArray[index].incorrectanswers;
 		$question.text(questionArray[index].text);
 		$answerA.text(questionArray[index].answers[0]);
 		$answerB.text(questionArray[index].answers[1]);
@@ -372,9 +388,6 @@ function loadQuestionInfo() {
 
 // Questions:
 //
-// Should I build the questionArray on the server instead of this file?
-// Is this restful?
-// How can I send an array from this file to the server file?
 // Should I be checking the server periodically for answers from users?
 
 });

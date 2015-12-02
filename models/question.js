@@ -3,34 +3,21 @@ var mongoose = require('mongoose'),
 		passportLocalMongoose = require('passport-local-mongoose');
 
 var QuestionSchema = new Schema({
-	label: String,
+	label: {
+		type: String,
+		unique: true
+	},
 	text: String,
 	correctanswer: String,
 	answers: [String],
-	usersanswers0: [
-	{
-		type: Schema.Types.ObjectId,
-		ref: 'User'
-	}],
-	usersanswers1: [
-	{
-		type: Schema.Types.ObjectId,
-		ref: 'User'
-	}],
-	usersanswers2: [
-	{
-		type: Schema.Types.ObjectId,
-		ref: 'User'
-	}],
-	usersanswers3: [
-	{
-		type: Schema.Types.ObjectId,
-		ref: 'User'
-	}]
-});
-
-QuestionSchema.plugin(passportLocalMongoose, {
-	populateFields: 'users'
+	show: {
+		type: Boolean,
+		default: false
+	},
+	usersanswers0: [String],
+	usersanswers1: [String],
+	usersanswers2: [String],
+	usersanswers3: [String]
 });
 
 var Question = mongoose.model('Question', QuestionSchema);
