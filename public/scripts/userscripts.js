@@ -153,7 +153,8 @@ function plotGraph(selectedQuestion) {
 	// 3. add code below
 
 	var $breakdownPieChart = $('#breakdown-pie-chart');
-
+	$breakdownPieChart.hide();
+	$breakdownPieChart.show();
 	// If canvas is bigger than the box-width, make the canvas smaller
 	var boxwidth = $questionIndividualResults.width();
 	if (boxwidth < 400) {
