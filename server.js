@@ -8,6 +8,7 @@ var express = require('express'),
 		mongoose = require('mongoose'),
 		cookieParser = require('cookie-parser'),
 		session = require('express-session'),
+		flash = require('express-flash'),
 		passport = require('passport'),
 		LocalStrategy = require('passport-local').Strategy;
 
@@ -24,6 +25,9 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Send flash messages
+app.use(flash());
 
 // Passport config
 passport.use(new LocalStrategy(User.authenticate()));
@@ -69,7 +73,7 @@ app.get('/signup', function(req, res) {
 		console.log(req.user.username + ' tried to sign up.  Redirected to profile.');		
 		res.redirect('/profile');
 	} else {
-		res.render('signup', {user: req.user});
+		res.render('signup', {user: req.user, errorMessage: req.flash('signupError')});
 	}
 });
 
@@ -89,14 +93,20 @@ app.post('/signup', function(req, res) {
 														admin: req.body.key}),
 														req.body.password,
 			function(err, newUser) {
-				passport.authenticate('local')(req, res, function() {
-					console.log(req.user.username + ' signed up. Redirected to profile.');
-					if(req.user.admin) {
-						res.redirect('/admin');
-					} else {
-						res.redirect('/profile');
-					}
-				});
+				if (err) {
+					// Set flash message
+					req.flash('signupError', err.message);
+					res.redirect('/signup');
+				} else {
+					passport.authenticate('local')(req, res, function() {
+						console.log(req.user.username + ' signed up. Redirected to profile.');
+						if(req.user.admin) {
+							res.redirect('/admin');
+						} else {
+							res.redirect('/profile');
+						}
+					});					
+				}
 			}
 		);
 	}
@@ -277,7 +287,9 @@ app.get('/api/users/:id', function(req, res) {
 	// Find URL from parameters
 	var userId = req.params.id;
 	// Find user in db using id
-	User.findOne({ _id: userId }, function(err, foundUser) {
+	User.findOne({ _id: userId })
+	.populate('questions')
+	.exec(function(err, foundUser) {
 		if (err) {
 			console.log('GET User Error: ', err);
 			res.json(err);

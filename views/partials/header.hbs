@@ -30,3 +30,10 @@
 		</div>
   </div>
 </nav>
+{{#if errorMessage}}
+	<div class="alert alert-danger">
+		<div class="container">
+			{{errorMessage}}
+		</div>
+	</div>
+{{/if}}

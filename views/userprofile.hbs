@@ -34,9 +34,10 @@
 						<hr>
 						<h2 class="text-center">{{user.name}}</h2>
 						<h4>username:</h4>
-						<h4 class="tab">{{user.username}}</h4>
+						<h4 class="tab green">{{user.username}}</h4>
 						<h4>password:</h4>
-						<h4 class="tab">{{user.password}}</h4>
+						<h4 class="tab green">********{{user.password}}</h4>
+						<h4>click on picture to change</h4>
 						<hr>
 						<button class="btn btn-success btn-block" id="user-view-results-btn">View Results</button>
 						<button class="btn btn-success btn-block" id="user-answer-questions-btn">Answer Questions</button>
@@ -50,40 +51,34 @@
 			<div class="col-md-9 col-sm-6 col-xs-12" id="directions">
 				<div class="box">
 					<div class="scroll">
+						<h2 class="text-center">Welcome to PulseCheck, {{user.name}}!</h2>
+						<hr>
 						<h2>Directions</h2>
 						<h3>To get started:</h3>
 						<ol>
-							<h4><li>Have users sign up and enter a password.</li></h4>
-							<h4><li>Enter a question into the database.</li></h4>
-							<h4><li>Select the questions you would like to display.</li></h4>
-							<h4><li>Poll your students and view the results.</li></h4>
+							<h4><li>Customize your picture by clicking on it.</li></h4>
+							<h4><li>Answer questions.</li></h4>
+							<h4><li>View your results.</li></h4>
 						</ol>
-						<h3>To add questions:</h3>
+						<h3>To answer questions:</h3>
 						<ol>
-							<h4><li>Click the [Add Question] button to open the form.</li></h4>
-							<h4><li>Fill out the form.</li></h4>
-							<h4><li>The label section does not get displayed with the question, but is used to keep track of questions in the database.  Name your questions wisely.</li></h4>
-							<h4><li>Enter the question, answer, and incorrect answer choices.</li></h4>
-							<h4><li>Press the [Preview] button to see how the question will appear to users.</li></h4>
-							<h4><li>Press the [Submit] button to enter the question into the database.</li></h4>
+							<h4><li>Click the <span class="green">[Answer Questions]</span> button to check for new questions.</li></h4>
+							<h4><li>Read the question and click the button for the correct answer.</li></h4>
+							<h4><li>Keep answering questions until you reach the end.</li></h4>
+							<h4><li>Return to your profile to view results.</li></h4>
 						</ol>
-						<h3>To view questions and make them available to users:</h3>
+						<h3>To view results:</h3>
 						<ol>
-							<h4><li>Click the [View Questions] button to open a list of all available questions.</li></h4>
-							<h4><li>Click on each question to review it and make sure you would like to use it.  If you would, click the [Add to List] button.</li></h4>
-							<h4><li>The button should change to green.  If you would like to deselect the question, click on it again and click the [Remove from List] button.</li></h4>
-							<h4><li>Once you have selected all of the questions you would like to use, click on the [Go to Questions] button under the Admin Profile.</li></h4>
-							<h4><li>After each question, click the [Next Question] button to move on.</li></h4>
-						</ol>
-						<h3>To view results by user:</h3>
-						<ol>
-							<h4><li>Click the [View Users] button to review the results by user</li></h4>
-							<h4><li>Choose a user to see their answers to each question</li></h4>
-						</ol>
-						<h3>To view results by user:</h3>
-						<ol>
-							<h4><li>Click the [View Results] button to review the breakdown of each question</li></h4>
-							<h4><li>Choose a question to see which users answered correctly or incorrectly.</li></h4>
+							<h4><li>Click the <span class="green">[View Results]</span> button to open a list of all answered questions.</li></h4>
+							<h4><li>Click on each question to review it.</li></h4>
+							<h4><li>The results show:</li></h4>
+								<ul>
+									<h4><li>the question</li></h4>
+									<h4><li>answer choices</li></h4>
+									<h4><li>your answer</li></h4>
+									<h4><li>a visual breakdown of how other users answered the question</li></h4>
+								</ul>
+							</li>
 						</ol>
 					</div>						
 				</div>

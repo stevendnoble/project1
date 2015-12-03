@@ -122,7 +122,31 @@ hr.hr-avatar {
 .btn-success:active:focus,
 .btn-success.active:focus,
 .btn-success:active.focus,
-.btn-success.active.focus {
+.btn-success.active.focus,
+.btn-danger,
+.btn-danger:focus,
+.btn-danger.focus,
+.btn-danger:hover,
+.btn-danger:active,
+.btn-danger.active,
+.btn-danger:active:hover,
+.btn-danger.active:hover,
+.btn-danger:active:focus,
+.btn-danger.active:focus,
+.btn-danger:active.focus,
+.btn-danger.active.focus,
+.delete,
+.delete:focus,
+.delete.focus,
+.delete:hover,
+.delete:active,
+.delete.active,
+.delete:active:hover,
+.delete.active:hover,
+.delete:active:focus,
+.delete.active:focus,
+.delete:active.focus,
+.delete.active.focus {
 	border-radius: 20px;
 	border: 1px solid black;
 	color: black;
@@ -179,4 +203,17 @@ hr.hr-avatar {
 
 .scroll {
 	overflow-y: scroll;
+}
+
+.error {
+	color: red;
+}
+
+.green {
+	color: green;
+	font-weight: bolder;
+}
+
+#flash-message {
+	margin-top: -6px;
 }

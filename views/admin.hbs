@@ -29,11 +29,12 @@
 						</div>
 						<h2 class="text-center">{{user.name}}</h2>
 						<h4>username:</h4>
-						<h4 class="tab">{{user.username}}</h4>
+						<h4 class="tab green">{{user.username}}</h4>
 						<h4>admin:</h4>
-						<h4 class="tab">{{#if user.admin}}yes{{else}}no{{/if}}</h4>
+						<h4 class="tab green">{{#if user.admin}}yes{{else}}no{{/if}}</h4>
 						<h4>password:</h4>
-						<h4 class="tab">{{user.password}}</h4>
+						<h4 class="tab green">********{{user.password}}</h4>
+						<h4>click on picture to change</h4>j
 						<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
 						<button class="btn btn-success btn-block" id="add-question-btn">Add New Question</button>
 						<button class="btn btn-success btn-block" id="view-questions-btn">View Questions</button>
@@ -47,41 +48,54 @@
 			<div class="col-md-9 col-sm-6 col-xs-12" id="directions">
 				<div class="box">
 					<div class="scroll">
+						<h2 class="text-center">Welcome to PulseCheck, {{user.name}}!</h2>
+						<hr>
 						<h2>Directions</h2>
 						<h3>To get started:</h3>
 						<ol>
 							<h4><li>Have users sign up and enter a password.</li></h4>
-							<h4><li>Enter a question into the database.</li></h4>
-							<h4><li>Select the questions you would like to display.</li></h4>
+							<h4><li>Enter questions into the database.</li></h4>
+							<h4><li>Select the questions you would like users to answer.</li></h4>
+							<h4><li>Display the questions (optional).</li></h4>
 							<h4><li>Poll your students and view the results.</li></h4>
 						</ol>
 						<h3>To add questions:</h3>
 						<ol>
-							<h4><li>Click the [Add Question] button to open the form.</li></h4>
+							<h4><li>Click the <span class="green">[Add Question]</span> button to open the form.</li></h4>
 							<h4><li>Fill out the form.</li></h4>
 							<h4><li>The label section does not get displayed with the question, but is used to keep track of questions in the database.  Name your questions wisely.</li></h4>
 							<h4><li>Enter the question, answer, and incorrect answer choices.</li></h4>
-							<h4><li>Press the [Preview] button to see how the question will appear to users.</li></h4>
-							<h4><li>Press the [Submit] button to enter the question into the database.</li></h4>
+							<h4><li>Press the <span class="green">[Preview]</span> button to see how the question will appear to users.</li></h4>
+							<h4><li>Press the <span class="green">[Submit]</span> button to enter the question into the database.</li></h4>
 						</ol>
 						<h3>To view questions and make them available to users:</h3>
 						<ol>
-							<h4><li>Click the [View Questions] button to open a list of all available questions.</li></h4>
-							<h4><li>Click on each question to review it and make sure you would like to use it.  If you would, click the [Add to List] button.</li></h4>
-							<h4><li>The button should change to green.  If you would like to deselect the question, click on it again and click the [Remove from List] button.</li></h4>
-							<h4><li>Once you have selected all of the questions you would like to use, click on the [Go to Questions] button under the Admin Profile.</li></h4>
-							<h4><li>After each question, click the [Next Question] button to move on.</li></h4>
+							<h4><li>Click the <span class="green">[View Questions]</span> button to open a list of all available questions.</li></h4>
+							<h4><li>Click the button for each question to review it and make sure you would like to use it.</li></h4>
+							<h4><li>The button should change to green.  If you would like to deselect the question, click on it again and it will change back to yellow.</li></h4>
+							<h4><li>Once you have selected all of the questions you would like to use, click on the <span class="green">[Display Questions]</span> button under the Admin Profile.</li></h4>
+							<h4><li>After each question, click the <span class="green">[Calculate Results]</span> button to display a pie chart with the results.</li></h4>
+							<h4><li>Click the <span class="green">[Next Question]</span> button to move on.</li></h4>
+							<h4><li>When you are finished, use the navigation bar to go back to your profile or the admin profile.</li></h4>
 						</ol>
 						<h3>To view results by user:</h3>
 						<ol>
-							<h4><li>Click the [View Users] button to review the results by user</li></h4>
-							<h4><li>Choose a user to see their answers to each question</li></h4>
+							<h4><li>Click the <span class="green">[User Results]</span> button to review the results by user.</li></h4>
+							<h4><li>Choose a user from the list to see their answers to each question.</li></h4>
+							<h4><li>From the user results, you can also <span class="green">[Delete User]</span>.</li></h4>							
 						</ol>
-						<h3>To view results by user:</h3>
+						<h3>To view results by question:</h3>
 						<ol>
-							<h4><li>Click the [View Results] button to review the breakdown of each question</li></h4>
+							<h4><li>Click the <span class="green">[Question Results]</span> button to review the breakdown of each question.</li></h4>
 							<h4><li>Choose a question to see which users answered correctly or incorrectly.</li></h4>
+							<h4><li>There is a breakdown of results including a pie chart in this view as well.</li></h4>
+							<h4><li>From the question results, you can also <span class="green">[Delete Question]</span>.</li></h4>							
 						</ol>
+						<h3>To delete a user or a question:</h3>
+						<ul>
+							<h4><li>Please see above under view results for question or user.</li></h4>
+							<h4><li>It is not possible to edit questions or users at this time.</li></h4>
+						</ul>
 					</div>						
 				</div>
 			</div>
@@ -89,30 +103,30 @@
 			<div class="col-md-3 col-sm-6 col-xs-12 add-question">
 				<div class="box">
 					<div class="scroll">
-						<h3>Fill in the following forms and click submit to insert a question</h1>
+						<h3>Fill in the following form. Click <span class="green">[Preview]</span> to preview the question.  Then <span class="green">[Submit]</span> to add the question.</h1>
 						<hr>
-						<form role="form">
+						<form role="form" class="check-validation">
 						  <div class="form-group">
 						    <label for="label">Label:</label>
-						    <input type="text" class="form-control" name="label" id="label">
+						    <input type="text" class="form-control" name="label" id="label" required>
 						  </div>
 						  <div class="form-group">
 						    <label for="question">Question:</label>
-						    <input type="text" class="form-control" name="text" id="text">
+						    <input type="text" class="form-control" name="text" id="text" required>
 						  </div>
 						  <div class="form-group">
 						    <label for="correctanswer">Correct Answer:</label>
-						    <input type="text" class="form-control" name="correctanswer" id="correctanswer">
+						    <input type="text" class="form-control" name="correctanswer" id="correctanswer" required>
 						  </div>
 						  <div class="form-group">
 						    <label for="answers0">Answer Choices:</label>
-						    <input type="text" class="form-control" name="answers0" id="answers0">
+						    <input type="text" class="form-control" name="answers0" id="answers0" required>
 						  </div>
 						  <div class="form-group">
-						    <input type="text" class="form-control" name="answers1" id="answers1">
+						    <input type="text" class="form-control" name="answers1" id="answers1" required>
 						  </div>
 						  <div class="form-group">
-						    <input type="text" class="form-control" name="answers2" id="answers2">
+						    <input type="text" class="form-control" name="answers2" id="answers2" required>
 						  </div>
 						  <button class="btn btn-success" id="preview-question-btn">Preview</button>
 						  <button type="submit" class="btn btn-success" id="submit-question-btn">Submit</button>
@@ -136,7 +150,7 @@
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Questions</strong></h2>
-						<h4>As you click questions, a preview will be shown to the right and the question will be added to the question list.  Click again to cancel.  Selected questions will have a green button.</h4>
+						<h4>Click questions once to select.  Click again to deselect.  When you are ready to show your questions, click <span class="green">[Display Questions]</span> to the left.</h4>
 						<div id="add-question-list-results"></div>
 						<script type="text/x-handlebars-template" id="add-question-list-template">
 							\{{#each questions}}
@@ -157,7 +171,7 @@
 					<button class="btn btn-success btn-block answer-d">Answer D</button>
 				</div>
 			</div>
-			<!-- [View Users] Pane -->
+			<!-- [User Results] Pane -->
 			<div class="col-md-3 col-sm-6 col-xs-12 user-list">
 				<div class="box">
 					<div class="scroll">
@@ -171,7 +185,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- Individual results of [View Users] -->
+			<!-- Individual results of [User Results] -->
 			<div class="col-md-6 col-sm-12 col-xs-12 user-list">
 				<div class="box">
 					<div class="scroll">
@@ -179,10 +193,41 @@
 							<h2><strong>Directions</strong></h2>
 							<h3>Click on a user.  The results for that user will be displayed in this box.  It will include the user's answers to each question as well as general information about those questions.</h3>
 						</div>
+						<script type="text/x-handlebars-template" id="user-results-template">
+							<div class="row">
+								<div class="col-sm-8">
+									<h2><strong>\{{username}}</strong></h2>
+									<hr>
+									<h3><strong>Question Breakdown:</strong></h3>
+									<canvas class="breakdown-pie-chart" width="200" height="200"></canvas>
+								</div>
+								<div class="col-sm-4">
+									<button class="btn btn-danger btn-block delete" data-id="\{{userid}}">Delete User</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-responsive table-hover">
+									  <tr>
+									    <td><strong>Question</strong></td>
+									    <td><strong>Answer</strong></td> 
+									    <td><strong>Correct Answer</strong></td>
+									  </tr>
+									  \{{#each questions}}
+										  <tr class="\{{#if correct}}success\{{else}}danger\{{/if}}">
+										    <td>\{{question}}</td>
+										    <td>\{{useranswer}}</td> 
+										    <td>\{{correctanswer}}</td>
+										  </tr>
+									  \{{/each}}
+									</table>
+								</div>
+							</div>
+						</script>
 					</div>
 				</div>
 			</div>
-			<!-- [View Results] Pane -->
+			<!-- [Question Results] Pane -->
 			<div class="col-md-3 col-sm-6 col-xs-12 question-list">
 				<div class="box">
 					<div class="scroll">
@@ -196,7 +241,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- Individual questions from [View Results] -->
+			<!-- Individual questions from [Question Results] -->
 			<div class="col-md-6 col-sm-12 col-xs-12 question-list">
 				<div class="box">
 					<div class="scroll">
@@ -205,20 +250,41 @@
 							<h3>Click on a question.  The results for that question will be displayed in this box.  It will include which users have answered correctly, which users have answered each of the incorrect answers, and a display of the breakdown for the question.</h3>
 						</div>
 						<script type="text/x-handlebars-template" id="question-results-template">
-							<h2><strong>\{{label}}</strong></h2>
-							<hr>
-							<h4><strong>Question:</strong>  \{{text}}</h4>
-							<h4><strong>Answer Choices:</strong></h4>
-							<ul>
-							\{{#each answers}}
-								<h4><li>\{{this}}</li></h4>
-							\{{/each}}
-							</ul>
-							<h4><strong>Correct Answer:</strong>  \{{correctanswer}}</h4>
-							<hr>
-							<h2><strong>Answers Breakdown:</strong></h2>
-							<br>
-							<canvas class="breakdown-pie-chart" width="400" height="400"></canvas>
+							<div class="row">
+								<div class="col-sm-8">
+									<h2><strong>\{{label}}</strong></h2>
+									<hr>
+									<h4><strong>Question:</strong>  \{{text}}</h4>
+									<h4><strong>Answer Choices:</strong></h4>
+								</div>
+								<div class="col-sm-4">
+									<button class="btn btn-danger btn-block delete" data-id="\{{this._id}}">Delete Question</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<ul>
+									\{{#each answers}}
+										<h4><li>\{{this}}</li></h4>
+									\{{/each}}
+									</ul>
+									<h4><strong>Correct Answer:</strong>  \{{correctanswer}}</h4>
+									<hr>
+									<h2><strong>Answers Breakdown:</strong></h2>
+									<br>
+									<canvas class="breakdown-pie-chart" width="400" height="400"></canvas>
+									<hr>
+									<h2><strong>Results by Answer:
+									\{{#each displayAnswers}}
+										<h4><strong>\{{answer}}:</strong></h4>
+										<ul>
+											\{{#each users}}
+												<h5><li>\{{this}}</li></h5>
+											\{{/each}}
+										</ul>
+									\{{/each}}
+								</div>
+							</div>
 						</script>
 					</div>
 				</div>
@@ -258,12 +324,16 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
 	<!-- bootstrapjs -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+	<!-- jquery validate -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
 
 	<!-- handlebars -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js"></script>
 
-  <!-- custom script -->
+  <!-- custom scripts -->
+  <script type="text/javascript" src="scripts/validations.js"></script>	
   <script type="text/javascript" src="scripts/admin.js"></script>
 </body>
 </html>

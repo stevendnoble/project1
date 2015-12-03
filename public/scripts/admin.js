@@ -53,7 +53,7 @@ var $addQuestionList = $('.add-question-list'),
 		$calculateResultsToggle = $('.calculate-results-toggle'),
 		$calculateResults = $('#calculate-results');
 
-// Selectors for [View Results] and [View Users]
+// Selectors for [User Results] and [Question Results]
 var $questionIndividualResults = $('#question-individual-results'),
 		$questionList = $('.question-list'),
 		$questionListResults = $('#question-list-results'),
@@ -64,7 +64,10 @@ var $questionIndividualResults = $('#question-individual-results'),
 		$userList = $('.user-list'),
 		$userListResults = $('#user-list-results'),
 		$userListTemplate = $('#user-list-template'),
-		$userTabBtn = $('.user-tab');
+		$userResultsTemplate = $('#user-results-template'),
+		$userTabBtn = $('.user-tab'),
+		$deleteQuestion= $('.delete-question'),
+		$deleteUser = $('.delete-user');
 
 // URLs for api calls to the database
 var baseUrl = '/',
@@ -80,7 +83,9 @@ var userListSource = $userListTemplate.html(),
 		addQuestionListSource = $addQuestionListTemplate.html(),
 		addQuestionTemplate = Handlebars.compile(addQuestionListSource),
 		questionResultsSource = $questionResultsTemplate.html(),
-		questionResultsTemplate = Handlebars.compile(questionResultsSource);
+		questionResultsTemplate = Handlebars.compile(questionResultsSource),
+		userResultsSource = $userResultsTemplate.html(),
+		userResultsTemplate = Handlebars.compile(userResultsSource);
 
 // Global variables
 var questionArray = []; // Array for questions to be displayed to students
@@ -116,11 +121,11 @@ $displayQuestionsBtn.on('click', gotoBreakdown);
 $nextQuestion.on('click', displayNextQuestion);
 $calculateResults.on('click', calculateResults);
 
-// Event handlers for detailed information by user or question
-// need to put handler on the 
+// Event handlers for [User Results] and [Question Results]
 $userListResults.on('click', '.user-tab', loadUserInfo);
 $questionListResults.on('click', '.question-tab', loadQuestionInfo);
-$
+$questionIndividualResults.on('click', '.delete', deleteQuestion);
+$userIndividualResults.on('click', '.delete', deleteUser);
 
 // Generic functions
 calculateHeight();
@@ -164,12 +169,9 @@ function plotGraph(selectedQuestion, boxwidth) {
 	values.push(selectedQuestion.usersanswers1.length);
 	values.push(selectedQuestion.usersanswers2.length);
 	values.push(selectedQuestion.usersanswers3.length);
-	console.log('unadjusted values', values);
 	var labels = selectedQuestion.answers;
-	console.log('unadjusted labels', labels);
 	// Determine the index of the correct answer, and move that to the first spot
 	// to always display the correct answer as green.
-	console.log(selectedQuestion);
 	var correctIndex = labels.indexOf(selectedQuestion.correctanswer);
 	var correctValue = values.splice(correctIndex, 1);
 	values.unshift(correctValue[0]);
@@ -196,6 +198,45 @@ function plotGraph(selectedQuestion, boxwidth) {
     color: "#BE4343",
     highlight: "#FFA7A7",
     label: labels[3]
+  }];
+  var options;
+	// Create a pie chart using the data
+	var myPieChart = new Chart(ctx).Pie(data, options);
+}
+
+// Plots the graph of the selected question
+function plotUserGraph(givendata, boxwidth) {
+	var $breakdownPieChart = $('.breakdown-pie-chart');
+	// If canvas is bigger than the box-width, make the canvas smaller
+	if (boxwidth < 200) {
+		$breakdownPieChart.attr('width', boxwidth);
+		$breakdownPieChart.attr('height', boxwidth);
+	}
+	// Get context with jQuery - using jQuery's .get() method.
+	ctx = $breakdownPieChart.get(0).getContext("2d");
+	// Add data and options
+	var correct = givendata.correct;
+	var incorrect = givendata.questions.length - correct;
+	var data = [{
+    value: correct,
+    color: "#369836",
+    highlight: "#8AD48A",
+    label: "Correct"
+  }, {
+    value: 0,
+    color: "#BE7B43",
+    highlight: "#FFCFA7",
+    label: "Incorrect"
+  }, {
+    value: 0,
+    color: "#287272",
+    highlight: "#6EA8A8",
+    label: "Incorrect"
+  }, {
+    value: incorrect,
+    color: "#BE4343",
+    highlight: "#FFA7A7",
+    label: "Incorrect"
   }];
   var options;
 	// Create a pie chart using the data
@@ -306,6 +347,7 @@ function openAddQuestionListPane() {
 	$addQuestionList.show();
 	$displayQuestionsBtn.show();
 	// Get the questions from the db
+	index = 0;
 	$.get(questionUrl, function(data) {
 		questionResults = data.questions;
 		refreshQuestionList(questionResults);
@@ -447,9 +489,47 @@ function refreshUsers(userResults) {
 function loadUserInfo() {
 	event.preventDefault();
 	$userIndividualResults.empty();
-	$userIndividualResults.text('coming soon...');
+	// Get id from button press
+	var id = $(this).attr('data-id');
+	// Ajax call to get question from db
+	$.get(userUrl + id, function(data) {
+		var userInfo = data;
+		var dataToAppend = {},
+				correctCount = 0;
+		dataToAppend.userid = id;
+		dataToAppend.username = userInfo.username;
+		dataToAppend.questions = [];
+		for(var i=0; i<userInfo.questions.length; i++) {
+			dataToAppend.questions[i] = {};
+			dataToAppend.questions[i].question = userInfo.questions[i].label;
+			dataToAppend.questions[i].useranswer = userInfo.useranswers[i];
+			dataToAppend.questions[i].correctanswer = userInfo.questions[i].correctanswer;
+			dataToAppend.questions[i].correct = (dataToAppend.questions[i].useranswer === dataToAppend.questions[i].correctanswer);
+			if (dataToAppend.questions[i].correct) correctCount++;
+		}
+		dataToAppend.correct = correctCount;
+		console.log('dataToAppend', dataToAppend, 'correct', correctCount);
+		var userResultsHtml = userResultsTemplate(dataToAppend);
+		$userIndividualResults.append(userResultsHtml);
+		var $breakdownPieChart = $('#breakdown-pie-chart');
+		$breakdownPieChart.show();
+		var boxwidth = $userIndividualResults.width();
+		plotUserGraph(dataToAppend, boxwidth);
+	});
+}
 
-	// Function will load individual results by user
+// Deletes User from Database
+function deleteUser() {
+	var id = $(this).attr('data-id');
+	$.ajax({
+		type: 'DELETE',
+		url: userUrl + id,
+		success: function(data) {
+			openUserPane();
+			$userIndividualResults.empty();
+			console.log('deleted user');
+		}
+	});
 }
 
 // Opens the questions pane to view results by question
@@ -485,7 +565,16 @@ function loadQuestionInfo() {
 	// Ajax call to get question from db
 	$.get(questionUrl + id, function(data) {
 		var questionInfo = data;
-		console.log(questionInfo);
+		questionInfo.displayAnswers = [];
+		questionInfo.displayAnswers[0] = {answer: questionInfo.answers[0],
+																			users: questionInfo.usersanswers0 };
+		questionInfo.displayAnswers[1] = {answer: questionInfo.answers[1],
+																			users: questionInfo.usersanswers1 };
+		questionInfo.displayAnswers[2] = {answer: questionInfo.answers[2],
+																			users: questionInfo.usersanswers2 };
+		questionInfo.displayAnswers[3] = {answer: questionInfo.answers[3],
+																			users: questionInfo.usersanswers3 };	
+		console.log(questionInfo);															
 		// Function will load individual results by question
 		var questionResultsHtml = questionResultsTemplate(questionInfo);
 		$questionIndividualResults.append(questionResultsHtml);
@@ -496,11 +585,19 @@ function loadQuestionInfo() {
 	});
 }
 
-
-
-
-
-// var boxwidth = $questionIndividualResults.width();
-// plotGraph(selectedQuestion, boxwidth);
+// Deletes User from Database
+function deleteQuestion() {
+	console.log('in delete question');
+	var id = $(this).attr('data-id');
+	$.ajax({
+		type: 'DELETE',
+		url: questionUrl + id,
+		success: function(data) {
+			openQuestionPane();
+			$questionIndividualResults.empty();
+			console.log('deleted question');
+		}
+	});
+}
 
 });

@@ -22,15 +22,15 @@
 				<div class="center-box">
 					<h1 class="text-center">Sign Up</h1>
 					<hr>
-					<form method="POST" action="/signup">
+					<form method="POST" action="/signup" class="check-validation">
 						<div class="form-group">
-							<input type="text" name="name" class="form-control" placeholder="Name" autofocus>
+							<input type="text" name="name" class="form-control" placeholder="Name" required autofocus>
 						</div>
 						<div class="form-group">
-							<input type="text" name="username" class="form-control" placeholder="Username">
+							<input type="text" name="username" class="form-control" placeholder="Username" required>
 						</div>
 						<div class="form-group">
-							<input type="password" name="password" class="form-control" placeholder="Password">
+							<input type="password" name="password" class="form-control" placeholder="Password" required minlength="6">
 						</div>
 						<div class="form-group">
 							<input type="text" name="key" class="form-control" placeholder="Key">
@@ -54,10 +54,14 @@
 	<!-- bootstrapjs -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
+	<!-- jquery validate -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+
 	<!-- handlebars -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.3/handlebars.min.js"></script>
 
   <!-- custom script -->
+  <script type="text/javascript" src="scripts/validations.js"></script>	
   <script type="text/javascript" src="/scripts/main.js"></script>
 </body>
 </html>

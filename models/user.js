@@ -27,8 +27,16 @@ var UserSchema = new Schema({
 	useranswers: [String]
 });
 
+var validatePassword = function (password, callback) {
+	if (password.length < 6) {
+		return callback({ code: 422, message: 'Password must be at least 6 characters.' });
+	}
+	return callback(null);
+};
+
 UserSchema.plugin(passportLocalMongoose, {
-	populateFields: 'questions'
+	populateFields: 'questions',
+	passwordValidator: validatePassword
 });
 
 var User = mongoose.model('User', UserSchema);
