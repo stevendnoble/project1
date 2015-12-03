@@ -203,6 +203,7 @@
 								</div>
 								<div class="col-sm-4">
 									<button class="btn btn-danger btn-block delete" data-id="\{{userid}}">Delete User</button>
+									<button class="btn btn-danger btn-block user-tab" data-id="\{{userid}}">Reset Password</button>
 								</div>
 							</div>
 							<div class="row">
@@ -214,7 +215,7 @@
 									    <td><strong>Correct Answer</strong></td>
 									  </tr>
 									  \{{#each questions}}
-										  <tr class="\{{#if correct}}success\{{else}}danger\{{/if}}">
+										  <tr class="\{{#if correct}}correct\{{else}}incorrect\{{/if}}">
 										    <td>\{{question}}</td>
 										    <td>\{{useranswer}}</td> 
 										    <td>\{{correctanswer}}</td>
@@ -253,16 +254,15 @@
 							<div class="row">
 								<div class="col-sm-8">
 									<h2><strong>\{{label}}</strong></h2>
-									<hr>
-									<h4><strong>Question:</strong>  \{{text}}</h4>
-									<h4><strong>Answer Choices:</strong></h4>
 								</div>
 								<div class="col-sm-4">
 									<button class="btn btn-danger btn-block delete" data-id="\{{this._id}}">Delete Question</button>
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-sm-12">
+								<div class="col-sm-6">
+									<h3><strong>Question:</strong>  \{{text}}</h3>
+									<h4><strong>Answer Choices:</strong></h4>
 									<ul>
 									\{{#each answers}}
 										<h4><li>\{{this}}</li></h4>
@@ -270,19 +270,31 @@
 									</ul>
 									<h4><strong>Correct Answer:</strong>  \{{correctanswer}}</h4>
 									<hr>
-									<h2><strong>Answers Breakdown:</strong></h2>
+									<h3><strong>Results by Answer:</h3>
 									<br>
-									<canvas class="breakdown-pie-chart" width="400" height="400"></canvas>
-									<hr>
-									<h2><strong>Results by Answer:
-									\{{#each displayAnswers}}
-										<h4><strong>\{{answer}}:</strong></h4>
-										<ul>
-											\{{#each users}}
-												<h5><li>\{{this}}</li></h5>
-											\{{/each}}
-										</ul>
-									\{{/each}}
+								</div>
+								<div class="col-sm-6">
+									<h3><strong>Answers Breakdown:</strong></h3>
+									<br>
+									<canvas class="breakdown-pie-chart" width="200" height="200"></canvas>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table table-responsive table-hover">
+									  <tr>
+										\{{#each displayAnswers}}
+											<td>
+											<h4><strong>\{{answer}}:</strong></h4>
+											<ul>
+												\{{#each users}}
+													<h5><li>\{{this}}</li></h5>
+												\{{/each}}
+											</ul>
+											</td>
+										\{{/each}}
+										</tr>
+									</table>
 								</div>
 							</div>
 						</script>

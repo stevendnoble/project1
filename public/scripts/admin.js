@@ -150,14 +150,25 @@ function changeAvatar() {
 	avatarNumber = (avatarNumber + 1) % 20;
 	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
 	$avatar.attr('src', avatarFile);
-	// change avatar in the database
+	// Change avatar in the database
+	$.ajax({
+		type: 'PATCH',
+		url: userUrl + 'self',
+		data: {avatar: avatarFile},
+		success: function(data) {
+			console.log(data);
+			console.log('changed avatar to', data.avatar);
+		}
+	});
 }
 
 // Plots the graph of the selected question
 function plotGraph(selectedQuestion, boxwidth) {
 	var $breakdownPieChart = $('.breakdown-pie-chart');
+	$breakdownPieChart.hide();
+	$breakdownPieChart.show();
 	// If canvas is bigger than the box-width, make the canvas smaller
-	if (boxwidth < 400) {
+	if (boxwidth < 200) {
 		$breakdownPieChart.attr('width', boxwidth);
 		$breakdownPieChart.attr('height', boxwidth);
 	}
@@ -207,6 +218,8 @@ function plotGraph(selectedQuestion, boxwidth) {
 // Plots the graph of the selected question
 function plotUserGraph(givendata, boxwidth) {
 	var $breakdownPieChart = $('.breakdown-pie-chart');
+	$breakdownPieChart.hide();
+	$breakdownPieChart.show();
 	// If canvas is bigger than the box-width, make the canvas smaller
 	if (boxwidth < 200) {
 		$breakdownPieChart.attr('width', boxwidth);
@@ -222,16 +235,6 @@ function plotUserGraph(givendata, boxwidth) {
     color: "#369836",
     highlight: "#8AD48A",
     label: "Correct"
-  }, {
-    value: 0,
-    color: "#BE7B43",
-    highlight: "#FFCFA7",
-    label: "Incorrect"
-  }, {
-    value: 0,
-    color: "#287272",
-    highlight: "#6EA8A8",
-    label: "Incorrect"
   }, {
     value: incorrect,
     color: "#BE4343",

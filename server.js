@@ -124,20 +124,17 @@ app.get('/login', function(req, res) {
 			res.redirect('/profile');
 		}
 	} else {
-		res.render('login', {user: req.user});
+		res.render('login', {user: req.user, errorMessage: req.flash('error')});
 	}
 });
 
-app.post('/login', passport.authenticate('local'), function(req, res) {
-	// If admin, send to admin page.  If not, send to user page.
-	if (req.user.admin) {
-		console.log(req.user.username + ' logged in.  Redirected to admin.');
-		res.redirect('/admin');		
-	} else {
-		console.log(req.user.username + ' logged in.  Redirected to profile.');
-		res.redirect('/profile');
-	}
-});
+app.post('/login', passport.authenticate('local', {
+	// Admin page will redirect to /profile if not admin
+	successRedirect: '/admin',
+	failureRedirect: '/login',
+	failureFlash: true
+	})
+);
 
 // User/Admin logout route
 app.get('/logout', function(req, res) {
@@ -257,6 +254,33 @@ app.patch('/api/questions/:id', function(req, res) {
 	});
 });
 
+// Api route to update answers to the questions
+app.patch('/api/questions/:questionId/answers', function(req, res) {
+	// In req, takes in userId, username, useranswerIndex, and useranswer
+	var questionId = req.params.questionId;
+	var useranswerIndex = req.body.useranswerIndex; // number 0, 1, 2, or 3
+	var useranswer = req.body.useranswer;
+	User.findOne({ _id: req.user._id }, function(err, foundUser) {
+		foundUser.questions.push(questionId);
+		foundUser.useranswers.push(useranswer);
+		foundUser.save();
+	});
+	Question.findOne({ _id: questionId }, function(err, foundQuestion) {
+		if (useranswerIndex === '0') {
+			foundQuestion.usersanswers0.push(req.user.username);
+		} else if (useranswerIndex === '1') {
+			foundQuestion.usersanswers1.push(req.user.username);
+		} else if (useranswerIndex === '2') {
+			foundQuestion.usersanswers2.push(req.user.username);
+		} else if (useranswerIndex === '3') {
+			foundQuestion.usersanswers3.push(req.user.username);
+		}	else {
+			console.log('POST Answer Error');
+		}
+		foundQuestion.save();
+	});
+});
+
 // Set up api routes for user
 app.get('/api/users', function(req, res) {
 	User.find(function(err, allUsers) {
@@ -316,14 +340,19 @@ app.delete('/api/users/:id', function(req, res) {
 app.patch('/api/users/:id', function(req, res) {
 	// Find the url from the parameters
 	var userId;
+	console.log('req.user._id', req.user._id);
 	var id = req.params.id;
+	console.log('id', id);
 	if (userId === 'self') {
 		userId = req.user._id;
+	// This needs to be in here for information that we don't want the user to update
+	// Keeps the site more secure (better with findOne...)
 	} else if (req.user.admin) {
 		userId = id;
 	} else {
 		res.status(403).json({errorMessage: 'Unauthorized access'});
 	}
+	console.log('userId', userId);
 	// Find user in the db using the id
 	User.findOne({ _id: userId }, function(err, foundUser) {
 		if (err) {
@@ -345,32 +374,6 @@ app.patch('/api/users/:id', function(req, res) {
 				res.json(savedUser);
 			});
 		}
-	});
-});
-
-app.patch('/api/questions/:questionId/answers', function(req, res) {
-	// In req, takes in userId, username, useranswerIndex, and useranswer
-	var questionId = req.params.questionId;
-	var useranswerIndex = req.body.useranswerIndex; // number 0, 1, 2, or 3
-	var useranswer = req.body.useranswer;
-	User.findOne({ _id: req.user._id }, function(err, foundUser) {
-		foundUser.questions.push(questionId);
-		foundUser.useranswers.push(useranswer);
-		foundUser.save();
-	});
-	Question.findOne({ _id: questionId }, function(err, foundQuestion) {
-		if (useranswerIndex === '0') {
-			foundQuestion.usersanswers0.push(req.user.username);
-		} else if (useranswerIndex === '1') {
-			foundQuestion.usersanswers1.push(req.user.username);
-		} else if (useranswerIndex === '2') {
-			foundQuestion.usersanswers2.push(req.user.username);
-		} else if (useranswerIndex === '3') {
-			foundQuestion.usersanswers3.push(req.user.username);
-		}	else {
-			console.log('POST Answer Error');
-		}
-		foundQuestion.save();
 	});
 });
 

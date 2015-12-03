@@ -218,6 +218,9 @@ function plotGraph(selectedQuestion) {
 // Runs displayQuestions within the callback function
 function createQuestionArray() {
 	// Create an array of all questions
+	console.log('createQA before index reset: index =', index);
+	index = 0;
+
 	$.get(questionUrl, function(data) {
 		questionArray = data.questions;
 		// Filter out only the questions that the user has answered and that the admin has not selected
@@ -250,6 +253,7 @@ function createQuestionArray() {
 
 // Displays the question on the PulseCheck app for users
 function displayQuestions() {
+	console.log('index', index);
 	$userResponse.hide();
 	$userProfile.hide();
 	$userQuestion.show();
@@ -264,6 +268,7 @@ function displayQuestions() {
 
 // Increments index and opens next question
 function displayNextQuestion() {
+	console.log('index', index);
 	if(index === questionArray.length-1) {
 		$questionResponse.text('You have answered all of the assigned questions. Please return to your profile to review your results.');
 		index = 0;
@@ -271,7 +276,7 @@ function displayNextQuestion() {
 		calculateHeight();
 	} else {
 		index++;
-		displayQuestion();
+		displayQuestions();
 	}
 }
 

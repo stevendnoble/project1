@@ -66,31 +66,13 @@ hr.hr-avatar {
 	padding: 0px 30px;
 }
 
-.navbar-inverse, 
-.navbar-inverse .navbar-brand,
-.navbar-inverse .navbar-brand:hover,
-.navbar-inverse .navbar-brand:focus,
+.navbar-inverse,
 .navbar-inverse .navbar-text,
 .navbar-inverse .navbar-nav > li > a,
-.navbar-inverse .navbar-nav > li > a:hover,
-.navbar-inverse .navbar-nav > li > a:focus,
-.navbar-inverse .navbar-nav > .active > a,
-.navbar-inverse .navbar-nav > .active > a:hover,
-.navbar-inverse .navbar-nav > .active > a:focus,
-.navbar-inverse .navbar-nav > .open > a,
-.navbar-inverse .navbar-nav > .open > a:hover,
-.navbar-inverse .navbar-nav > .open > a:focus,
-.navbar-inverse .navbar-toggle,
-.navbar-inverse .navbar-toggle:hover,
-.navbar-inverse .navbar-toggle:focus,
-.navbar-inverse .navbar-toggle .icon-bar,
-.navbar-inverse .navbar-collapse,
-.navbar-inverse .navbar-form,
-.navbar-inverse .navbar-link,
-.navbar-inverse .navbar-link:hover {
-	background-color: black;
-	border-color: black;
-	color: green;	
+.navbar-inverse .navbar-toggle {
+	background-color: black !important;
+	border-color: black !important;
+	color: green !important;	
 }
 
 .navbar-inverse .navbar-toggle .icon-bar {
@@ -111,68 +93,37 @@ hr.hr-avatar {
 
 /*Button Styling*/
 .btn, 
-.btn-success,
 .btn-success:focus,
-.btn-success.focus,
 .btn-success:hover,
 .btn-success:active,
-.btn-success.active,
-.btn-success:active:hover,
-.btn-success.active:hover,
-.btn-success:active:focus,
-.btn-success.active:focus,
-.btn-success:active.focus,
-.btn-success.active.focus,
 .btn-danger,
 .btn-danger:focus,
-.btn-danger.focus,
 .btn-danger:hover,
 .btn-danger:active,
-.btn-danger.active,
-.btn-danger:active:hover,
-.btn-danger.active:hover,
-.btn-danger:active:focus,
-.btn-danger.active:focus,
-.btn-danger:active.focus,
-.btn-danger.active.focus,
 .delete,
 .delete:focus,
-.delete.focus,
 .delete:hover,
-.delete:active,
-.delete.active,
-.delete:active:hover,
-.delete.active:hover,
-.delete:active:focus,
-.delete.active:focus,
-.delete:active.focus,
-.delete.active.focus {
-	border-radius: 20px;
-	border: 1px solid black;
-	color: black;
+.delete:active {
+	border-radius: 20px !important;
+	border: 1px solid black !important;
+	color: black !important;
+	white-space:normal !important;
 }
 
 .user-tab, .question-tab {
-	color: black;
-	background-color: #FFFFAA;
-}
-.user-tab:focus, .question-tab:focus,
-.user-tab.focus, .question-tab.focus,
-.user-tab:hover, .question-tab:hover {
-	color: black;
-	background-color: #FFFF88;
+	color: black !important;
+	background-color: #FFFFAA !important;
 }
 
-.user-tab:active, .question-tab:active,
-.user-tab.active, .question-tab.active,
-.user-tab:active:hover, .question-tab:active:hover,
-.user-tab.active:hover, .question-tab.active:hover,
-.user-tab:active:focus, .question-tab:active:focus,
-.user-tab.active:focus, .question-tab.active:focus,
-.user-tab:active.focus, .question-tab:active.focus,
-.user-tab.active.focus, .question-tab.active.focus {
-	color: black;
-	background-color: #FFFF66;
+.user-tab:focus, .question-tab:focus,
+.user-tab:hover, .question-tab:hover {
+	color: black !important;
+	background-color: #FFFF88 !important;
+}
+
+.user-tab:active, .question-tab:active {
+	color: black !important;
+	background-color: #FFFF66 !important;
 }
 
 .glyphicon {
@@ -198,7 +149,7 @@ hr.hr-avatar {
 }
 
 #question-box button.btn, #pie-chart-canvas button.btn {
-	border-radius: 40px;
+	border-radius: 40px !important;
 }
 
 .scroll {
@@ -214,6 +165,22 @@ hr.hr-avatar {
 	font-weight: bolder;
 }
 
-#flash-message {
+.correct {
+	color: #369836;
+}
+
+.incorrect {
+	color: #BE4343;
+}
+
+table.table.table-hover {
+	width:100%;
+}
+
+table.table.table-hover tr td {
+	width:25%
+}
+
+.alert {
 	margin-top: -6px;
 }
