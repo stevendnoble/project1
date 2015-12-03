@@ -315,7 +315,15 @@ app.delete('/api/users/:id', function(req, res) {
 
 app.patch('/api/users/:id', function(req, res) {
 	// Find the url from the parameters
-	var userId = req.params.id;
+	var userId;
+	var id = req.params.id;
+	if (userId === 'self') {
+		userId = req.user._id;
+	} else if (req.user.admin) {
+		userId = id;
+	} else {
+		res.status(403).json({errorMessage: 'Unauthorized access'});
+	}
 	// Find user in the db using the id
 	User.findOne({ _id: userId }, function(err, foundUser) {
 		if (err) {
