@@ -263,12 +263,12 @@ function displayQuestions() {
 	$userProfile.hide();
 	$userQuestion.show();
 	$nextQuestion.show();
-	calculateHeight();
 	$question.text(questionArray[index].text);
 	$answerA.text(questionArray[index].answers[0]);
 	$answerB.text(questionArray[index].answers[1]);
 	$answerC.text(questionArray[index].answers[2]);
 	$answerD.text(questionArray[index].answers[3]);
+	calculateHeight();
 }
 
 // Increments index and opens next question

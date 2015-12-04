@@ -300,6 +300,7 @@ function previewQuestion() {
 	$answerB.text(answers[0]);
 	$answerC.text(answers[1]);
 	$answerD.text(answers[2]);
+	calculateHeight();
 }
 
 // Post the question to the server (and then db)
@@ -389,6 +390,7 @@ function selectQuestion() {
 		$answerB.text(questionToAdd.answers[1]);
 		$answerC.text(questionToAdd.answers[2]);
 		$answerD.text(questionToAdd.answers[3]);
+		calculateHeight();
 	});
 	// Change the color of the button and value of show in the database
 	if ($(this).hasClass('question-tab')) {
