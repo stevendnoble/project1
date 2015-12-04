@@ -7,6 +7,7 @@ var $avatar = $('.avatar'),
 		$centerBox2 = $('.center-box-2'),
 		$centerBox3 = $('.center-box-3'),
 		$centerBox4 = $('.center-box-4'),
+		$navbar = $('.navbar'),
 		$scroll = $('.scroll'),
 		$window = $(window);
 
@@ -87,10 +88,14 @@ var userListSource = $userListTemplate.html(),
 		userResultsSource = $userResultsTemplate.html(),
 		userResultsTemplate = Handlebars.compile(userResultsSource);
 
+// Chartjs global attributes
+Chart.defaults.global.animationSteps = 60;
+
 // Global variables
 var questionArray = []; // Array for questions to be displayed to students
 var index = 0;
 var ctx;
+var pieChart;
 
 // Add all questions to the questionArray and filter out questions which are not to be shown
 $.get(questionUrl, function(data) {
@@ -113,7 +118,7 @@ $viewUsersBtn.on('click', openUserPane);
 
 // Event handlers for [Add Question]
 $previewQuestionBtn.on('click', previewQuestion);
-$submitQuestionBtn.on('click', submitQuestion);
+$submitQuestionBtn.on('submit', submitQuestion);
 
 // Event handlers for [View Questions]
 $addQuestionListResults.on('click', '.click-to-select', selectQuestion);
@@ -132,16 +137,17 @@ calculateHeight();
 function calculateHeight() {
 	var height = $window.height();
 	var width = $window.width();
+	var navbarHeight = $navbar.height();
 	var boxHeight = $centerBox.height();
 	var boxHeight2 = $centerBox2.height();
 	var boxHeight3 = $centerBox3.height();
 	var boxHeight4 = $centerBox4.height();
-	$box.css('height', height - 90);
+	$box.css('height', height - navbarHeight - 36);
 	$scroll.css('height', height - 130);
-	$centerBox.css('margin-top', ((height - boxHeight - 150) / 2));	
-	$centerBox2.css('margin-top', ((height - boxHeight2 - 150) / 2));	
-	$centerBox3.css('margin-top', ((height - boxHeight3 - 150) / 2));	
-	$centerBox4.css('margin-top', ((height - boxHeight4 - 150) / 2));	
+	$centerBox.css('margin-top', ((height - boxHeight - navbarHeight - 36) / 2));	
+	$centerBox2.css('margin-top', ((height - boxHeight2 - navbarHeight - 36) / 2));	
+	$centerBox3.css('margin-top', ((height - boxHeight3 - navbarHeight - 36) / 2));	
+	$centerBox4.css('margin-top', ((height - boxHeight4 - navbarHeight - 36) / 2));	
 }
 
 // On click, changes the avatar image, but does not yet save to the database
@@ -150,6 +156,7 @@ function changeAvatar() {
 	avatarNumber = (avatarNumber + 1) % 20;
 	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
 	$avatar.attr('src', avatarFile);
+	console.log(avatarFile);
 	// Change avatar in the database
 	$.ajax({
 		type: 'PATCH',
@@ -168,7 +175,7 @@ function plotGraph(selectedQuestion, boxwidth) {
 	$breakdownPieChart.hide();
 	$breakdownPieChart.show();
 	// If canvas is bigger than the box-width, make the canvas smaller
-	if (boxwidth < 200) {
+	if ($breakdownPieChart.width() > boxwidth) {
 		$breakdownPieChart.attr('width', boxwidth);
 		$breakdownPieChart.attr('height', boxwidth);
 	}
@@ -212,7 +219,7 @@ function plotGraph(selectedQuestion, boxwidth) {
   }];
   var options;
 	// Create a pie chart using the data
-	var myPieChart = new Chart(ctx).Pie(data, options);
+	pieChart = new Chart(ctx).Pie(data, options);
 }
 
 // Plots the graph of the selected question
@@ -436,6 +443,7 @@ function gotoBreakdown() {
 function displayNextQuestion() {
 	$nextQuestion.hide();
 	$displayQuestionsCanvas.hide();
+	pieChart.destroy();
 	var $breakdownPieChart = $('.breakdown-pie-chart');
 	ctx.clearRect(0, 0, $breakdownPieChart.width(), $breakdownPieChart.height());
 	$calculateResultsToggle.show();
@@ -515,6 +523,10 @@ function loadUserInfo() {
 		var userResultsHtml = userResultsTemplate(dataToAppend);
 		$userIndividualResults.append(userResultsHtml);
 		var $breakdownPieChart = $('#breakdown-pie-chart');
+		if(pieChart) {
+			pieChart.destroy();
+		}
+		$breakdownPieChart.hide();
 		$breakdownPieChart.show();
 		var boxwidth = $userIndividualResults.width();
 		plotUserGraph(dataToAppend, boxwidth);
@@ -582,6 +594,10 @@ function loadQuestionInfo() {
 		var questionResultsHtml = questionResultsTemplate(questionInfo);
 		$questionIndividualResults.append(questionResultsHtml);
 		var $breakdownPieChart = $('#breakdown-pie-chart');
+		if(pieChart) {
+			pieChart.destroy();
+		}
+		$breakdownPieChart.hide();
 		$breakdownPieChart.show();
 		var boxwidth = $questionIndividualResults.width();
 		plotGraph(questionInfo, boxwidth);

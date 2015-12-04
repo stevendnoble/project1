@@ -40,6 +40,7 @@ var $userAnswerQuestionsBtn = $('#user-answer-questions-btn'),
 var questionArray = [];
 var index = 0;
 var username = $username.text();
+var pieChart;
 
 //##############
 //# Handlebars #
@@ -88,12 +89,23 @@ function calculateHeight() {
 }
 
 // On click, changes the avatar image, but does not yet save to the database
+// On click, changes the avatar image, but does not yet save to the database
 function changeAvatar() {
 	var avatarNumber = Number($avatar.attr('src').slice(14).slice(0, -4));
 	avatarNumber = (avatarNumber + 1) % 20;
 	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
 	$avatar.attr('src', avatarFile);
-	// change avatar in the database
+	console.log(avatarFile);
+	// Change avatar in the database
+	$.ajax({
+		type: 'PATCH',
+		url: userUrl + 'self',
+		data: {avatar: avatarFile},
+		success: function(data) {
+			console.log(data);
+			console.log('changed avatar to', data.avatar);
+		}
+	});
 }
 
 //////////////////////////////////
@@ -147,21 +159,15 @@ function displayIndividualResults() {
 }
 
 function plotGraph(selectedQuestion) {
-	// 1. add canvas
-	// 2. add var $breakdownPieChart = $('#breakdown-pie-chart');
-	//    edit boxwidth = $ to measure the correct box width
-	// 3. add code below
-
 	var $breakdownPieChart = $('#breakdown-pie-chart');
 	$breakdownPieChart.hide();
 	$breakdownPieChart.show();
 	// If canvas is bigger than the box-width, make the canvas smaller
-	var boxwidth = $questionIndividualResults.width();
-	if (boxwidth < 400) {
-		$breakdownPieChart.attr('width', width);
-		$breakdownPieChart.attr('height', width);
+	var boxwidth = $userViewResultsList.width();
+	if (boxwidth < $breakdownPieChart.width()) {
+		$breakdownPieChart.attr('width', boxwidth);
+		$breakdownPieChart.attr('height', boxwidth);
 	}
-
 	// Get context with jQuery - using jQuery's .get() method.
 	var ctx = $breakdownPieChart.get(0).getContext("2d");
 	// Create an array for values and labels
@@ -181,7 +187,6 @@ function plotGraph(selectedQuestion) {
 	values.unshift(correctValue[0]);
 	var correctLabel = labels.splice(correctIndex, 1);
 	labels.unshift(correctLabel[0]);
-
 	// Add data and options
 	var data = [{
     value: values[0],
@@ -204,11 +209,9 @@ function plotGraph(selectedQuestion) {
     highlight: "#FFA7A7",
     label: labels[3]
   }];
-
   var options;
-
 	// Create a pie chart using the data
-	var myPieChart = new Chart(ctx).Pie(data, options);
+	pieChart = new Chart(ctx).Pie(data, options);
 }
 
 //////////////////////////////////////
@@ -240,6 +243,7 @@ function createQuestionArray() {
 				return true;
 			}
 		});
+		console.log('QUESTIONS', questionArray);
 		if (questionArray.length === 0) {
 			$questionResponse.text('You have answered all of the assigned questions. Please return to your profile to review your results.');
 			$nextQuestion.hide();

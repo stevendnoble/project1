@@ -343,7 +343,7 @@ app.patch('/api/users/:id', function(req, res) {
 	console.log('req.user._id', req.user._id);
 	var id = req.params.id;
 	console.log('id', id);
-	if (userId === 'self') {
+	if (id === 'self') {
 		userId = req.user._id;
 	// This needs to be in here for information that we don't want the user to update
 	// Keeps the site more secure (better with findOne...)

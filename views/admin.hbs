@@ -33,7 +33,7 @@
 						<h4>admin:</h4>
 						<h4 class="tab green">{{#if user.admin}}yes{{else}}no{{/if}}</h4>
 						<h4>password:</h4>
-						<h4 class="tab green">********{{user.password}}</h4>
+						<button class="btn btn-success btn-sm">change password</button>
 						<h4>click on picture to change</h4>
 						<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
 						<button class="btn btn-success btn-block" id="add-question-btn">Add New Question</button>
@@ -105,7 +105,7 @@
 					<div class="scroll">
 						<h3>Fill in the following form. Click <span class="green">[Preview]</span> to preview the question.  Then <span class="green">[Submit]</span> to add the question.</h1>
 						<hr>
-						<form role="form" class="check-validation">
+						<form role="form" class="check-validation" id="submit-question-btn">
 						  <div class="form-group">
 						    <label for="label">Label:</label>
 						    <input type="text" class="form-control" name="label" id="label" required>
@@ -129,7 +129,7 @@
 						    <input type="text" class="form-control" name="answers2" id="answers2" required>
 						  </div>
 						  <button class="btn btn-success" id="preview-question-btn">Preview</button>
-						  <button type="submit" class="btn btn-success" id="submit-question-btn">Submit</button>
+						  <input type="submit" class="btn btn-success" value="Submit"><!-- Submit</button> -->
 						</form>
 					</div>
 				</div>
@@ -204,6 +204,11 @@
 								<div class="col-sm-4">
 									<button class="btn btn-danger btn-block delete" data-id="\{{userid}}">Delete User</button>
 									<button class="btn btn-danger btn-block user-tab" data-id="\{{userid}}">Reset Password</button>
+									<div class="password-confirm">
+										<p>This will reset the password to "password"  Are you sure you want to continue?</p>
+										<button class="btn btn-danger user-tab password-reset" id="yes">Yes</button>
+										<button class="btn btn-danger user-tab password-reset" id="no">No</button>
+									</div>
 								</div>
 							</div>
 							<div class="row">

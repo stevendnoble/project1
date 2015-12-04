@@ -35,8 +35,12 @@
 						<h2 class="text-center">{{user.name}}</h2>
 						<h4>username:</h4>
 						<h4 class="tab green">{{user.username}}</h4>
+						{{#if req.user.admin}}
+							<h4>admin:</h4>
+							<h4 class="tab green">yes</h4>
+						{{/if}}
 						<h4>password:</h4>
-						<h4 class="tab green">********{{user.password}}</h4>
+						<button class="btn btn-success btn-sm">change password</button>
 						<h4>click on picture to change</h4>
 						<hr>
 						<button class="btn btn-success btn-block" id="user-view-results-btn">View Results</button>
