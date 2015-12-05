@@ -145,7 +145,7 @@
 					<button class="btn btn-success btn-block answer-d">Answer D</button>
 				</div>
 			</div>
-			<!-- Add questions to array from [View Questions] -->
+			<!-- List of questions to display from [View Questions] -->
 			<div class="col-md-3 col-sm-6 col-xs-12 add-question-list">
 				<div class="box">
 					<div class="scroll">
@@ -199,7 +199,7 @@
 									<h2><strong>\{{username}}</strong></h2>
 									<hr>
 									<h3><strong>Question Breakdown:</strong></h3>
-									<canvas class="breakdown-pie-chart" width="200" height="200"></canvas>
+									<canvas id="user-results-pie-chart" width="200" height="200"></canvas>
 								</div>
 								<div class="col-sm-4">
 									<button class="btn btn-danger btn-block delete" data-id="\{{userid}}">Delete User</button>
@@ -278,10 +278,10 @@
 									<h3><strong>Results by Answer:</h3>
 									<br>
 								</div>
-								<div class="col-sm-6">
+								<div class="col-sm-6" id="question-results-pie-chart-canvas">
 									<h3><strong>Answers Breakdown:</strong></h3>
 									<br>
-									<canvas class="breakdown-pie-chart" width="200" height="200"></canvas>
+									<canvas id="question-results-pie-chart" width="200" height="200"></canvas>
 								</div>
 							</div>
 							<div class="row">
@@ -324,7 +324,7 @@
 				<div class="center-box-3 display-font" id="pie-chart-canvas">
 					<h2 class="text-center display-font">Class Breakdown</h2>
 					<hr>
-					<canvas class="breakdown-pie-chart" id="display-questions-canvas" width="400" height="400"></canvas>
+					<canvas id="display-questions-pie-chart" width="400" height="400"></canvas>
 					<h3 class="calculate-results-toggle">Click the button below to see the results.</h3>
 					<hr>
 					<button class="btn btn-success btn-block calculate-results-toggle" id="calculate-results">Calculate Results</button>

@@ -35,5 +35,3 @@ describe('Users', function() {
 		});
 	});
 });
-
-

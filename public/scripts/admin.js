@@ -27,19 +27,19 @@ var $addQuestionBtn = $('#add-question-btn'),
 		$previewQuestionBtn = $('#preview-question-btn'),
 		$submitQuestionBtn = $('#submit-question-btn'),
 		// [Submit]/[Preview]
-		$correctanswer = $('#correctanswer'),
 		$answers0 = $('#answers0'),
 		$answers1 = $('#answers1'),
 		$answers2 = $('#answers2'),
+		$correctanswer = $('#correctanswer'),
 		$label = $('#label'),
 		$text = $('#text'),
 		// [Preview]
-		$formControl = $('.form-control'),
-		$question = $('.question'),
 		$answerA = $('.answer-a'),
 		$answerB = $('.answer-b'),
 		$answerC = $('.answer-c'),
-		$answerD = $('.answer-d');
+		$answerD = $('.answer-d'),
+		$formControl = $('.form-control'),
+		$question = $('.question');
 
 // Selectors for [View Questions]
 var $addQuestionList = $('.add-question-list'),
@@ -47,15 +47,17 @@ var $addQuestionList = $('.add-question-list'),
 		$addQuestionListTemplate = $('#add-question-list-template'),
 		$addQuestionTabBtn = $('.add-question-tab'),
 		$adminProfile = $('#admin-profile'),
-		$breakdown = $('.breakdown'),
-		$nextQuestion = $('#next-question'),
-		$pieChartCanvas = $('#pie-chart-canvas'),
-		$displayQuestionsCanvas = $('#display-questions-canvas'),
+		$calculateResults = $('#calculate-results'),
 		$calculateResultsToggle = $('.calculate-results-toggle'),
-		$calculateResults = $('#calculate-results');
+		$breakdown = $('.breakdown'),
+		$displayQuestionsPieChart = $('#display-questions-pie-chart'),
+		$nextQuestion = $('#next-question'),
+		$pieChartCanvas = $('#pie-chart-canvas');
 
 // Selectors for [User Results] and [Question Results]
-var $questionIndividualResults = $('#question-individual-results'),
+var $deleteQuestion= $('.delete-question'),
+		$deleteUser = $('.delete-user'),
+		$questionIndividualResults = $('#question-individual-results'),
 		$questionList = $('.question-list'),
 		$questionListResults = $('#question-list-results'),
 		$questionListTemplate = $('#question-list-template'),
@@ -66,9 +68,7 @@ var $questionIndividualResults = $('#question-individual-results'),
 		$userListResults = $('#user-list-results'),
 		$userListTemplate = $('#user-list-template'),
 		$userResultsTemplate = $('#user-results-template'),
-		$userTabBtn = $('.user-tab'),
-		$deleteQuestion= $('.delete-question'),
-		$deleteUser = $('.delete-user');
+		$userTabBtn = $('.user-tab');
 
 // URLs for api calls to the database
 var baseUrl = '/',
@@ -77,25 +77,22 @@ var baseUrl = '/',
 
 // Handlebars templates and compilers for adding user buttons and
 // question buttons to the [View Results] and [View Users] buttons
-var userListSource = $userListTemplate.html(),
-		userTemplate = Handlebars.compile(userListSource),
+var addQuestionListSource = $addQuestionListTemplate.html(),
+		addQuestionTemplate = Handlebars.compile(addQuestionListSource),
 		questionListSource = $questionListTemplate.html(),
 		questionTemplate = Handlebars.compile(questionListSource),
-		addQuestionListSource = $addQuestionListTemplate.html(),
-		addQuestionTemplate = Handlebars.compile(addQuestionListSource),
 		questionResultsSource = $questionResultsTemplate.html(),
 		questionResultsTemplate = Handlebars.compile(questionResultsSource),
+		userListSource = $userListTemplate.html(),
+		userTemplate = Handlebars.compile(userListSource),
 		userResultsSource = $userResultsTemplate.html(),
 		userResultsTemplate = Handlebars.compile(userResultsSource);
 
-// Chartjs global attributes
-Chart.defaults.global.animationSteps = 60;
-
 // Global variables
 var questionArray = []; // Array for questions to be displayed to students
-var index = 0;
-var ctx;
-var pieChart;
+var index = 0;					// Index of current question
+var context;								// Context to be used for displaying charts
+var pieChart;						// Current pie chart - needs to be global to destroy it
 
 // Add all questions to the questionArray and filter out questions which are not to be shown
 $.get(questionUrl, function(data) {
@@ -150,37 +147,30 @@ function calculateHeight() {
 	$centerBox4.css('margin-top', ((height - boxHeight4 - navbarHeight - 36) / 2));	
 }
 
-// On click, changes the avatar image, but does not yet save to the database
+// On click, changes the avatar image and saves to the database
 function changeAvatar() {
+	// Get the nunber (0-19) from the filename
 	var avatarNumber = Number($avatar.attr('src').slice(14).slice(0, -4));
+	// Cycle through to the next avatar in the list
 	avatarNumber = (avatarNumber + 1) % 20;
+	// Create new file name and update this on the webpage
 	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
 	$avatar.attr('src', avatarFile);
-	console.log(avatarFile);
 	// Change avatar in the database
 	$.ajax({
 		type: 'PATCH',
 		url: userUrl + 'self',
 		data: {avatar: avatarFile},
-		success: function(data) {
-			console.log(data);
-			console.log('changed avatar to', data.avatar);
-		}
 	});
 }
 
 // Plots the graph of the selected question
-function plotGraph(selectedQuestion, boxwidth) {
-	var $breakdownPieChart = $('.breakdown-pie-chart');
-	$breakdownPieChart.hide();
-	$breakdownPieChart.show();
-	// If canvas is bigger than the box-width, make the canvas smaller
-	if ($breakdownPieChart.width() > boxwidth) {
-		$breakdownPieChart.attr('width', boxwidth);
-		$breakdownPieChart.attr('height', boxwidth);
-	}
-	// Get context with jQuery - using jQuery's .get() method.
-	ctx = $breakdownPieChart.get(0).getContext("2d");
+function plotGraph(selectedQuestion, boxwidth, pieChartCanvas) {
+	// Set canvas to boxwidth
+	pieChartCanvas.attr('width', boxwidth);
+	pieChartCanvas.attr('height', boxwidth);
+	// Get context
+	context = pieChartCanvas.get(0).getContext("2d");
 	// Create an array for values and labels
 	var values = [];
 	values.push(selectedQuestion.usersanswers0.length);
@@ -219,22 +209,19 @@ function plotGraph(selectedQuestion, boxwidth) {
   }];
   var options;
 	// Create a pie chart using the data
-	pieChart = new Chart(ctx).Pie(data, options);
+	pieChart = new Chart(context).Pie(data, options);
 }
 
 // Plots the graph of the selected question
-function plotUserGraph(givendata, boxwidth) {
-	var $breakdownPieChart = $('.breakdown-pie-chart');
-	$breakdownPieChart.hide();
-	$breakdownPieChart.show();
-	// If canvas is bigger than the box-width, make the canvas smaller
+function plotUserGraph(givendata, boxwidth, pieChartCanvas) {
+	// If the container for the canvas is smaller than 200, make the canvas smaller
 	if (boxwidth < 200) {
-		$breakdownPieChart.attr('width', boxwidth);
-		$breakdownPieChart.attr('height', boxwidth);
+		pieChartCanvas.attr('width', boxwidth);
+		pieChartCanvas.attr('height', boxwidth);
 	}
-	// Get context with jQuery - using jQuery's .get() method.
-	ctx = $breakdownPieChart.get(0).getContext("2d");
-	// Add data and options
+	// Get context
+	context = pieChartCanvas.get(0).getContext("2d");
+	// Add data and options (number of correct/incorrect answers)
 	var correct = givendata.correct;
 	var incorrect = givendata.questions.length - correct;
 	var data = [{
@@ -250,7 +237,7 @@ function plotUserGraph(givendata, boxwidth) {
   }];
   var options;
 	// Create a pie chart using the data
-	var myPieChart = new Chart(ctx).Pie(data, options);
+	var myPieChart = new Chart(context).Pie(data, options);
 }
 
 ///////////////////////////////
@@ -314,6 +301,7 @@ function submitQuestion() {
 	answers[1] = $answers1.val();
 	answers[2] = $answers2.val();
 	answers.push(correctanswer);
+	// Shuffle the answers before storing in the db
 	answers = shuffle(answers);
 	// Add values to our newQuestion object
 	newQuestion.label = $label.val();
@@ -321,9 +309,7 @@ function submitQuestion() {
 	newQuestion.correctanswer = correctanswer;
 	newQuestion.answers = answers;
 	// Add newQuestion to the db and clear the form
-	$.post(questionUrl, newQuestion, function(data) {
-		console.log('question added');
-	});
+	$.post(questionUrl, newQuestion);
 	$formControl.val('');
 }
 
@@ -368,7 +354,6 @@ function openAddQuestionListPane() {
 
 // Refresh the question list with the questions from the db
 function refreshQuestionList(questionResults) {
-	console.log('refreshing questions');
 	$addQuestionListResults.empty();
 	// Render the data
 	var addQuestionListHtml = addQuestionTemplate({questions: questionResults});
@@ -383,7 +368,6 @@ function selectQuestion() {
 	// Ajax call to get question by id
 	$.get(questionUrl + id, function(data) {
 		questionToAdd = data;
-		// Create an array of answers and shuffle the answers
 		// Preview the question to make sure it is the correct one to add to the array
 		$question.text(questionToAdd.text);
 		$answerA.text(questionToAdd.answers[0]);
@@ -394,24 +378,28 @@ function selectQuestion() {
 	});
 	// Change the color of the button and value of show in the database
 	if ($(this).hasClass('question-tab')) {
+		// Make the button green
 		$(this).removeClass('question-tab');
+		// Change the value of show to true
 		$.ajax({
 			type: 'PATCH',
 			url: questionUrl + id,
 			data: {show: true},
 			success: function(data) {
-				console.log('changed to show, added to array');
+				// Add the question to questionArray (to be displayed)
 				questionArray.push(data);
 			}
 		});
 	} else {
+		// Make the button yellow
 		$(this).addClass('question-tab');
+		// Change the value of show to false
 		$.ajax({
 			type: 'PATCH',
 			url: questionUrl + id,
 			data: {show: false},
 			success: function(data) {
-				console.log('changed to not show, deleted from array');
+				// Remove the question from questionArray
 				for (var i = 0; i < questionArray.length; i++) {
 					if (questionArray[i]._id == id) {
 						questionArray.splice(i, 1);
@@ -426,6 +414,7 @@ function selectQuestion() {
 function gotoBreakdown() {
 	$adminProfile.hide();
 	$breakdown.show();
+	$displayQuestionsPieChart.hide();
 	$calculateResultsToggle.show();
 		if (questionArray.length === 0) {
 		$pieChartCanvas.empty();
@@ -444,10 +433,8 @@ function gotoBreakdown() {
 // Increments index and displays next question with breakdown
 function displayNextQuestion() {
 	$nextQuestion.hide();
-	$displayQuestionsCanvas.hide();
+	$displayQuestionsPieChart.hide();
 	pieChart.destroy();
-	var $breakdownPieChart = $('.breakdown-pie-chart');
-	ctx.clearRect(0, 0, $breakdownPieChart.width(), $breakdownPieChart.height());
 	$calculateResultsToggle.show();
 	calculateHeight();
 	if(index === questionArray.length-1) {
@@ -463,8 +450,8 @@ function displayNextQuestion() {
 
 function calculateResults() {
 	var boxwidth = $pieChartCanvas.width();
-	$displayQuestionsCanvas.show();
-	plotGraph(questionArray[index], boxwidth);
+	$displayQuestionsPieChart.show();
+	plotGraph(questionArray[index], boxwidth, $displayQuestionsPieChart);
 	$calculateResultsToggle.hide();
 	$nextQuestion.show();
 	calculateHeight();
@@ -491,7 +478,6 @@ function openUserPane() {
 
 // Refreshes the users with results from db
 function refreshUsers(userResults) {
-	console.log('refreshing users');
 	$userListResults.empty();
 	// Render the data
 	var userListHtml = userTemplate({users: userResults});
@@ -521,17 +507,14 @@ function loadUserInfo() {
 			if (dataToAppend.questions[i].correct) correctCount++;
 		}
 		dataToAppend.correct = correctCount;
-		console.log('dataToAppend', dataToAppend, 'correct', correctCount);
 		var userResultsHtml = userResultsTemplate(dataToAppend);
 		$userIndividualResults.append(userResultsHtml);
-		var $breakdownPieChart = $('#breakdown-pie-chart');
 		if(pieChart) {
 			pieChart.destroy();
 		}
-		$breakdownPieChart.hide();
-		$breakdownPieChart.show();
 		var boxwidth = $userIndividualResults.width();
-		plotUserGraph(dataToAppend, boxwidth);
+		var $userResultsPieChart = $('#user-results-pie-chart');
+		plotUserGraph(dataToAppend, 200, $userResultsPieChart);
 	});
 }
 
@@ -544,7 +527,6 @@ function deleteUser() {
 		success: function(data) {
 			openUserPane();
 			$userIndividualResults.empty();
-			console.log('deleted user');
 		}
 	});
 }
@@ -567,7 +549,6 @@ function openQuestionPane() {
 
 // Refreshes the questions with results from db
 function refreshQuestions(questionResults) {
-	console.log('refreshing questions');
 	// Render the data
 	var questionListHtml = questionTemplate({questions: questionResults});
 	$questionListResults.append(questionListHtml);
@@ -591,24 +572,22 @@ function loadQuestionInfo() {
 																			users: questionInfo.usersanswers2 };
 		questionInfo.displayAnswers[3] = {answer: questionInfo.answers[3],
 																			users: questionInfo.usersanswers3 };	
-		console.log(questionInfo);															
 		// Function will load individual results by question
 		var questionResultsHtml = questionResultsTemplate(questionInfo);
 		$questionIndividualResults.append(questionResultsHtml);
-		var $breakdownPieChart = $('#breakdown-pie-chart');
 		if(pieChart) {
 			pieChart.destroy();
 		}
-		$breakdownPieChart.hide();
-		$breakdownPieChart.show();
-		var boxwidth = $questionIndividualResults.width();
-		plotGraph(questionInfo, boxwidth);
+		$questionResultsPieChart = $('#question-results-pie-chart');
+		$questionResultsPieChartCanvas = $('#question-results-pie-chart-canvas');
+		var boxwidth = $questionResultsPieChartCanvas.width();
+		if (boxwidth > 250) { boxwidth = 250; }
+		plotGraph(questionInfo, boxwidth, $questionResultsPieChart);
 	});
 }
 
 // Deletes User from Database
 function deleteQuestion() {
-	console.log('in delete question');
 	var id = $(this).attr('data-id');
 	$.ajax({
 		type: 'DELETE',
@@ -616,7 +595,6 @@ function deleteQuestion() {
 		success: function(data) {
 			openQuestionPane();
 			$questionIndividualResults.empty();
-			console.log('deleted question');
 		}
 	});
 }

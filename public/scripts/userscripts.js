@@ -95,14 +95,12 @@ function changeAvatar() {
 	avatarNumber = (avatarNumber + 1) % 20;
 	var avatarFile = 'avatars/avatar' + avatarNumber + '.png';
 	$avatar.attr('src', avatarFile);
-	console.log(avatarFile);
 	// Change avatar in the database
 	$.ajax({
 		type: 'PATCH',
 		url: userUrl + 'self',
 		data: {avatar: avatarFile},
 		success: function(data) {
-			console.log(data);
 			console.log('changed avatar to', data.avatar);
 		}
 	});
@@ -176,12 +174,9 @@ function plotGraph(selectedQuestion) {
 	values.push(selectedQuestion.usersanswers1.length);
 	values.push(selectedQuestion.usersanswers2.length);
 	values.push(selectedQuestion.usersanswers3.length);
-	console.log('unadjusted values', values);
 	var labels = selectedQuestion.answers;
-	console.log('unadjusted labels', labels);
 	// Determine the index of the correct answer, and move that to the first spot
 	// to always display the correct answer as green.
-	console.log(selectedQuestion);
 	var correctIndex = labels.indexOf(selectedQuestion.correctanswer);
 	var correctValue = values.splice(correctIndex, 1);
 	values.unshift(correctValue[0]);
@@ -222,7 +217,6 @@ function plotGraph(selectedQuestion) {
 // Runs displayQuestions within the callback function
 function createQuestionArray() {
 	// Create an array of all questions
-	console.log('createQA before index reset: index =', index);
 	index = 0;
 
 	$.get(questionUrl, function(data) {
@@ -243,7 +237,6 @@ function createQuestionArray() {
 				return true;
 			}
 		});
-		console.log('QUESTIONS', questionArray);
 		if (questionArray.length === 0) {
 			$questionResponse.text('You have answered all of the assigned questions. Please return to your profile to review your results.');
 			$nextQuestion.hide();
@@ -258,7 +251,6 @@ function createQuestionArray() {
 
 // Displays the question on the PulseCheck app for users
 function displayQuestions() {
-	console.log('index', index);
 	$userResponse.hide();
 	$userProfile.hide();
 	$userQuestion.show();
@@ -273,7 +265,6 @@ function displayQuestions() {
 
 // Increments index and opens next question
 function displayNextQuestion() {
-	console.log('index', index);
 	if(index === questionArray.length-1) {
 		$questionResponse.text('You have answered all of the assigned questions. Please return to your profile to review your results.');
 		index = 0;
