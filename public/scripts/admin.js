@@ -2,6 +2,7 @@ $(function() {
 
 // Selectors for page manipulation
 var $avatar = $('.avatar'),
+		$body = $('body'),
 		$box = $('.box'),
 		$centerBox = $('.center-box'),
 		$centerBox2 = $('.center-box-2'),
@@ -24,6 +25,8 @@ var $directions = $('#directions');
 
 // Selectors for [Add Question]
 var $addQuestionBtn = $('#add-question-btn'),
+		$addQuestionForm = $('#add-question-form'),
+		$addQuestionPreview = $('#add-question-preview'),		
 		$previewQuestionBtn = $('#preview-question-btn'),
 		$submitQuestionBtn = $('#submit-question-btn'),
 		// [Submit]/[Preview]
@@ -52,7 +55,8 @@ var $addQuestionList = $('.add-question-list'),
 		$breakdown = $('.breakdown'),
 		$displayQuestionsPieChart = $('#display-questions-pie-chart'),
 		$nextQuestion = $('#next-question'),
-		$pieChartCanvas = $('#pie-chart-canvas');
+		$pieChartCanvas = $('#pie-chart-canvas'),
+		$scrollToList = $('#scroll-to-list');
 
 // Selectors for [User Results] and [Question Results]
 var $deleteQuestion= $('.delete-question'),
@@ -63,6 +67,10 @@ var $deleteQuestion= $('.delete-question'),
 		$questionListTemplate = $('#question-list-template'),
 		$questionResultsTemplate = $('#question-results-template'),
 		$questionTabBtn = $('.question-tab'),
+		$scrollToQuestionList = $('#scroll-to-question-list'),
+		$scrollToQuestionResults = $('#scroll-to-question-results'),
+		$scrollToUserList = $('#scroll-to-user-list'),
+		$scrollToUserResults = $('#scroll-to-user-results'),
 		$userIndividualResults = $('#user-individual-results'),
 		$userList = $('.user-list'),
 		$userListResults = $('#user-list-results'),
@@ -91,8 +99,10 @@ var addQuestionListSource = $addQuestionListTemplate.html(),
 // Global variables
 var questionArray = []; // Array for questions to be displayed to students
 var index = 0;					// Index of current question
-var context;								// Context to be used for displaying charts
+var context;						// Context to be used for displaying charts
 var pieChart;						// Current pie chart - needs to be global to destroy it
+var navbarHeightAdjust = -1 * $navbar.height();	// Used for scrollto on small screens
+
 
 // Add all questions to the questionArray and filter out questions which are not to be shown
 $.get(questionUrl, function(data) {
@@ -253,6 +263,8 @@ function openDirectionsPane() {
 	$addQuestion.hide();
 	$displayQuestionsBtn.hide();
 	$addQuestionList.hide();
+	$body.scrollTo($directions, 1000, {offset: {top: navbarHeightAdjust}});
+
 }
 
 //////////////////////////////////
@@ -269,6 +281,7 @@ function addQuestionPane() {
 	$addQuestionList.hide();
 	$displayQuestionsBtn.hide();
 	calculateHeight();
+	$body.scrollTo($addQuestionForm, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // Add the information from the form to the preview
@@ -288,6 +301,7 @@ function previewQuestion() {
 	$answerC.text(answers[1]);
 	$answerD.text(answers[2]);
 	calculateHeight();
+	$body.scrollTo($addQuestionPreview, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // Post the question to the server (and then db)
@@ -350,6 +364,7 @@ function openAddQuestionListPane() {
 		refreshQuestionList(questionResults);
 	});
 	calculateHeight();
+	$body.scrollTo($scrollToList, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // Refresh the question list with the questions from the db
@@ -474,6 +489,7 @@ function openUserPane() {
 		var userResults = data.users;
 		refreshUsers(userResults);
 	});
+	$body.scrollTo($scrollToUserList, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // Refreshes the users with results from db
@@ -516,6 +532,7 @@ function loadUserInfo() {
 		var $userResultsPieChart = $('#user-results-pie-chart');
 		plotUserGraph(dataToAppend, 200, $userResultsPieChart);
 	});
+	$body.scrollTo($scrollToUserResults, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // Deletes User from Database
@@ -545,6 +562,7 @@ function openQuestionPane() {
 		$questionListResults.empty();
 		refreshQuestions(questionResults);
 	});
+	$body.scrollTo($scrollToQuestionList, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // Refreshes the questions with results from db
@@ -584,6 +602,7 @@ function loadQuestionInfo() {
 		if (boxwidth > 250) { boxwidth = 250; }
 		plotGraph(questionInfo, boxwidth, $questionResultsPieChart);
 	});
+	$body.scrollTo($scrollToQuestionResults, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // Deletes User from Database

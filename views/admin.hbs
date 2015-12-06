@@ -100,7 +100,7 @@
 				</div>
 			</div>
 			<!-- Form to [Add New Question] -->
-			<div class="col-md-3 col-sm-6 col-xs-12 add-question">
+			<div class="col-md-3 col-sm-6 col-xs-12 add-question" id="add-question-form">
 				<div class="box">
 					<div class="scroll">
 						<h3>Fill in the following form. Click <span class="green">[Preview]</span> to preview the question.  Then <span class="green">[Submit]</span> to add the question.</h1>
@@ -135,7 +135,7 @@
 				</div>
 			</div>
 			<!-- Preview for [Add New Question] -->
-			<div class="col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-3 col-xs-12 add-question">
+			<div class="col-md-4 col-md-offset-1 col-sm-6 col-sm-offset-3 col-xs-12 add-question" id="add-question-preview">
 				<div class="center-box-4">
 					<h2 class="question">Question</h2>
 					<hr>
@@ -146,7 +146,7 @@
 				</div>
 			</div>
 			<!-- List of questions to display from [View Questions] -->
-			<div class="col-md-3 col-sm-6 col-xs-12 add-question-list">
+			<div class="col-md-3 col-sm-6 col-xs-12 add-question-list" id="scroll-to-list">
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Questions</strong></h2>
@@ -172,7 +172,7 @@
 				</div>
 			</div>
 			<!-- [User Results] Pane -->
-			<div class="col-md-3 col-sm-6 col-xs-12 user-list">
+			<div class="col-md-3 col-sm-6 col-xs-12 user-list" id="scroll-to-user-list">
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Users</strong></h2>
@@ -186,7 +186,7 @@
 				</div>
 			</div>
 			<!-- Individual results of [User Results] -->
-			<div class="col-md-6 col-sm-12 col-xs-12 user-list">
+			<div class="col-md-6 col-sm-12 col-xs-12 user-list" id="scroll-to-user-results">
 				<div class="box">
 					<div class="scroll">
 						<div id="user-individual-results">
@@ -234,7 +234,7 @@
 				</div>
 			</div>
 			<!-- [Question Results] Pane -->
-			<div class="col-md-3 col-sm-6 col-xs-12 question-list">
+			<div class="col-md-3 col-sm-6 col-xs-12 question-list" id="scroll-to-question-list">
 				<div class="box">
 					<div class="scroll">
 						<h2 class="text-center"><strong>Questions</strong></h2>
@@ -248,7 +248,7 @@
 				</div>
 			</div>
 			<!-- Individual questions from [Question Results] -->
-			<div class="col-md-6 col-sm-12 col-xs-12 question-list">
+			<div class="col-md-6 col-sm-12 col-xs-12 question-list" id="scroll-to-question-results">
 				<div class="box">
 					<div class="scroll">
 						<div id="question-individual-results">
@@ -339,6 +339,9 @@
 
 	<!-- jquery -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+	<!-- scrollto script -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.0/jquery.scrollTo.min.js"></script>
 
 	<!-- bootstrapjs -->
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
