@@ -2,6 +2,7 @@ $(function() {
 
 // Selectors for page
 var $avatar = $('.avatar'),
+		$body = $('body'),
 		$box = $('.box'),
 		$centerBox = $('.center-box'),
 		$centerBox2 = $('.center-box-2'),
@@ -20,7 +21,10 @@ var $userViewResultsBtn = $('#user-view-results-btn'),
 		$userViewResultsList = $('.user-view-results-list'),
 		$resultsTemplate = $('#results-template'),
 		$questionIndividualResults = $('#question-individual-results'),
-		$answeredQuestions = $('#answered-questions');
+		$answeredQuestions = $('#answered-questions'),
+		$userView1 = $('#user-view-1'),
+		$userView2 = $('#user-view-2'),
+		$navbar = $('.navbar');
 
 // Selectors for [Answer Questions]
 var $userAnswerQuestionsBtn = $('#user-answer-questions-btn'),
@@ -118,6 +122,8 @@ function openQuestionPane() {
 	$gotoQuestionsBtn.hide();
 	$userViewResultsList.show();
 	$userAnswerQuestionsList.hide();
+	var navbarHeightAdjust = -1 * $navbar.height();
+	$body.scrollTo($userView1, 1000, {offset: {top: navbarHeightAdjust}});
 }
 
 // When tab is clicked displays results in the results box
@@ -153,6 +159,8 @@ function displayIndividualResults() {
 		var htmlResults = template(dataToAppend);
 		$questionIndividualResults.append(htmlResults);
 		plotGraph(selectedQuestion);
+		var navbarHeightAdjust = -1 * $navbar.height();
+		$body.scrollTo($userView2, 1000, {offset: {top: navbarHeightAdjust}});
 	});
 }
 
