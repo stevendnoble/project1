@@ -10,6 +10,9 @@ var $avatar = $('.avatar'),
 		$centerBox4 = $('.center-box-4'),
 		$navbar = $('.navbar'),
 		$scroll = $('.scroll'),
+		$changePassword = $('#change-password'),
+		$newPasswordForm = $('#newpassword-form'),
+		$newPassword = $('#new-password'),
 		$window = $(window);
 
 // Selectors for admin tabs
@@ -116,6 +119,10 @@ $.get(questionUrl, function(data) {
 $avatar.on('click', changeAvatar);
 $window.on('resize', calculateHeight);
 
+// Event handlers change password
+$changePassword.on('click', changePassword);
+$newPasswordForm.on('submit', submitPassword);
+
 // Event handlers for admin tabs
 $addQuestionBtn.on('click', addQuestionPane);
 $directionsBtn.on('click', openDirectionsPane);
@@ -174,6 +181,29 @@ function changeAvatar() {
 	});
 }
 
+//Toggle password form
+function changePassword() {
+	$changePassword.hide();
+	$newPasswordForm.show();
+}
+
+//Submit new password
+function submitPassword () {
+	event.preventDefault();
+	var newPassword = $newPassword.val();
+	$changePassword.show();
+	$newPasswordForm.hide();
+	$.ajax ({
+		type: 'PATCH',
+		url: userUrl + 'self',
+		data: {
+			password: newPassword
+		},
+		success: function () {
+			console.log('password changed');
+		}
+	});
+}
 // Plots the graph of the selected question
 function plotGraph(selectedQuestion, boxwidth, pieChartCanvas) {
 	// Set canvas to boxwidth

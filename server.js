@@ -363,11 +363,16 @@ app.patch('/api/users/:id', function(req, res) {
 			console.log('PATCH req.body', req.body);
 			foundUser.name = req.body.name || foundUser.name;
 			foundUser.username = req.body.username || foundUser.username;
-			foundUser.password = req.body.password || foundUser.password;
 			foundUser.avatar = req.body.avatar || foundUser.avatar;
 			foundUser.admin = req.body.admin || foundUser.admin;
 			foundUser.questions = req.body.questions || foundUser.questions;
 			foundUser.useranswers = req.body.useranswers || foundUser.useranswers;
+			if (req.body.password){
+				foundUser.setPassword(req.body.password, function () {
+					foundUser.save();
+					console.log('password saved');
+				});
+			}
 			console.log('PATCH foundUser (after)', foundUser);
 			// Save updated user
 			foundUser.save(function(err, savedUser) {

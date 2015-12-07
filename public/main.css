@@ -144,7 +144,8 @@ hr.hr-avatar {
 .add-question-list, .breakdown, #user-question, #user-response,
 #display-questions-btn, .user-view-results-list,
 .user-answer-questions-list, #user-goto-questions-btn,
-#display-questions-canvas, #next-question, .password-confirm {
+#display-questions-canvas, #next-question, .password-confirm,
+#newpassword-form {
 	display: none;
 }
 

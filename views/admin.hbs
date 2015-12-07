@@ -33,7 +33,15 @@
 						<h4>admin:</h4>
 						<h4 class="tab green">{{#if user.admin}}yes{{else}}no{{/if}}</h4>
 						<h4>password:</h4>
-						<button class="btn btn-success btn-sm">change password</button>
+						<button class="btn btn-success btn-sm" id="change-password">change password</button>
+						<form id="newpassword-form">
+							<div class="form-group">	
+								<input type="password" id="new-password" name="newpassword" placeholder="New password" class="form-control">
+							</div>
+							<div class="form-group">
+								<input type="submit" class="btn btn-success" value="Submit">
+							</div>
+						</form>
 						<h4>click on picture to change</h4>
 						<button class="btn btn-success btn-block" id="directions-btn">Directions</button>
 						<button class="btn btn-success btn-block" id="add-question-btn">Add New Question</button>
