@@ -36,17 +36,17 @@ In the future, I plan to add:
 
 ## Screenshots
 
-![alt text](https://github.com/stevendnoble/project1/blob/master/public/screenshots/addquestion.png "Add a Question")
+![alt text](https://github.com/stevendnoble/pulse-check/blob/master/public/screenshots/screenshot0pcp.png)
 
-![alt text](https://github.com/stevendnoble/project1/blob/master/public/screenshots/viewusers.png "User Results")
+![alt text](https://github.com/stevendnoble/pulse-check/blob/master/public/screenshots/screenshot1pcp.png)
 
-![alt text](https://github.com/stevendnoble/project1/blob/master/public/screenshots/viewresults.png "Question Results")
+![alt text](https://github.com/stevendnoble/pulse-check/blob/master/public/screenshots/screenshot2pcp.png)
 
-![alt text](https://github.com/stevendnoble/project1/blob/master/public/screenshots/classbreakdown.png "Display Question")
+![alt text](https://github.com/stevendnoble/pulse-check/blob/master/public/screenshots/screenshot3pcp.png)
 
-![alt text](https://github.com/stevendnoble/project1/blob/master/public/screenshots/userprofile.png "User Profile")
+![alt text](https://github.com/stevendnoble/pulse-check/blob/master/public/screenshots/screenshot4pcp.png)
 
-![alt text](https://github.com/stevendnoble/project1/blob/master/public/screenshots/classbreakdown.png "Add a Question")
+![alt text](https://github.com/stevendnoble/pulse-check/blob/master/public/screenshots/screenshot5pcp.png)
 
 ## Link
 
