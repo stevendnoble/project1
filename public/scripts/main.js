@@ -5,6 +5,8 @@ var $box = $('.box'),
     $scroll = $('.scroll'),
     $window = $(window);
 
+var imageId = 0;
+
 // Centers boxes and sets height of boxes for scrolling
 calculateHeight();
 function calculateHeight() {
@@ -18,5 +20,13 @@ function calculateHeight() {
 
 // Event handlers
 $window.on('resize', calculateHeight);
+
+function switchImage() {
+  $('.img-' + imageId).hide();
+  imageId = (imageId + 1) % 6;
+  $('.img-' + imageId).show();
+}
+
+var intervalId = setInterval(switchImage, 3000);
 
 });

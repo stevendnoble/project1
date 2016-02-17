@@ -189,3 +189,7 @@ table.table.table-hover tr td {
 .alert {
 	margin-top: -6px;
 }
+
+.img-2, .img-3, .img-4, .img-5, .img-1 {
+	display: none;
+}
