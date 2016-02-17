@@ -193,3 +193,7 @@ table.table.table-hover tr td {
 .img-2, .img-3, .img-4, .img-5, .img-1 {
 	display: none;
 }
+
+.project-images {
+	border: 2px solid black;
+}
